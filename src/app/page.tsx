@@ -1,7 +1,7 @@
 import WhetherCard from "@/components/WeatherCard";
 import styles from "./page.module.css";
 
-export default function Home() {
+const Home = () =>{
   return (
     <div className={styles.wrapper}>
       <div className={styles.calendar_whether}>
@@ -15,3 +15,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;
