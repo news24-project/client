@@ -1,0 +1,81 @@
+.icon_wrapper {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  align-items: center;
+  background-color: #1f1f1f;
+  border-radius: 15px;
+}
+
+.location {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  background-color: inherit;
+  border: none;
+  transition: transform 0.5s ease; /* smooth rotation */
+}
+
+.button.rotate {
+  transform: rotate(180deg); /* rotate 180 degrees when active */
+}
+
+.forecast {
+  display: flex;
+  gap: 30px;
+  border-right: 1px solid #fff;
+  padding-right: 10px;
+
+  transform: translateX(-100%);
+  opacity: 0;
+
+  transition: transform 20s ease, opacity s ease;
+}
+
+.forecast.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.sunIconWrapper {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate {
+  animation: fadeInRight 1s forwards;
+}
+
+.sunIconWrapper,
+.forecast div > div {
+  cursor: pointer;
+}
+
+.animate {
+  animation: fadeInRight 1s forwards;
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
