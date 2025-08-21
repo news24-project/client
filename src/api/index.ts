@@ -1,1 +1,1 @@
-// This file is here to keep the folder in Git. 
+export * from "./weather";
