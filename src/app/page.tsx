@@ -1,4 +1,4 @@
-import WhetherCard from "@/components/WeatherCard";
+import WeatherCard from "@/components/WeatherCard";
 import styles from "./page.module.css";
 
 const days = [
@@ -41,7 +41,7 @@ const Home = () => {
             {dayOfWeek}, {monthName} {day}
           </p>
         </div>
-        <WhetherCard />
+        <WeatherCard />
       </div>
     </div>
   );

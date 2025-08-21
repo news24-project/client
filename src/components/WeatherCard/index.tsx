@@ -5,8 +5,19 @@ import LeftSwiper from "../../../public/icons/left_swiper";
 import SunIcon from "../../../public/icons/sun";
 import TargetIcon from "../../../public/icons/target";
 import cls from "./whether.module.css";
+import { useGetWeather } from "@/hooks/useGetWeather";
 
-const WhetherCard = () => {
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const WeatherCard = () => {
   const [show, setShow] = useState(false);
   const [bigAnimate, setBigAnimate] = useState(false);
   const [bigCooldown, setBigCooldown] = useState(false);
@@ -15,18 +26,16 @@ const WhetherCard = () => {
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(
     null
   );
+  const today = new Date();
 
-  const forecast = [
-    { day: "Today", high: 32, low: 21 },
-    { day: "Tomorrow", high: 30, low: 20 },
-    { day: "Wed", high: 29, low: 19 },
-    { day: "Thu", high: 31, low: 22 },
-  ];
-
+  const { data, error, isLoading } = useGetWeather("Tashkent");
   const [smallAnimate, setSmallAnimate] = useState<Record<number, boolean>>({});
   const [smallCooldown, setSmallCooldown] = useState<Record<number, boolean>>(
     {}
   );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const handleBigHover = () => {
     if (bigCooldown) return;
@@ -52,6 +61,28 @@ const WhetherCard = () => {
       3000
     );
   };
+  const forecast = [
+    {
+      day: "Today",
+      high: Math.floor(data.list[0].main.temp),
+      low: Math.floor(data.list[0].main.temp_min),
+    },
+    {
+      day: "Tomorrow",
+      high: Math.floor(data.list[8].main.temp),
+      low: Math.floor(data.list[8].main.temp_min),
+    },
+    {
+      day: days[(today.getDay() + 2) % 7].slice(0, 3),
+      high: Math.floor(data.list[17].main.temp),
+      low: Math.floor(data.list[17].main.temp_min),
+    },
+    {
+      day: days[(today.getDay() + 3) % 7].slice(0, 3),
+      high: Math.floor(data.list[25].main.temp),
+      low: Math.floor(data.list[25].main.temp_min),
+    },
+  ];
   const handleGetLocation = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -148,7 +179,7 @@ const WhetherCard = () => {
             margin: 0,
           }}
         >
-          34°C
+          {forecast[0].high}°C
         </h1>
         <a
           style={{ textDecoration: "none", color: "blue" }}
@@ -163,4 +194,4 @@ const WhetherCard = () => {
   );
 };
 
-export default WhetherCard;
+export default WeatherCard;
