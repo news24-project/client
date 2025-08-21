@@ -6,7 +6,7 @@ const TargetIcon = ({ width, height, color }: IconsTypes) => (
     width={width || 20}
     height={height || 20}
     color={color || "#fff"}
-    fill={color || "#fff"}
+    fill={color || "rgb(189, 193, 198)"}
     viewBox="0 0 24 24"
     focusable="false"
   >
