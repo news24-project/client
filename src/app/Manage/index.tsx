@@ -6,7 +6,6 @@ import { ArrowLeft, Info, Search, MapPin, Star, X, MoreHorizontal, Trash2 } from
 import { useState } from "react"
 import styles from "./Manage.module.css"
 import Link from "next/link"
-// Test data for cities
 const cities = [
   { name: "Dresden", country: "Germany", flag: "🇩🇪", image: "https://picsum.photos/200/300" },
   { name: "Dublin", country: "Ireland", flag: "🇮🇪", image: "https://picsum.photos/200/300" },
@@ -82,7 +81,6 @@ export default function ManageLocalNews() {
 
   return (
     <div className={styles.container}>
-      {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <Link href="/local">
@@ -99,7 +97,6 @@ export default function ManageLocalNews() {
       </div>
 
       <div className={styles.content}>
-        {/* Search Bar */}
         <div className={styles.searchContainer}>
           <Search className={styles.searchIcon} />
           <input
@@ -141,7 +138,6 @@ export default function ManageLocalNews() {
 
         {!searchQuery && (
           <>
-            {/* Your local news section */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>Your local news</h2>
 
@@ -195,7 +191,6 @@ export default function ManageLocalNews() {
               )}
             </div>
 
-            {/* Suggested for you section */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>Suggested for you</h2>
 
