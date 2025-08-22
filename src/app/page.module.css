@@ -1,0 +1,27 @@
+.wrapper {
+  max-width: 1140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  margin-inline: auto;
+  color: white;
+  font-family: sans-serif;
+  padding-top: 30px;
+}
+
+.calendar_whether {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.whether {
+  display: flex;
+}
+
+.weak {
+  color: rgb(189, 193, 198);
+}
