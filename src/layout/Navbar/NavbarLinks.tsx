@@ -1,49 +1,81 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import cls from "./Navbar.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CategoryType } from "@/types";
+import { customAxios } from "@/api/customAxios";
 
-const NavbarLinks = () => {
+interface NavbarLinksProps {
+  selectedLang: string;
+}
+
+const translations: Record<string, { home: string; forYou: string; following: string }> = {
+  "en-US": { home: "Home", forYou: "For you", following: "Following" },
+  "ru-RU": { home: "Главная", forYou: "Для вас", following: "Подписки" },
+  "zh-TW": { home: "首頁", forYou: "為你推薦", following: "關注" },
+  "uz-UZ": { home: "Bosh sahifa", forYou: "Siz uchun", following: "Obunalar" },
+  "kz-KZ": { home: "Басты бет", forYou: "Сіз үшін", following: "Жазылымдар" },
+  "in-IN": { home: "होम", forYou: "आपके लिए", following: "अनुसरण" },
+  "tr-TR": { home: "Ana Sayfa", forYou: "Senin için", following: "Takipler" },
+};
+
+const NavbarLinks: React.FC<NavbarLinksProps> = ({ selectedLang }) => {
+  const [categories, setCategories] = useState<CategoryType[]>([]);
   const pathname = usePathname();
 
-  const categories: ({ name: string; path: string } | "|") [] = [
-    { name: "Home", path: "/" },
-    { name: "For you", path: "/foryou" },
-    { name: "Following", path: "/following" },
-    "|",
-    { name: "U.S.", path: "/us" },
-    { name: "World", path: "/world" },
-    { name: "Local", path: "/local" },
-    { name: "Business", path: "/business" },
-    { name: "Technology", path: "/technology" },
-    { name: "Sports", path: "/sports" },
-    { name: "Entertainment", path: "/entertainment" },
-    { name: "Science", path: "/science" },
-    { name: "Health", path: "/health" },
+  const t = translations[selectedLang] || translations["en-US"];
+
+  const staticCategories: CategoryType[] = [
+    { name: t.home, path: "/" },
+    { name: t.forYou, path: "/foryou" },
+    { name: t.following, path: "/following" },
   ];
+
+  const toSlug = (name: string) =>
+    "/" +
+    name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await customAxios.get<CategoryType[]>("/categories");
+        const mapped = data.map((cat) => ({
+          name: cat.name,
+          path: toSlug(cat.name),
+        }));
+        setCategories([...staticCategories, ...mapped]);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        setCategories(staticCategories);
+      }
+    };
+    fetchCategories();
+  }, [selectedLang]);
 
   return (
     <div className={cls["navbar-links"]}>
-      {categories.map((category, index) =>
-        category === "|" ? (
-          <span key={index} className={cls["hide-mobile"]}>
-            |
-          </span>
-        ) : (
+      {categories.map((cat, index) => (
+        <React.Fragment key={index}>
           <Link
-            key={index}
-            href={category.path}
-            className={`${pathname === category.path ? cls.active : ""} ${
-              category.name === "Home" || category.name === "Following"
+            href={cat.path}
+            className={`${pathname === cat.path ? cls.active : ""} ${
+              cat.name === t.home || cat.name === t.following
                 ? cls["hide-mobile"]
                 : ""
             }`}
           >
-            {category.name}
+            {cat.name}
           </Link>
-        )
-      )}
+
+          {index === staticCategories.length - 1 && (
+            <span className={cls["hide-mobile"]}>|</span>
+          )}
+        </React.Fragment>
+      ))}
     </div>
   );
 };

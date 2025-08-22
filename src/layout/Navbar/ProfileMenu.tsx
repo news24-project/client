@@ -8,7 +8,70 @@ import { FiLogOut } from "react-icons/fi";
 import Link from "next/link";
 import Avatar from "../Avatar";
 
-const ProfileMenu = () => {
+interface ProfileMenuProps {
+  selectedLang: string;
+}
+
+const translations: Record<string, any> = {
+  "en-US": {
+    manageAccount: "Manage your Google Account",
+    addAccount: "Add account",
+    signOut: "Sign out",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service",
+    greeting: "Hi",
+  },
+  "ru-RU": {
+    manageAccount: "Управление аккаунтом Google",
+    addAccount: "Добавить аккаунт",
+    signOut: "Выйти",
+    privacy: "Политика конфиденциальности",
+    terms: "Условия использования",
+    greeting: "Привет",
+  },
+  "zh-TW": {
+    manageAccount: "管理您的 Google 帳戶",
+    addAccount: "新增帳戶",
+    signOut: "登出",
+    privacy: "隱私權政策",
+    terms: "服務條款",
+    greeting: "您好",
+  },
+  "uz-UZ": {
+    manageAccount: "Google hisobingizni boshqarish",
+    addAccount: "Hisob qo‘shish",
+    signOut: "Chiqish",
+    privacy: "Maxfiylik siyosati",
+    terms: "Xizmat shartlari",
+    greeting: "Salom",
+  },
+  "kz-KZ": {
+    manageAccount: "Google есептік жазбасын басқару",
+    addAccount: "Есептік жазба қосу",
+    signOut: "Шығу",
+    privacy: "Құпиялық саясаты",
+    terms: "Қызмет көрсету шарттары",
+    greeting: "Сәлем",
+  },
+  "in-IN": {
+    manageAccount: "अपने Google खाते का प्रबंधन करें",
+    addAccount: "खाता जोड़ें",
+    signOut: "साइन आउट",
+    privacy: "गोपनीयता नीति",
+    terms: "सेवा की शर्तें",
+    greeting: "नमस्ते",
+  },
+  "tr-TR": {
+    manageAccount: "Google Hesabınızı Yönetin",
+    addAccount: "Hesap ekle",
+    signOut: "Çıkış yap",
+    privacy: "Gizlilik Politikası",
+    terms: "Hizmet Şartları",
+    greeting: "Merhaba",
+  },
+};
+
+const ProfileMenu: React.FC<ProfileMenuProps> = ({ selectedLang }) => {
   const [openProfile, setOpenProfile] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -16,6 +79,8 @@ const ProfileMenu = () => {
     name: "nurken",
     email: "nurkenqaldybaev2001@gmail.com",
   };
+
+  const t = translations[selectedLang];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,11 +128,11 @@ const ProfileMenu = () => {
               }}
             />
             <IoIosCamera className={cls["cam-icon"]} />
-            <p>Hi, {user.name}!</p>
+            <p>{t.greeting}, {user.name}!</p>
           </div>
 
           <button className={cls["manage-button"]}>
-            Manage your Google Account
+            {t.manageAccount}
           </button>
 
           <div className={cls["profile-actions"]}>
@@ -75,20 +140,20 @@ const ProfileMenu = () => {
               <span className={cls["button-icon"]}>
                 <IoAddOutline />
               </span>
-              Add account
+              {t.addAccount}
             </button>
             <button className={cls["sign-out"]}>
               <span className={cls["button-icon"]}>
                 <FiLogOut />
               </span>
-              Sign out
+              {t.signOut}
             </button>
           </div>
 
           <div className={cls["popup-footer"]}>
-            <Link href="#">Privacy Policy</Link>
+            <Link href="#">{t.privacy}</Link>
             <p>-</p>
-            <Link href="#">Terms of Service</Link>
+            <Link href="#">{t.terms}</Link>
           </div>
         </div>
       )}

@@ -1,0 +1,245 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal {
+  background: #3c4043;
+  border-radius: 22px;
+  padding: 30px 20px;
+  width: 650px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search {
+  width: 100%;
+  padding: 8px 12px 8px 40px;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  margin: 12px 0 16px;
+  font-size: 16px;
+  background-color: transparent;
+  outline: none;
+  color: #f0f0f0;
+  letter-spacing: 1px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.options label {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px 22px;
+}
+
+.options input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 25px;
+  height: 25px;
+  border: 2px solid #b1b6bd;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.options input[type="radio"]:checked {
+  background-color: transparent;
+  border-color: #1263ba;
+}
+
+.options input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #1263ba;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.actions button {
+  padding: 8px 22px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.actions button:first-child {
+  background: none;
+  color: #73b3f7;
+}
+
+.actions button:first-child:hover {
+  background: #37393a;
+}
+
+.actions button:last-child {
+  background: #416c9a;
+  color: rgb(10, 49, 77);
+}
+
+.actions button:last-child:hover {
+  background: #1263ba;
+}
+
+.modal-title {
+  margin-bottom: 10px;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #ececec;
+}
+
+.modal-input {
+  position: relative;
+}
+
+.modal-input input::placeholder {
+  color: #ccc;
+}
+
+.modal-input input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  background: url("/images/close-icon1.png") no-repeat center center;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.input-icon {
+  position: absolute;
+  font-size: 22px;
+  left: 10px;
+  top: 18px;
+}
+
+@media screen and (max-width: 768px) {
+  .modal {
+    width: 90%;
+    padding: 25px 15px;
+  }
+
+  .search {
+    padding: 8px 12px 8px 35px;
+    font-size: 15px;
+  }
+
+  .options label {
+    font-size: 16px;
+    padding: 5px 18px;
+    gap: 12px;
+  }
+
+  .options input[type="radio"] {
+    width: 22px;
+    height: 22px;
+  }
+
+  .options input[type="radio"]:checked::after {
+    width: 13px;
+    height: 13px;
+  }
+
+  .actions button {
+    padding: 6px 18px;
+    font-size: 13px;
+  }
+
+  .input-icon {
+    left: 8px;
+    top: 16px;
+    font-size: 20px;
+  }
+}
+
+
+@media screen and (max-width: 482px) {
+  .modal {
+    width: 95%;
+    padding: 20px 12px;
+  }
+  .modal-title{
+    font-size: 14px;
+  }
+  .modal-desc{
+    font-size: 10px !important;
+  }
+
+  .search {
+    padding: 7px 10px 7px 30px;
+    font-size: 14px;
+  }
+
+  .options label {
+    font-size: 14px;
+    padding: 5px 15px;
+    gap: 10px;
+  }
+
+  .options input[type="radio"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  .options input[type="radio"]:checked::after {
+    width: 12px;
+    height: 12px;
+  }
+
+  .actions button {
+    padding: 5px 16px;
+    font-size: 12px;
+  }
+
+  .input-icon {
+    left: 10px;
+    top: 18px;
+    font-size: 18px;
+  }
+}
