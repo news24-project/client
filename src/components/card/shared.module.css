@@ -1,0 +1,25 @@
+.toFullCoverageDiv {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: rgb(51, 53, 54);
+}
+
+.toFullCoverageDiv:hover a {
+  text-decoration: underline;
+}
+.toFullCoverageDiv img {
+  width: 21px;
+  height: 21px;
+}
+
+.toFullCoverageDiv a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgb(189, 193, 198);
+  font-size: 12px;
+  font-weight: 600;
+}

@@ -1,95 +1,42 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Card from "@/components/card/Card";
+import { ICard } from "@/components/card/interfaces";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const cardMain: ICard["cardMain"] = {
+    img: "https://www.timeoutdubai.com/cloud/timeoutdubai/2021/09/11/hfpqyV7B-IMG-Dubai-UAE.jpg",
+    cardMainDiv: {
+      imgIcon:
+        "https://play-lh.googleusercontent.com/0IoGNBJeaga47hJgxtTzXXlPQmZYGjrzghS1NLoCrtjJTkm_GSRs5e44FmrXxxCUYJs",
+      imgIconText: "BBC",
+      title: "Protests expected at asylum hotels across UK as tensions mount",
+      dateText: "1 hour ago",
+      author: {
+        name: "By Jamie Grierson",
+        id: "https://news.google.com/topics/CAAqKAgKIiJDQkFTRXdvTkwyY3ZNVEZ3Tmpjd1ltUnFkeElDWlc0b0FBUAE?hl=en-GB&gl=GB&ceid=GB%3Aen",
+      },
+      organization: {
+        id: "https://news.google.com/publications/CAAqIAgKIhpDQklTRFFnTWFna0tCMkppWXk1amIyMG9BQVAB?hl=en-GB&gl=GB&ceid=GB%3Aen",
+        title: "BBC",
+      },
+      socials: [
+        "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.bbc.com%2Fnews%2Flive%2Fce83n80dqllt",
+        "https://www.bbc.com/news/live/ce83n80dqllt",
+        "https://x.com/intent/post?text=Number%20of%20asylum%20seekers%20in%20hotels%20up%208%25%20in%20past%20year%2C%20but%20falls%20slightly%20since%20March%2C%20new%20data%20shows%20-%20BBC&url=https%3A%2F%2Fwww.bbc.com%2Fnews%2Flive%2Fce83n80dqllt&via=GoogleNews",
+      ],
+    },
+  };
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const cards: ICard["cards"] = [
+    { cardMainDiv: cardMain.cardMainDiv },
+    { cardMainDiv: cardMain.cardMainDiv },
+    { cardMainDiv: cardMain.cardMainDiv },
+  ];
+
+  return (
+    <main>
+      <Card cardMain={cardMain} smallCardOA={true} />
+
+      <Card cardMain={cardMain} cards={cards} />
+    </main>
   );
 }
