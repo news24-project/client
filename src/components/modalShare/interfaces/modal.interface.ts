@@ -5,6 +5,9 @@ export interface IModalShare {
 
   description: string;
 
+  isActiveModal: boolean
+  setIsActiveModal: any
+
   socials: {
     link: string;
 

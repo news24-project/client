@@ -16,9 +16,20 @@ import DisLikeIcon from "../../../public/icons/cardComponent/DisLike";
 type Props = {
   author?: { id?: string; name?: string };
   organization: { id: string; title: string };
+  socials?: { link: string; facebookLink: string; twitterLink: string };
+  imgIcon: string;
+  imgIconText: string;
+  setIsActiveModal: (v: boolean) => void;
 };
 
-const CardMenu = ({ author, organization }: Props) => {
+const CardMenu = ({
+  author,
+  organization,
+  socials,
+  imgIcon,
+  imgIconText,
+  setIsActiveModal,
+}: Props) => {
   const [isActive, setIsActive] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement>(null);
 
@@ -36,7 +47,10 @@ const CardMenu = ({ author, organization }: Props) => {
 
   return (
     <div ref={menuRef} className={cn(css.wrapper)}>
-      <article className={cn(css.menuIcon)} onClick={() => setIsActive((p) => !p)}>
+      <article
+        className={cn(css.menuIcon)}
+        onClick={() => setIsActive((p) => !p)}
+      >
         <ThreeMenuIcon />
       </article>
 
@@ -44,39 +58,71 @@ const CardMenu = ({ author, organization }: Props) => {
         <ul>
           <li className={cn(css.menuItem)}>
             <Link href="/#">
-              <div><SaveIcon /></div> Save for later
+              <div>
+                <SaveIcon />
+              </div>{" "}
+              Save for later
             </Link>
           </li>
-          <li className={cn(css.menuItem)}>
-            <Link href="/#">
-              <div><ShareIcon /></div> Share
-            </Link>
+          <li
+            className={cn(css.menuItem)}
+            onClick={() => {
+              const shareData = {
+                imgIcon,
+                imgIconText,
+                socials,
+                description: organization.title,
+              };
+              sessionStorage.setItem("shareData", JSON.stringify(shareData));
+              setIsActive(false);
+              setIsActiveModal(true);
+            }}
+          >
+            <div>
+              <ShareIcon />
+            </div>
+            Share
           </li>
           <li className={cn(css.menuItem)}>
             <Link href={organization.id} target="_blank">
-              <div><LinkIcon /></div> Go to {organization.title}
+              <div>
+                <LinkIcon />
+              </div>{" "}
+              Go to {organization.title}
             </Link>
           </li>
           {author?.id && author.name && (
             <li className={cn(css.menuItem)}>
               <Link href={author.id} target="_blank">
-                <div><LinkIcon /></div> Go to {author.name}
+                <div>
+                  <LinkIcon />
+                </div>{" "}
+                Go to {author.name}
               </Link>
             </li>
           )}
           <li className={cn(css.menuItem)}>
             <Link href="/#">
-              <div><BlockIcon /></div> Hide All stories from {organization.title}
+              <div>
+                <BlockIcon />
+              </div>{" "}
+              Hide All stories from {organization.title}
             </Link>
           </li>
           <li className={cn(css.menuItem)}>
             <Link href="/#">
-              <div><LikeIcon /></div> More stories like this
+              <div>
+                <LikeIcon />
+              </div>{" "}
+              More stories like this
             </Link>
           </li>
           <li className={cn(css.menuItem)}>
             <Link href="/#">
-              <div><DisLikeIcon /></div> Fewer stories like this
+              <div>
+                <DisLikeIcon />
+              </div>{" "}
+              Fewer stories like this
             </Link>
           </li>
         </ul>

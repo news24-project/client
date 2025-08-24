@@ -4,8 +4,12 @@ import css from "./CardChild.module.css";
 import { ICardChild } from "./interfaces";
 import CardMenu from "./CardMenu";
 
-const CardChild = ({ cardMainDiv }: ICardChild) => {
-  const { imgIcon, imgIconText, title, dateText, author, organization } = cardMainDiv;
+interface CardChildProps extends ICardChild {
+  setIsActiveModal: (v: boolean) => void;
+}
+
+const CardChild = ({ cardMainDiv, setIsActiveModal }: CardChildProps) => {
+  const { imgIcon, imgIconText, title, dateText, author, organization, socials } = cardMainDiv;
 
   return (
     <div className={cn(css.cardRightDiv)}>
@@ -19,9 +23,17 @@ const CardChild = ({ cardMainDiv }: ICardChild) => {
         <span className={cn(css.cardRightDivText)}>&bull;</span>
         <span className={cn(css.cardRightDivText)}>{author?.name}</span>
       </p>
-      <CardMenu author={author} organization={organization} />
+      <CardMenu
+        author={author}
+        organization={organization}
+        socials={socials}
+        imgIcon={imgIcon}
+        imgIconText={imgIconText}
+        setIsActiveModal={setIsActiveModal}
+      />
     </div>
   );
 };
+
 
 export default CardChild;

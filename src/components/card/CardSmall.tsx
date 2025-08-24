@@ -5,15 +5,33 @@ import shared from "./shared.module.css";
 import { ICardMain } from "./interfaces";
 import CardMenu from "./CardMenu";
 
-const CardSmall = ({ cardMain, smallCardOA }: { cardMain: ICardMain; smallCardOA?: boolean }) => {
+const CardSmall = ({
+  cardMain,
+  smallCardOA,
+  setIsActiveModal,
+}: {
+  cardMain: ICardMain;
+  smallCardOA?: boolean;
+  setIsActiveModal: (v: boolean) => void;
+}) => {
   const { img, cardMainDiv } = cardMain;
-  const { imgIcon, imgIconText, title, dateText, author, organization } = cardMainDiv;
+  const {
+    imgIcon,
+    imgIconText,
+    title,
+    dateText,
+    author,
+    organization,
+    socials,
+  } = cardMainDiv;
 
   return (
     <div className={cn(css.cardSmall)}>
-      <div className={cn(css.cardSmallLeftDiv, {
-        [css.cardSmallLeftDivActive]: !smallCardOA
-      })}>
+      <div
+        className={cn(css.cardSmallLeftDiv, {
+          [css.cardSmallLeftDivActive]: !smallCardOA,
+        })}
+      >
         {smallCardOA && (
           <div>
             <div className={cn(css.cardLeftDivIconDiv)}>
@@ -25,13 +43,21 @@ const CardSmall = ({ cardMain, smallCardOA }: { cardMain: ICardMain; smallCardOA
         )}
         {!smallCardOA && <h2>{title}</h2>}
 
-
-        <CardMenu author={author} organization={organization} />
+        <CardMenu
+          author={author}
+          organization={organization}
+          socials={socials}
+          imgIcon={imgIcon}
+          imgIconText={imgIconText}
+          setIsActiveModal={setIsActiveModal}
+        />
       </div>
 
-      <div className={cn(css.cardSmallRightDiv, {
-        [css.cardSmallRightDivActive]: !smallCardOA
-      })}>
+      <div
+        className={cn(css.cardSmallRightDiv, {
+          [css.cardSmallRightDivActive]: !smallCardOA,
+        })}
+      >
         <img alt={title} src={img} />
       </div>
 
@@ -42,13 +68,19 @@ const CardSmall = ({ cardMain, smallCardOA }: { cardMain: ICardMain; smallCardOA
           <span className={cn(css.cardLeftDivText)}>{author?.name}</span>
         </p>
 
-      {smallCardOA && (
-        <div className={cn(shared.toFullCoverageDiv)} style={{backgroundColor: "transparent"}}>
-          <a href="/#" target="_blank">
-            <img alt="full coverage" src="/images/cardComponent/FullCoverage.webp" />
-          </a>
-        </div>
-      )}
+        {smallCardOA && (
+          <div
+            className={cn(shared.toFullCoverageDiv)}
+            style={{ backgroundColor: "transparent" }}
+          >
+            <a href="/#" target="_blank">
+              <img
+                alt="full coverage"
+                src="/images/cardComponent/FullCoverage.webp"
+              />
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

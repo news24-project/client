@@ -2,6 +2,7 @@ export interface ICard {
   cardMain: ICardMain;
   cards?: ICardChild[];
   smallCardOA?: boolean;
+  setIsActiveModal: (v: boolean) => void;
 }
 
 export interface ICardMain {
@@ -16,7 +17,13 @@ export interface ICardMainDiv {
   dateText: string;
   author?: IAuthor;
   organization: IOrganization;
-  socials?: string[];
+  socials?: {
+    link: string;
+
+    facebookLink: string;
+
+    twitterLink: string;
+  };
 }
 
 export interface IAuthor {

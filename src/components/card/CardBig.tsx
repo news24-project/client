@@ -6,9 +6,25 @@ import CardMenu from "./CardMenu";
 import CardChild from "./CardChild";
 import { ICardChild, ICardMain } from "./interfaces";
 
-const CardBig = ({ cardMain, cards }: { cardMain: ICardMain; cards: ICardChild[] }) => {
+const CardBig = ({
+  cardMain,
+  cards,
+  setIsActiveModal,
+}: {
+  cardMain: ICardMain;
+  cards: ICardChild[];
+  setIsActiveModal: (v: boolean) => void;
+}) => {
   const { img, cardMainDiv } = cardMain;
-  const { imgIcon, imgIconText, title, dateText, author, organization } = cardMainDiv;
+  const {
+    imgIcon,
+    imgIconText,
+    title,
+    dateText,
+    author,
+    organization,
+    socials,
+  } = cardMainDiv;
 
   return (
     <div className={cn(css.cardBig)}>
@@ -30,19 +46,29 @@ const CardBig = ({ cardMain, cards }: { cardMain: ICardMain; cards: ICardChild[]
             <span className={cn(css.cardLeftDivText)}>{author?.name}</span>
           </p>
 
-          <CardMenu author={author} organization={organization} />
+          <CardMenu
+            author={author}
+            organization={organization}
+            socials={socials}
+            imgIcon={imgIcon}
+            imgIconText={imgIconText}
+            setIsActiveModal={setIsActiveModal}
+          />
         </div>
       </div>
 
       <div className={cn(css.cardRight)}>
         {cards.map((child, i) => (
-          <CardChild key={i} {...child} />
+          <CardChild key={i} {...child} setIsActiveModal={setIsActiveModal} />
         ))}
       </div>
 
       <div className={cn(shared.toFullCoverageDiv)}>
         <a href="/#" target="_blank">
-          <img alt="full coverage" src="/images/cardComponent/FullCoverage.webp" />
+          <img
+            alt="full coverage"
+            src="/images/cardComponent/FullCoverage.webp"
+          />
           Full coverage
         </a>
       </div>
