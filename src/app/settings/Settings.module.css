@@ -66,7 +66,7 @@
   position: absolute;
   top: -8px;
   left: 12px;
-  background: rgb(42, 42, 42);
+  background: rgb(31, 31, 31);
   padding: 0 5px;
   font-size: 12px;
   color: #aaa;
@@ -81,7 +81,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #2a2a2a;
+  background-color: rgb(31, 31, 31);
   color: #fff;
 }
 
@@ -137,7 +137,7 @@
 
 @media screen and (max-width: 768px) {
   .settings {
-    width: 90%;
+    width: 100%;
     margin: 30px auto 0 auto;
   }
 
@@ -170,21 +170,24 @@
 
 @media screen and (max-width: 482px) {
   .settings {
-    width: 95%;
+    width: 100%;
     margin: 20px auto 0 auto;
+    
   }
+ 
 
   .settings-title {
-    font-size: 22px;
+    font-size: 18px;
   }
 
   .settings-flex {
     padding: 25px 0;
+    font-size: 14px;
   }
 
   .custom-select {
     padding: 8px 10px;
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .dropdown {
@@ -194,7 +197,8 @@
 
   .settings-footer {
     display: flex;
-    align-items: flex-start;
+    justify-content: flex-start;
     margin-top: 20px;
+    font-size: 12px;
   }
 }

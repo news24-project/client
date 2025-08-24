@@ -5,26 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CategoryType } from "@/types";
 import { customAxios } from "@/api/customAxios";
+import { useLanguage } from "@/app/LanguageProvider";
+import { translations } from "@/app/translation";
 
-interface NavbarLinksProps {
-  selectedLang: string;
-}
-
-const translations: Record<string, { home: string; forYou: string; following: string }> = {
-  "en-US": { home: "Home", forYou: "For you", following: "Following" },
-  "ru-RU": { home: "Главная", forYou: "Для вас", following: "Подписки" },
-  "zh-TW": { home: "首頁", forYou: "為你推薦", following: "關注" },
-  "uz-UZ": { home: "Bosh sahifa", forYou: "Siz uchun", following: "Obunalar" },
-  "kz-KZ": { home: "Басты бет", forYou: "Сіз үшін", following: "Жазылымдар" },
-  "in-IN": { home: "होम", forYou: "आपके लिए", following: "अनुसरण" },
-  "tr-TR": { home: "Ana Sayfa", forYou: "Senin için", following: "Takipler" },
-};
-
-const NavbarLinks: React.FC<NavbarLinksProps> = ({ selectedLang }) => {
+const NavbarLinks: React.FC = () => {
+  const { selectedLang } = useLanguage();
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const pathname = usePathname();
 
-  const t = translations[selectedLang] || translations["en-US"];
+  const t = translations[selectedLang].navbarLinks || translations["en-US"].navbarLinks;
 
   const staticCategories: CategoryType[] = [
     { name: t.home, path: "/" },
@@ -63,9 +52,7 @@ const NavbarLinks: React.FC<NavbarLinksProps> = ({ selectedLang }) => {
           <Link
             href={cat.path}
             className={`${pathname === cat.path ? cls.active : ""} ${
-              cat.name === t.home || cat.name === t.following
-                ? cls["hide-mobile"]
-                : ""
+              [t.home, t.following].includes(cat.name) ? cls["hide-mobile"] : ""
             }`}
           >
             {cat.name}

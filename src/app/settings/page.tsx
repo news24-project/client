@@ -3,69 +3,76 @@
 import React, { useState } from "react";
 import cls from "./Settings.module.css";
 import Link from "next/link";
+import { useLanguage } from "@/app/LanguageProvider";
+import { translations } from "../translation";
+import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 
 const Settings = () => {
+  const { selectedLang } = useLanguage();
+  const t = translations[selectedLang]?.settings;
+
   const [theme, setTheme] = useState("system");
   const [temperatureUnit, setTemperatureUnit] = useState("celsius");
   const [openTheme, setOpenTheme] = useState(false);
   const [openTemp, setOpenTemp] = useState(false);
 
-  const handleManageSources = () => {
-    alert("Manage hidden sources clicked!");
-  };
-
   const themeOptions = [
-    { value: "never", label: "Never" },
-    { value: "always", label: "Always" },
-    { value: "system", label: "System default (when available)" },
+    { value: "never", label: t.themeOptions.never },
+    { value: "always", label: t.themeOptions.always },
+    { value: "system", label: t.themeOptions.system },
   ];
 
   const tempOptions = [
-    { value: "celsius", label: "Celsius (°C)" },
-    { value: "fahrenheit", label: "Fahrenheit (°F)" },
-    { value: "kelvin", label: "Kelvin" },
+    { value: "celsius", label: t.tempOptions.celsius },
+    { value: "fahrenheit", label: t.tempOptions.fahrenheit },
+    { value: "kelvin", label: t.tempOptions.kelvin },
   ];
 
   return (
     <div className={cls["settings"]}>
       <div className={cls["settings-container"]}>
-        <h1 className={cls["settings-title"]}>General</h1>
+        <h1 className={cls["settings-title"]}>{t.general}</h1>
         <hr className={cls["settings-hr"]} />
 
         <div className={cls["settings-flex"]}>
-          <p>Hidden sources</p>
-          <button onClick={handleManageSources} className={cls["settings-btn"]}>
-            Manage
+          <p>{t.hiddenSources}</p>
+          <button
+            onClick={() => alert("clicked")}
+            className={cls["settings-btn"]}
+          >
+            {t.manage}
           </button>
         </div>
         <hr className={cls["settings-hr"]} />
 
         <div className={cls["settings-flex"]}>
           <p>
-            My activity <br />
+            {t.myActivity} <br />
             <span className={cls["settings-span"]}>
-              Signed in as nurkenqaldybaev2001@gmail.com
+              {t.signedIn} nurkenqaldybaev2001@gmail.com
             </span>
           </p>
           <Link
             href={"https://myactivity.google.com"}
             className={cls["settings-btn"]}
           >
-            View
+            {t.view}
           </Link>
         </div>
         <hr className={cls["settings-hr"]} />
 
         <div className={cls["settings-flex"]}>
-          <p>Dark theme</p>
+          <p className={cls["select-label"]}>{t.darkTheme}</p>
           <div className={cls["select-container"]}>
-            <label className={cls["custom-label"]}>Dark theme</label>
+            <label className={cls["custom-label"]}>{t.darkTheme}</label>
             <div
               className={cls["custom-select"]}
               onClick={() => setOpenTheme(!openTheme)}
             >
               {themeOptions.find((opt) => opt.value === theme)?.label}
-              <span className={cls["arrow"]}>{openTheme ? "▲" : "▼"}</span>
+              <span className={cls["arrow"]}>
+                {openTheme ? <TiArrowSortedUp /> : <TiArrowSortedDown />}
+              </span>
             </div>
             {openTheme && (
               <ul className={cls["dropdown"]}>
@@ -87,15 +94,17 @@ const Settings = () => {
         <hr className={cls["settings-hr"]} />
 
         <div className={cls["settings-flex"]}>
-          <p>Temperature unit</p>
+          <p>{t.temperatureUnit}</p>
           <div className={cls["custom-select-container"]}>
-            <label className={cls["custom-label"]}>Temperature unit</label>
+            <label className={cls["custom-label"]}>{t.temperatureUnit}</label>
             <div
               className={cls["custom-select"]}
               onClick={() => setOpenTemp(!openTemp)}
             >
               {tempOptions.find((opt) => opt.value === temperatureUnit)?.label}
-              <span className={cls["arrow"]}>{openTemp ? "▲" : "▼"}</span>
+              <span className={cls["arrow"]}>
+                {openTemp ? <TiArrowSortedUp /> : <TiArrowSortedDown />}
+              </span>
             </div>
             {openTemp && (
               <ul className={cls["dropdown"]}>
@@ -120,26 +129,23 @@ const Settings = () => {
         <Link
           href="https://policies.google.com/privacy"
           target="_blank"
-          rel="noopener noreferrer"
           className={cls["footer-link"]}
         >
-          Privacy policy
+          {t.privacy}
         </Link>
         <Link
           href="https://policies.google.com/terms"
           target="_blank"
-          rel="noopener noreferrer"
           className={cls["footer-link"]}
         >
-          Terms of service
+          {t.terms}
         </Link>
         <Link
           href="https://www.google.com/about"
           target="_blank"
-          rel="noopener noreferrer"
           className={cls["footer-link"]}
         >
-          About Google
+          {t.about}
         </Link>
       </div>
     </div>
