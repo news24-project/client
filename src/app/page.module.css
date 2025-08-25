@@ -11,7 +11,7 @@
   padding-top: 30px;
 }
 
-.calendar_whether {
+.calendar_weather {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,7 +27,7 @@
 }
 
 @media (max-width: 600px) {
-  .calendar_whether {
+  .calendar_weather {
     display: none;
   }
 }

@@ -132,6 +132,8 @@ const WeatherCard = () => {
                 alignItems: "center",
                 display: "flex",
                 flexDirection: "column",
+                gap: "0",
+                margin: "0",
               }}
               onMouseEnter={() => handleSmallHover(i)}
             >
@@ -147,10 +149,13 @@ const WeatherCard = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
+                  alignItems: "center",
                   width: "100%",
+                  margin: "0",
+                  padding: 0,
                 }}
               >
-                <p>{f.high}°</p>
+                <p style={{ margin: 0, padding: 0 }}>{f.high}°</p>
                 <p className={cls.weak_line}>{f.low}°</p>
               </div>
             </div>

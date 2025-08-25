@@ -27,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NavbarLayout />
-        {children} {/* ✅ Sahifalardagi kontent shu joyga tushadi */}
+        <Providers>
+          <NavbarLayout />
+          {children}
+        </Providers>
       </body>
     </html>
   );
