@@ -1,6 +1,5 @@
 import WeatherCard from "@/components/WeatherCard";
 import styles from "./page.module.css";
-import SunClouds from "../../public/icons/sun_clouds";
 
 const days = [
   "Sunday",
@@ -25,8 +24,8 @@ const months = [
   "November",
   "December",
 ];
+
 import React from "react";
-import LocalNews from "./Local";
 
 const Home = () => {
   const today = new Date();

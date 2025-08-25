@@ -5,23 +5,19 @@ import { IoIosArrowRoundBack, IoIosSearch } from "react-icons/io";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import CustomSelect from "@/components/Select";
 import { Option } from "@/types";
+import { translations } from "@/app/translation";
+import { useLanguage } from "@/app/LanguageProvider";
 
-const SearchBar = () => {
+const SearchBar: React.FC = () => {
+  const { selectedLang } = useLanguage();
+  const t = translations[selectedLang].searchBar;
+
   const [desktopOpen, setDesktopOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Option | null>(null);
 
-  const dateOptions: Option[] = [
-    { value: "anytime", label: "Anytime" },
-    { value: "24h", label: "Past 24 hours" },
-    { value: "week", label: "Past week" },
-    { value: "month", label: "Past month" },
-    { value: "year", label: "Past year" },
-  ];
-
   return (
     <div className={cls["navbar-center"]}>
-    
       <div className={`${cls["navbar-search"]}`}>
         <IoIosSearch
           className={cls["search-icon"]}
@@ -29,7 +25,7 @@ const SearchBar = () => {
         />
         <input
           type="search"
-          placeholder="Search for topics, locations & sources"
+          placeholder={t.placeholder}
           className={`${cls["search-input"]} ${desktopOpen ? cls.show : ""}`}
         />
         <div
@@ -41,34 +37,34 @@ const SearchBar = () => {
 
         {desktopOpen && (
           <div className={cls["search-dropdown"]}>
-            <p>Narrow your search results</p>
+            <p>{t.narrowResults}</p>
             <label>
-              Exact phrase <input type="text" />
+              {t.exactPhrase} <input type="text" />
             </label>
             <label>
-              Has words <input type="text" />
+              {t.hasWords} <input type="text" />
             </label>
             <label>
-              Exclude words <input type="text" />
+              {t.excludeWords} <input type="text" />
             </label>
             <label>
-              Website <input type="text" />
+              {t.website} <input type="text" />
             </label>
             <label>
-              Date
+              {t.date}
               <CustomSelect
                 style={{ backgroundColor: "#4b4c4d", width: "200px" }}
                 value={selectedDate}
                 onChange={setSelectedDate}
-                options={dateOptions}
-                placeholder="Select date"
-                icon={<TiArrowSortedUp /> }
+                options={t.dateOptions}
+                placeholder={t.selectDate}
+                icon={<TiArrowSortedUp />}
                 iconPosition="right"
               />
             </label>
             <div className={cls["filter-actions"]}>
-              <button className={cls["clear-btn"]}>Clear</button>
-              <button className={cls["search-btn"]}>Search</button>
+              <button className={cls["clear-btn"]}>{t.clear}</button>
+              <button className={cls["search-btn"]}>{t.search}</button>
             </div>
           </div>
         )}
@@ -91,7 +87,7 @@ const SearchBar = () => {
           />
           <input
             type="search"
-            placeholder="Search"
+            placeholder={t.placeholder}
             className={cls["mobile-input"]}
           />
         </div>

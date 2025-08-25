@@ -2,24 +2,33 @@
 import React, { useState, useRef, useEffect } from "react";
 import cls from "./Navbar.module.css";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { Option } from "@/types";
+import { useLanguage } from "@/app/LanguageProvider";
+import { translations } from "@/app/translation";
 
-const HelpDropdown = () => {
+interface HelpOption {
+  value: string;
+  label: string;
+  url: string;
+}
+
+const HelpDropdown: React.FC = () => {
+  const { selectedLang } = useLanguage();
   const [openHelp, setOpenHelp] = useState(false);
-  const [helpValue, setHelpValue] = useState<Option | null>(null);
+  const [helpValue, setHelpValue] = useState<HelpOption | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const helpOptions: Option[] = [
-    { value: "help", label: "Help" },
-    { value: "privacy", label: "Privacy" },
-    { value: "terms", label: "Terms" },
-    { value: "about", label: "About Google" },
-    { value: "android", label: "Get the Android app" },
-    { value: "ios", label: "Get the iOS app" },
-    { value: "feedback", label: "Send feedback" },
+  const t = translations[selectedLang].helpDropdown || translations["en-US"].helpDropdown;
+
+  const helpOptions: HelpOption[] = [
+    { value: "help", label: t.help, url: "https://support.google.com" },
+    { value: "privacy", label: t.privacy, url: "https://policies.google.com/privacy" },
+    { value: "terms", label: t.terms, url: "https://policies.google.com/terms" },
+    { value: "about", label: t.about, url: "https://about.google" },
+    { value: "android", label: t.android, url: "https://play.google.com" },
+    { value: "ios", label: t.ios, url: "https://apps.apple.com" },
+    { value: "feedback", label: t.feedback, url: "https://support.google.com/feedback" },
   ];
 
-  
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -55,6 +64,7 @@ const HelpDropdown = () => {
               onClick={() => {
                 setHelpValue(opt);
                 setOpenHelp(false);
+                window.open(opt.url, "_blank");
               }}
             >
               {opt.label}
