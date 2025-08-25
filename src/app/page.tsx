@@ -25,25 +25,13 @@ const months = [
   "November",
   "December",
 ];
+import React from "react";
+import LocalNews from "./Local";
 
 const Home = () => {
-  const today = new Date();
-  const monthName = months[today.getMonth()];
-  const dayOfWeek = days[today.getDay()];
-  const day = today.getDate();
-
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.calendar_whether}>
-        <div>
-          <h1 style={{ fontWeight: "400" }}>Your briefing</h1>
-          <br />
-          <p className={styles.weak}>
-            {dayOfWeek}, {monthName} {day}
-          </p>
-        </div>
-        <WeatherCard />
-      </div>
+    <div className="container">
+      <h1>Home</h1>
     </div>
   );
 };
