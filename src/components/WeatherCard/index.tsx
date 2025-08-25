@@ -6,6 +6,7 @@ import SunIcon from "../../../public/icons/sun";
 import TargetIcon from "../../../public/icons/target";
 import cls from "./whether.module.css";
 import { useGetWeather } from "@/hooks/useGetWeather";
+import SunClouds from "../../../public/icons/sun_clouds";
 
 const days = [
   "Sunday",
@@ -36,14 +37,13 @@ const WeatherCard = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   const handleBigHover = () => {
     if (bigCooldown) return;
     setBigAnimate(true);
     setBigCooldown(true);
 
     setTimeout(() => setBigAnimate(false), 1000);
-    setTimeout(() => setBigCooldown(false), 1000);
+    setTimeout(() => setBigCooldown(false), 3000);
   };
 
   const handleSmallHover = (i: number) => {
@@ -66,21 +66,25 @@ const WeatherCard = () => {
       day: "Today",
       high: Math.floor(data.list[0].main.temp),
       low: Math.floor(data.list[0].main.temp_min),
+      weather: data.list[0].weather[0].main,
     },
     {
       day: "Tomorrow",
       high: Math.floor(data.list[8].main.temp),
       low: Math.floor(data.list[8].main.temp_min),
+      weather: data.list[8].weather[0].main,
     },
     {
       day: days[(today.getDay() + 2) % 7].slice(0, 3),
       high: Math.floor(data.list[17].main.temp),
       low: Math.floor(data.list[17].main.temp_min),
+      weather: data.list[17].weather[0].main,
     },
     {
       day: days[(today.getDay() + 3) % 7].slice(0, 3),
       high: Math.floor(data.list[25].main.temp),
       low: Math.floor(data.list[25].main.temp_min),
+      weather: data.list[25].weather[0].main,
     },
   ];
   const handleGetLocation = () => {
@@ -128,21 +132,30 @@ const WeatherCard = () => {
                 alignItems: "center",
                 display: "flex",
                 flexDirection: "column",
+                gap: "0",
+                margin: "0",
               }}
               onMouseEnter={() => handleSmallHover(i)}
             >
               <p className={cls.weak_line}>{f.day}</p>
               <div className={`${smallAnimate[i] ? cls.animate : ""}`}>
-                <SunIcon width={40} height={40} />
+                {f.weather == "Clouds" ? (
+                  <SunClouds width={40} height={40} />
+                ) : (
+                  <SunIcon width={40} height={40} />
+                )}
               </div>
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
+                  alignItems: "center",
                   width: "100%",
+                  margin: "0",
+                  padding: 0,
                 }}
               >
-                <p>{f.high}°</p>
+                <p style={{ margin: 0, padding: 0 }}>{f.high}°</p>
                 <p className={cls.weak_line}>{f.low}°</p>
               </div>
             </div>
