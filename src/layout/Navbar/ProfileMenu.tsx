@@ -1,14 +1,16 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import cls from "./Navbar.module.css";
-
 import { IoIosCamera } from "react-icons/io";
 import { IoAddOutline } from "react-icons/io5";
 import { FiLogOut } from "react-icons/fi";
 import Link from "next/link";
 import Avatar from "../Avatar";
+import { useLanguage } from "@/app/LanguageProvider";
+import { translations } from "@/app/translation";
 
-const ProfileMenu = () => {
+const ProfileMenu: React.FC = () => {
+  const { selectedLang } = useLanguage();
   const [openProfile, setOpenProfile] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -16,6 +18,8 @@ const ProfileMenu = () => {
     name: "nurken",
     email: "nurkenqaldybaev2001@gmail.com",
   };
+
+  const t = translations[selectedLang].profileMenu;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,11 +67,11 @@ const ProfileMenu = () => {
               }}
             />
             <IoIosCamera className={cls["cam-icon"]} />
-            <p>Hi, {user.name}!</p>
+            <p>{t.greeting}, {user.name}!</p>
           </div>
 
           <button className={cls["manage-button"]}>
-            Manage your Google Account
+            {t.manageAccount}
           </button>
 
           <div className={cls["profile-actions"]}>
@@ -75,20 +79,20 @@ const ProfileMenu = () => {
               <span className={cls["button-icon"]}>
                 <IoAddOutline />
               </span>
-              Add account
+              {t.addAccount}
             </button>
             <button className={cls["sign-out"]}>
               <span className={cls["button-icon"]}>
                 <FiLogOut />
               </span>
-              Sign out
+              {t.signOut}
             </button>
           </div>
 
           <div className={cls["popup-footer"]}>
-            <Link href="#">Privacy Policy</Link>
+            <Link href="#">{t.privacy}</Link>
             <p>-</p>
-            <Link href="#">Terms of Service</Link>
+            <Link href="#">{t.terms}</Link>
           </div>
         </div>
       )}

@@ -1,49 +1,68 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import cls from "./Navbar.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CategoryType } from "@/types";
+import { customAxios } from "@/api/customAxios";
+import { useLanguage } from "@/app/LanguageProvider";
+import { translations } from "@/app/translation";
 
-const NavbarLinks = () => {
+const NavbarLinks: React.FC = () => {
+  const { selectedLang } = useLanguage();
+  const [categories, setCategories] = useState<CategoryType[]>([]);
   const pathname = usePathname();
 
-  const categories: ({ name: string; path: string } | "|") [] = [
-    { name: "Home", path: "/" },
-    { name: "For you", path: "/foryou" },
-    { name: "Following", path: "/following" },
-    "|",
-    { name: "U.S.", path: "/us" },
-    { name: "World", path: "/world" },
-    { name: "Local", path: "/local" },
-    { name: "Business", path: "/business" },
-    { name: "Technology", path: "/technology" },
-    { name: "Sports", path: "/sports" },
-    { name: "Entertainment", path: "/entertainment" },
-    { name: "Science", path: "/science" },
-    { name: "Health", path: "/health" },
+  const t = translations[selectedLang].navbarLinks || translations["en-US"].navbarLinks;
+
+  const staticCategories: CategoryType[] = [
+    { name: t.home, path: "/" },
+    { name: t.forYou, path: "/foryou" },
+    { name: t.following, path: "/following" },
   ];
+
+  const toSlug = (name: string) =>
+    "/" +
+    name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await customAxios.get<CategoryType[]>("/categories");
+        const mapped = data.map((cat) => ({
+          name: cat.name,
+          path: toSlug(cat.name),
+        }));
+        setCategories([...staticCategories, ...mapped]);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+        setCategories(staticCategories);
+      }
+    };
+    fetchCategories();
+  }, [selectedLang]);
 
   return (
     <div className={cls["navbar-links"]}>
-      {categories.map((category, index) =>
-        category === "|" ? (
-          <span key={index} className={cls["hide-mobile"]}>
-            |
-          </span>
-        ) : (
+      {categories.map((cat, index) => (
+        <React.Fragment key={index}>
           <Link
-            key={index}
-            href={category.path}
-            className={`${pathname === category.path ? cls.active : ""} ${
-              category.name === "Home" || category.name === "Following"
-                ? cls["hide-mobile"]
-                : ""
+            href={cat.path}
+            className={`${pathname === cat.path ? cls.active : ""} ${
+              [t.home, t.following].includes(cat.name) ? cls["hide-mobile"] : ""
             }`}
           >
-            {category.name}
+            {cat.name}
           </Link>
-        )
-      )}
+
+          {index === staticCategories.length - 1 && (
+            <span className={cls["hide-mobile"]}>|</span>
+          )}
+        </React.Fragment>
+      ))}
     </div>
   );
 };
