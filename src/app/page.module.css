@@ -25,3 +25,9 @@
 .weak {
   color: rgb(189, 193, 198);
 }
+
+@media (max-width: 600px) {
+  .calendar_whether {
+    display: none;
+  }
+}

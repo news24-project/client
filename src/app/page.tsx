@@ -1,5 +1,6 @@
 import WeatherCard from "@/components/WeatherCard";
 import styles from "./page.module.css";
+import SunClouds from "../../public/icons/sun_clouds";
 
 const days = [
   "Sunday",
