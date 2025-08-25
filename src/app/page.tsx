@@ -26,6 +26,7 @@ const months = [
 ];
 
 import React from "react";
+import LocalNews from "./Local";
 
 const Home = () => {
   const today = new Date();
