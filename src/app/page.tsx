@@ -26,12 +26,24 @@ const months = [
 ];
 
 import React from "react";
-import LocalNews from "./Local";
 
 const Home = () => {
+  const today = new Date();
+  const dayName = days[today.getDay()];
+  const monthName = months[today.getMonth()];
+  const dateNum = today.getDate();
+
+  const formattedDate = `${dayName}, ${monthName} ${dateNum}`;
+
   return (
-    <div className="container">
-      <h1>Home</h1>
+    <div className={styles.wrapper}>
+      <div className={styles.calendar_weather}>
+        <div>
+          <h1 style={{ fontWeight: "300" }}>Your briefing</h1>
+          <p className={styles.weak}>{formattedDate}</p>{" "}
+        </div>
+        <WeatherCard />
+      </div>
     </div>
   );
 };

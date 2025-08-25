@@ -1,9 +1,25 @@
+import { customAxios } from "@/api/customAxios";
 import CategoryHeader from "@/components/CategoryHeader";
 import NewsItem from "@/components/LocalNews";
 
-import React from "react";
+interface News {
+  source: string;
+  sourceIcon: string;
+  title: string;
+  time: string;
+  image: string;
+}
+
+// import React, { useEffect, useState } from "react";
 
 const ForYou = () => {
+  // const [news, setNews] = useState<News[]>([]);
+
+  // useEffect(() => {
+  //   customAxios.get("/art")
+   
+  // }, []);
+
   return (
     <div className="container">
       <div>
@@ -21,11 +37,11 @@ const ForYou = () => {
           ]}
         />
 
-        <CategoryHeader
+        {/* <CategoryHeader
           title="Sports"
           icon="⚽"
           categories={["Football", "Basketball", "Tennis", "Cycling"]}
-        />
+        /> */}
       </div>
       <div>
         <NewsItem

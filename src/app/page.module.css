@@ -11,7 +11,7 @@
   padding-top: 30px;
 }
 
-.calendar_whether {
+.calendar_weather {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,4 +24,10 @@
 
 .weak {
   color: rgb(189, 193, 198);
+}
+
+@media (max-width: 600px) {
+  .calendar_weather {
+    display: none;
+  }
 }
