@@ -1,0 +1,64 @@
+.menuIcon {
+  position: absolute;
+  top: -6px;
+  right: 0;
+  padding: 1px 3px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: 0.2s;
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.menuIcon:hover {
+  background-color: #222;
+}
+
+.menuWrapper {
+  position: absolute;
+  z-index: -1;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  top: 23px;
+  right: -250px;
+  padding: 5px 0px;
+  border-radius: 12px;
+  background-color: rgb(51, 53, 54);
+  box-shadow: 0px 0px 3px black;
+  width: 100px;
+  height: 100px;
+}
+
+.menuActive {
+  visibility: visible;
+  opacity: 1;
+  z-index: 1;
+  width: auto;
+  height: auto;
+}
+
+.menuItem {
+  padding: 8px 75px 8px 13px;
+  transition: 0.2s;
+}
+
+.menuItem:hover {
+  background-color: rgb(60, 64, 67);
+}
+
+.menuItem:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 14px;
+  color: rgb(189, 193, 198);
+}
+
+.menuItem a {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 14px;
+  color: rgb(189, 193, 198);
+}

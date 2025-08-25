@@ -1,0 +1,99 @@
+.cardBig {
+  background-color: #131314;
+  border-top: 1px solid #e3e3e3;
+  margin-top: 16px;
+  padding-top: 16px;
+  width: 800px;
+  display: flex;
+  gap: 30px;
+  position: relative;
+}
+
+.cardLeft {
+  width: 33%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+
+.cardLeftImgDiv {
+  width: 100%;
+  height: 50%;
+  border-radius: 12px;
+}
+.cardLeftImgDiv img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.cardLeftDiv {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.cardLeftDiv:hover article {
+  visibility: visible;
+}
+
+.cardLeftDivIconDiv {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.cardLeftDivIconDiv img {
+  width: 15px;
+  height: 15px;
+}
+.cardLeftDivIconDiv span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #dfdfdf;
+}
+
+.cardLeftDiv h2 {
+  color: whitesmoke;
+  font-size: 18px;
+  font-weight: lighter;
+  line-height: 1.4;
+}
+.cardLeftDiv:hover h2 {
+  text-decoration: underline;
+}
+
+.cardLeftDiv p {
+  font-size: 12px;
+  font-weight: lighter;
+  display: flex;
+  align-items: center;
+  color: #dfdfdf;
+  gap: 3px;
+}
+
+.cardLeftDivText {
+  color: #eeeeee;
+  font-size: 12px;
+  font-weight: 500;
+}
+.cardLeftDivText:first-child {
+  color: #dfdfdf;
+  position: relative;
+  top: 0.3px;
+}
+
+.cardRight {
+  width: 67%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
