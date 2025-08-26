@@ -2,7 +2,6 @@ import type React from "react"
 import { FiSliders, FiInfo } from "react-icons/fi"
 import styles from "./Local.module.css"
 import Link from "next/link"
-import NewsItem from "../../components/LocalNews/"
 
 const LocalNews: React.FC = () => {
   const news = [
@@ -79,7 +78,17 @@ const LocalNews: React.FC = () => {
 
       <div className={styles.newsList}>
         {news.map((item) => (
-          <NewsItem key={item.id} {...item} />
+          <div key={item.id} className={styles.newsItem}>
+            <img src={item.image} alt={item.title} className={styles.newsImage} />
+            <div className={styles.newsContent}>
+              <div className={styles.newsHeader}>
+                <img src={item.sourceIcon} alt={item.source} className={styles.sourceIcon} />
+                <span className={styles.sourceName}>{item.source}</span>
+                <span className={styles.newsTime}>{item.time}</span>
+              </div>
+              <h2 className={styles.newsTitle}>{item.title}</h2>
+            </div>
+          </div>
         ))}
       </div>
     </div>

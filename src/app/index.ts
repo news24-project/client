@@ -1,2 +1,2 @@
-export { default as LocalPage } from './Local';
-export { default as ManagePage } from './Manage';
+export { default as LocalPage } from './local';
+export { default as ManagePage } from './manage';
