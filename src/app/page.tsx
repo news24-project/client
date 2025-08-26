@@ -76,7 +76,15 @@ const Home = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.calendar_weather}>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
           <h1 style={{ fontWeight: "300" }}>Your briefing</h1>
           <p className={styles.weak}>{formattedDate}</p>{" "}
         </div>
