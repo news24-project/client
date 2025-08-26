@@ -30,30 +30,31 @@ const NavbarLinks: React.FC = () => {
       .replace(/[^\w-]/g, "");
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data } = await customAxios.get(
-          `/categories?lang=${selectedLang}`
-        );
-        console.log(data)
+  const fetchCategories = async () => {
+    setCategories([]);
+    try {
+      const { data } = await customAxios.get(`/categories?lang=${selectedLang}`);
 
-        const mapped = (data.categories || []).map((cat: any) => ({
-          name: cat.name,
-          path: toSlug(cat.name),
-        }));
+      const mapped = (data.categories || []).map((cat: any) => ({
+        name: cat.name,
+        path: "/" + cat.slug,
+      }));
 
-        setCategories([
-          ...staticCategories,
-          { name: data.country, path: toSlug(data.country) },
-          ...mapped,
-        ]);
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-        setCategories(staticCategories);
-      }
-    };
-    fetchCategories();
-  }, [selectedLang]);
+      const countryPath = `/country/${data.country.slug}?lang=${selectedLang}`;
+
+      setCategories([
+        ...staticCategories,
+        { name: data.country.name, path: countryPath },
+        ...mapped,
+      ]);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+      setCategories(staticCategories);
+    }
+  };
+  fetchCategories();
+}, [selectedLang]);
+
 
   return (
     <div className={cls["navbar-links"]}>

@@ -9,15 +9,14 @@ import {
 } from "react";
 
 type Language =
-  | "en-US" 
-  | "ru-RU" 
-  | "uz-UZ" 
-  | "kz-KZ" 
-  | "in-IN" 
-  | "tr-TR" 
-  | "zh-TW" 
-  | "ky-KG"; 
-
+  | "en-US"
+  | "ru-RU"
+  | "uz-UZ"
+  | "kz-KZ"
+  | "in-IN"
+  | "tr-TR"
+  | "zh-TW"
+  | "ky-KG";
 
 interface LanguageContextType {
   selectedLang: Language;
@@ -43,6 +42,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setSelectedLang = (lang: Language) => {
     setSelectedLangState(lang);
     localStorage.setItem(STORAGE_KEY, lang);
+
+    window.location.href = `/?lang=${lang}`;
   };
 
   return (
