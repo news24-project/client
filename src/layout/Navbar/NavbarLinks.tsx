@@ -34,13 +34,14 @@ const NavbarLinks: React.FC = () => {
     setCategories([]);
     try {
       const { data } = await customAxios.get(`/categories?lang=${selectedLang}`);
+      
 
       const mapped = (data.categories || []).map((cat: any) => ({
         name: cat.name,
         path: "/" + cat.slug,
       }));
 
-      const countryPath = `/country/${data.country.slug}?lang=${selectedLang}`;
+      const countryPath = `/country/${data?.country?.slug}?lang=${selectedLang}`;
 
       setCategories([
         ...staticCategories,

@@ -10,9 +10,10 @@ type Props = {
   title: string;
   icon?: React.ReactNode;
   categories: string[];
+  onTagClick?: (index: number) => void;
 };
 
-const CategoryHeader = ({ title, icon = "💡", categories }: Props) => {
+const CategoryHeader = ({ title, icon = "💡", categories, onTagClick }: Props) => {
   const [active, setActive] = useState(categories[0]);
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -46,11 +47,14 @@ const CategoryHeader = ({ title, icon = "💡", categories }: Props) => {
       </div>
 
       <div className={cls.buttons}>
-        {categories.map((cat) => (
+        {categories.map((cat, idx) => (
           <button
             key={cat}
             className={`${cls.button} ${active === cat ? cls.active : ""}`}
-            onClick={() => setActive(cat)}
+            onClick={() => {
+              setActive(cat);
+              onTagClick?.(idx);
+            }}
           >
             {cat}
           </button>
