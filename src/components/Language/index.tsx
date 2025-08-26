@@ -10,7 +10,8 @@ type Language =
   | "kz-KZ"
   | "in-IN"
   | "tr-TR"
-  | "zh-TW";
+  | "zh-TW"
+  | "ky-KG";
 
 interface LanguageModalProps {
   selectedLang: Language;

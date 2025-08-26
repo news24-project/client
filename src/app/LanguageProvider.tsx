@@ -9,13 +9,15 @@ import {
 } from "react";
 
 type Language =
-  | "en-US"
-  | "ru-RU"
-  | "uz-UZ"
-  | "kz-KZ"
-  | "in-IN"
-  | "tr-TR"
-  | "zh-TW";
+  | "en-US" 
+  | "ru-RU" 
+  | "uz-UZ" 
+  | "kz-KZ" 
+  | "in-IN" 
+  | "tr-TR" 
+  | "zh-TW" 
+  | "ky-KG"; 
+
 
 interface LanguageContextType {
   selectedLang: Language;

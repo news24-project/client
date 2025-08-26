@@ -13,7 +13,8 @@ const NavbarLinks: React.FC = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const pathname = usePathname();
 
-  const t = translations[selectedLang].navbarLinks || translations["en-US"].navbarLinks;
+  const t =
+    translations[selectedLang].navbarLinks || translations["en-US"].navbarLinks;
 
   const staticCategories: CategoryType[] = [
     { name: t.home, path: "/" },
@@ -31,12 +32,21 @@ const NavbarLinks: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await customAxios.get<CategoryType[]>("/categories");
-        const mapped = data.map((cat) => ({
+        const { data } = await customAxios.get(
+          `/categories?lang=${selectedLang}`
+        );
+        console.log(data)
+
+        const mapped = (data.categories || []).map((cat: any) => ({
           name: cat.name,
           path: toSlug(cat.name),
         }));
-        setCategories([...staticCategories, ...mapped]);
+
+        setCategories([
+          ...staticCategories,
+          { name: data.country, path: toSlug(data.country) },
+          ...mapped,
+        ]);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
         setCategories(staticCategories);
