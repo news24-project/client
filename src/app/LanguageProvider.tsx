@@ -15,7 +15,8 @@ export type Language =
   | "kz-KZ"
   | "in-IN"
   | "tr-TR"
-  | "zh-TW";
+  | "zh-TW"
+  | "ky-KG";
 
 interface LanguageContextType {
   selectedLang: Language;
@@ -41,6 +42,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setSelectedLang = (lang: Language) => {
     setSelectedLangState(lang);
     localStorage.setItem(STORAGE_KEY, lang);
+
+    window.location.href = `/?lang=${lang}`;
   };
 
   return (

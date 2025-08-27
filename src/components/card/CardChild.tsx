@@ -1,39 +1,32 @@
 import React from "react";
 import cn from "classnames";
 import css from "./CardChild.module.css";
-import { ICardChild } from "./interfaces";
 import CardMenu from "./CardMenu";
+import { IArticle } from "@/api";
 
-interface CardChildProps extends ICardChild {
-  setIsActiveModal: (v: boolean) => void;
-}
-
-const CardChild = ({ cardMainDiv, setIsActiveModal }: CardChildProps) => {
-  const { imgIcon, imgIconText, title, dateText, author, organization, socials } = cardMainDiv;
+const CardChild = ({ cardMain }: { cardMain: IArticle }) => {
+  const { iconUrl, title, publishedAt, author, url } = cardMain;
 
   return (
     <div className={cn(css.cardRightDiv)}>
       <div className={cn(css.cardRightDivIconDiv)}>
-        <img alt={imgIconText} src={imgIcon} />
-        <span>{imgIconText}</span>
+        <img alt={title} src={iconUrl || "https://ih1.redbubble.net/image.4905811472.8675/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"} />
+        <span>{author}</span>
       </div>
       <h2>{title}</h2>
       <p>
-        {dateText}
+        {publishedAt ? new Date(publishedAt).toLocaleDateString() : "Нет даты"}
         <span className={cn(css.cardRightDivText)}>&bull;</span>
-        <span className={cn(css.cardRightDivText)}>{author?.name}</span>
+        <span className={cn(css.cardRightDivText)}>{author}</span>
       </p>
       <CardMenu
-        author={author}
-        organization={organization}
-        socials={socials}
-        imgIcon={imgIcon}
-        imgIconText={imgIconText}
-        setIsActiveModal={setIsActiveModal}
+        url={url}
+        title={title}
+        author={author || ""}
+        iconUrl={iconUrl || "https://ih1.redbubble.net/image.4905811472.8675/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"}
       />
     </div>
   );
 };
-
 
 export default CardChild;

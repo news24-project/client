@@ -2,11 +2,12 @@
 
 import WeatherCard from "@/components/WeatherCard";
 import styles from "./page.module.css";
-import { ICard } from "@/components/card/interfaces";
 import Card from "@/components/card/Card";
 import ModalShare from "@/components/modalShare";
 import React from "react";
 import { useLanguage } from "./LanguageProvider";
+import { useFindAllArticles } from "@/hooks/useArticles";
+import { ICard } from "@/components/card/interfaces";
 
 export const days = [
   {
@@ -14,9 +15,10 @@ export const days = [
     "ru-RU": "Воскресенье",
     "uz-UZ": "Yakshanba",
     "kz-KZ": "Жексенбі",
-    "in-IN": "रविवार", // Hindi
+    "in-IN": "रविवार",
     "tr-TR": "Pazar",
     "zh-TW": "星期日",
+    "ky-KG": "Жекшемби",
   },
   {
     "en-US": "Monday",
@@ -26,6 +28,7 @@ export const days = [
     "in-IN": "सोमवार",
     "tr-TR": "Pazartesi",
     "zh-TW": "星期一",
+    "ky-KG": "Дүйшөмбү",
   },
   {
     "en-US": "Tuesday",
@@ -35,6 +38,7 @@ export const days = [
     "in-IN": "मंगलवार",
     "tr-TR": "Salı",
     "zh-TW": "星期二",
+    "ky-KG": "Шейшемби",
   },
   {
     "en-US": "Wednesday",
@@ -44,6 +48,7 @@ export const days = [
     "in-IN": "बुधवार",
     "tr-TR": "Çarşamba",
     "zh-TW": "星期三",
+    "ky-KG": "Шаршемби",
   },
   {
     "en-US": "Thursday",
@@ -53,6 +58,7 @@ export const days = [
     "in-IN": "गुरुवार",
     "tr-TR": "Perşembe",
     "zh-TW": "星期四",
+    "ky-KG": "Бейшемби",
   },
   {
     "en-US": "Friday",
@@ -62,6 +68,7 @@ export const days = [
     "in-IN": "शुक्रवार",
     "tr-TR": "Cuma",
     "zh-TW": "星期五",
+    "ky-KG": "Жума",
   },
   {
     "en-US": "Saturday",
@@ -71,9 +78,11 @@ export const days = [
     "in-IN": "शनिवार",
     "tr-TR": "Cumartesi",
     "zh-TW": "星期六",
+    "ky-KG": "Ишемби",
   },
 ];
-const months = [
+
+export const months = [
   {
     "en-US": "January",
     "ru-RU": "Январь",
@@ -82,6 +91,7 @@ const months = [
     "in-IN": "जनवरी",
     "tr-TR": "Ocak",
     "zh-TW": "一月",
+    "ky-KG": "Январь",
   },
   {
     "en-US": "February",
@@ -91,6 +101,7 @@ const months = [
     "in-IN": "फ़रवरी",
     "tr-TR": "Şubat",
     "zh-TW": "二月",
+    "ky-KG": "Февраль",
   },
   {
     "en-US": "March",
@@ -100,6 +111,7 @@ const months = [
     "in-IN": "मार्च",
     "tr-TR": "Mart",
     "zh-TW": "三月",
+    "ky-KG": "Март",
   },
   {
     "en-US": "April",
@@ -109,6 +121,7 @@ const months = [
     "in-IN": "अप्रैल",
     "tr-TR": "Nisan",
     "zh-TW": "四月",
+    "ky-KG": "Апрель",
   },
   {
     "en-US": "May",
@@ -118,6 +131,7 @@ const months = [
     "in-IN": "मई",
     "tr-TR": "Mayıs",
     "zh-TW": "五月",
+    "ky-KG": "Май",
   },
   {
     "en-US": "June",
@@ -127,6 +141,7 @@ const months = [
     "in-IN": "जून",
     "tr-TR": "Haziran",
     "zh-TW": "六月",
+    "ky-KG": "Июнь",
   },
   {
     "en-US": "July",
@@ -136,6 +151,7 @@ const months = [
     "in-IN": "जुलाई",
     "tr-TR": "Temmuz",
     "zh-TW": "七月",
+    "ky-KG": "Июль",
   },
   {
     "en-US": "August",
@@ -145,6 +161,7 @@ const months = [
     "in-IN": "अगस्त",
     "tr-TR": "Ağustos",
     "zh-TW": "八月",
+    "ky-KG": "Август",
   },
   {
     "en-US": "September",
@@ -154,6 +171,7 @@ const months = [
     "in-IN": "सितंबर",
     "tr-TR": "Eylül",
     "zh-TW": "九月",
+    "ky-KG": "Сентябрь",
   },
   {
     "en-US": "October",
@@ -163,6 +181,7 @@ const months = [
     "in-IN": "अक्टूबर",
     "tr-TR": "Ekim",
     "zh-TW": "十月",
+    "ky-KG": "Октябрь",
   },
   {
     "en-US": "November",
@@ -172,6 +191,7 @@ const months = [
     "in-IN": "नवंबर",
     "tr-TR": "Kasım",
     "zh-TW": "十一月",
+    "ky-KG": "Ноябрь",
   },
   {
     "en-US": "December",
@@ -181,10 +201,11 @@ const months = [
     "in-IN": "दिसंबर",
     "tr-TR": "Aralık",
     "zh-TW": "十二月",
+    "ky-KG": "Декабрь",
   },
 ];
 
-const briefing = {
+export const briefing = {
   "en-US": "Your briefing",
   "ru-RU": "Ваше резюме",
   "uz-UZ": "Sizning qisqacha ma’lumotingiz",
@@ -192,86 +213,41 @@ const briefing = {
   "in-IN": "आपकी सारांश सूचना",
   "tr-TR": "Sizin brifinginiz",
   "zh-TW": "您的簡報",
+  "ky-KG": "Сиздин кыскача маалымат",
 };
 
-const cardMain: ICard["cardMain"] = {
-  img: "https://www.timeoutdubai.com/cloud/timeoutdubai/2021/09/11/hfpqyV7B-IMG-Dubai-UAE.jpg",
-  cardMainDiv: {
-    imgIcon:
-      "https://play-lh.googleusercontent.com/0IoGNBJeaga47hJgxtTzXXlPQmZYGjrzghS1NLoCrtjJTkm_GSRs5e44FmrXxxCUYJs",
-    imgIconText: "BBC",
-    title: "Protests expected at asylum hotels across UK as tensions mount",
-    dateText: "1 hour ago",
-    author: {
-      name: "By Jamie Grierson",
-      id: "https://news.google.com/topics/CAAqKAgKIiJDQkFTRXdvTkwyY3ZNVEZ3Tmpjd1ltUnFkeElDWlc0b0FBUAE?hl=en-GB&gl=GB&ceid=GB%3Aen",
-    },
-    organization: {
-      id: "https://news.google.com/publications/CAAqIAgKIhpDQklTRFFnTWFna0tCMkppWXk1amIyMG9BQVAB?hl=en-GB&gl=GB&ceid=GB%3Aen",
-      title: "BBC",
-    },
-    socials: {
-      facebookLink:
-        "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.bbc.com%2Fnews%2Flive%2Fce83n80dqllt",
-      link: "https://www.bbc.com/news/live/ce83n80dqllt",
-      twitterLink:
-        "https://x.com/intent/post?text=Number%20of%20asylum%20seekers%20in%20hotels%20up%208%25%20in%20past%20year%2C%20but%20falls%20slightly%20since%20March%2C%20new%20data%20shows%20-%20BBC&url=https%3A%2F%2Fwww.bbc.com%2Fnews%2Flive%2Fce83n80dqllt&via=GoogleNews",
-    },
-  },
-};
-
-const cards: ICard["cards"] = [
-  { cardMainDiv: cardMain.cardMainDiv },
-  { cardMainDiv: cardMain.cardMainDiv },
-  { cardMainDiv: cardMain.cardMainDiv },
-];
-
-const Home = () => {
+const Home: React.FC = () => {
   const { selectedLang } = useLanguage();
   const today = new Date();
-  const dayName = days[today.getDay()][selectedLang];
-  const monthName = months[today.getMonth()][selectedLang];
+  const dayName = days[today.getDay()][selectedLang as keyof (typeof days)[0]];
+  const monthName =
+    months[today.getMonth()][selectedLang as keyof (typeof months)[0]];
   const dateNum = today.getDate();
-
-  const [isActiveModal, setIsActiveModal] = React.useState(false);
-
   const formattedDate = `${dayName}, ${monthName} ${dateNum}`;
+
+  const { data: articles = [], isLoading, isError } = useFindAllArticles();
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Something went wrong!</p>;
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.calendar_weather}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "20px",
-          }}
-        >
-          <h1 style={{ fontWeight: "300" }}>{briefing[selectedLang]}</h1>
-          <p className={styles.weak}>{formattedDate}</p>{" "}
-        </div>
+        <h1 style={{ fontWeight: 300 }}>{briefing[selectedLang]}</h1>
+        <p className={styles.weak}>{formattedDate}</p>
         <WeatherCard />
       </div>
 
-      <Card
-        cardMain={cardMain}
-        smallCardOA={true}
-        setIsActiveModal={setIsActiveModal}
-      />
-      <Card
-        cardMain={cardMain}
-        cards={cards}
-        setIsActiveModal={setIsActiveModal}
-      />
-
-      {isActiveModal && (
-        <ModalShare
-          isActiveModal={isActiveModal}
-          setIsActiveModal={setIsActiveModal}
-        />
+      {articles.length > 0 && (
+        <>
+          <Card cardMain={articles[0]} smallCardOA={true} />
+          {articles.length > 1 && (
+            <Card cardMain={articles[1]} cards={articles.slice(2)} />
+          )}
+        </>
       )}
+
+      <ModalShare />
     </div>
   );
 };

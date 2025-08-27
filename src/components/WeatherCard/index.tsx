@@ -18,7 +18,9 @@ export const todayVariants = {
   "in-IN": "आज",
   "tr-TR": "Bugün",
   "zh-TW": "今天",
+  "ky-KG": "Бүгүн",
 };
+
 
 const WeatherCard = () => {
   const [show, setShow] = useState(false);

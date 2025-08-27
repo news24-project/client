@@ -38,7 +38,7 @@ const Navbar = () => {
           <ProfileMenu  />
         </div>
       </div>
-      <div className="container">
+      <div>
         <NavbarLinks  />
       </div>
     </div>

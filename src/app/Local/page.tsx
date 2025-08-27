@@ -1,8 +1,10 @@
+"use client";
+
 import type React from "react"
 import { FiSliders, FiInfo } from "react-icons/fi"
 import styles from "./Local.module.css"
 import Link from "next/link"
-import NewsItem from "../../components/LocalNews/"
+import NewsItem from "../../components/LocalNews"
 
 const LocalNews: React.FC = () => {
   const news = [
