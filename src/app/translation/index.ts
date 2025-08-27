@@ -718,7 +718,114 @@ export const translations = {
             home: "首頁",
             following: "追蹤中",
         }
+    },
+    "ky-KG": {
+        sidebar: {
+            home: "Башкы бет",
+            following: "Жазылгандар",
+            saved: "Сакталган издөө",
+            us: "АКШ",
+            world: "Дүйнө",
+            local: "Жергиликтүү",
+            business: "Бизнес",
+            technology: "Технология",
+            entertainment: "Көңүл ачуу",
+            sports: "Спорт",
+            science: "Илим",
+            health: "Саламаттык",
+            language: "Тил жана аймак",
+            settings: "Орнотуулар",
+            android: "Android колдонмосун жүктөп алуу",
+            feedback: "Пикир калтыруу",
+            help: "Жардам",
+        },
+        languageModal: {
+            languageLabel: "Кыргызча (Киргизстан)",
+            modalTitle: "Тил жана аймак",
+            modalDesc: "Тандалган тил жана аймак боюнча жаңылыктарды көрүңүз",
+            searchPlaceholder: "Тил же аймак издөө",
+            buttons: { cancel: "Жокко чыгаруу", update: "Жаңыртуу" },
+            language: "Тил",
+        },
+        navbarLinks: { home: "Башкы бет", forYou: "Сиз үчүн", following: "Жазылгандар" },
+        appsMenu: {
+            main: [
+                "Google Диск", "Gmail", "Gemini", "Карта", "Google", "Календарь", "Жаңылыктар", "Сүрөттөр",
+                "Meet", "Котормо", "Sheets", "Документтер", "Slides", "Google One"
+            ],
+            more: [
+                "Дүкөн", "Play", "Каржы", "Класс", "Keep", "Менин борборум", "Чат", "Жер", "Сакталган",
+                "Өнөр жана маданият", "Бизнес борбору", "Байланыштар", "Саякат", "Формалар", "Китептер", "Chrome", "Сырсөздөр",
+                "Аналитика", "Блог", "Капчык", "NotebookLM"
+            ],
+            moreLink: "Дагы Google кызматтары"
+        },
+        searchBar: {
+            placeholder: "Тема, жер же булакты издөө",
+            narrowResults: "Издөө натыйжасын тактоо",
+            exactPhrase: "Так дал келген сөздөр",
+            hasWords: "Камтылган сөздөр",
+            excludeWords: "Чыгарылуучу сөздөр",
+            website: "Вебсайт",
+            date: "Дата",
+            clear: "Тазалоо",
+            search: "Издөө",
+            selectDate: "Датаны тандаңыз",
+            dateOptions: [
+                { value: "anytime", label: "Каалаган убакта" },
+                { value: "24h", label: "Акыркы 24 саат" },
+                { value: "week", label: "Акыркы жума" },
+                { value: "month", label: "Акыркы ай" },
+                { value: "year", label: "Акыркы жыл" },
+            ],
+        },
+        settingsDropdown: { settings: "Орнотуулар", language: "Тил" },
+        profileMenu: {
+            manageAccount: "Google аккаунтуңузду башкаруу",
+            addAccount: "Аккаунт кошуу",
+            signOut: "Чыгуу",
+            privacy: "Купуялык саясаты",
+            terms: "Колдонуу шарттары",
+            greeting: "Салам",
+        },
+        helpDropdown: {
+            help: "Жардам",
+            privacy: "Купуялык",
+            terms: "Шарттар",
+            about: "Google жөнүндө",
+            android: "Android колдонмосун жүктөп алуу",
+            ios: "iOS колдонмосун жүктөп алуу",
+            feedback: "Пикир калтыруу",
+        },
+        settings: {
+            general: "Негизги",
+            hiddenSources: "Жашырылган булактар",
+            manage: "Башкаруу",
+            myActivity: "Менин аракеттерим",
+            signedIn: "Кирген аккаунт:",
+            view: "Көрүү",
+            darkTheme: "Караңгы тема",
+            temperatureUnit: "Температура бирдиги",
+            themeOptions: {
+                never: "Эч качан",
+                always: "Ар дайым",
+                system: "Система боюнча",
+            },
+            tempOptions: {
+                celsius: "Цельсий (°C)",
+                fahrenheit: "Фаренгейт (°F)",
+                kelvin: "Кельвин",
+            },
+            privacy: "Купуялык саясаты",
+            terms: "Колдонуу шарттары",
+            about: "Google жөнүндө",
+        },
+        footer: {
+            home: "Башкы бет",
+            following: "Жазылгандар",
+        }
     }
+
 
 }
 

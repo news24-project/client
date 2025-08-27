@@ -1,40 +1,55 @@
+
+
+"use client";
+
+import type React from "react"
 import { FiSliders, FiInfo } from "react-icons/fi"
 import styles from "./Local.module.css"
 import Link from "next/link"
+import NewsItem from "../../components/LocalNews"
 
-const Local= () => {
+const LocalNews: React.FC = () => {
   const news = [
     {
       id: 1,
-      source: "FIVB",
-      sourceIcon: "https://picsum.photos/seed/fivb/40/40",
-      title: "Spotlight turns to Tashkent as Boys' U19 World Championship begins Thursday",
-      time: "23 Jul",
-      image: "https://picsum.photos/seed/volleyball/200/120",
+      source: "Euronews.com",
+      sourceIcon: "https://www.euronews.com/favicon.ico",
+      title: "New Tashkent: Uzbekistan's Urban Transformation",
+      time: "20 hours ago",
+      image: "https://picsum.photos/200/300",
     },
     {
       id: 2,
-      source: "The Guardian",
-      sourceIcon: "https://picsum.photos/seed/guardian/40/40",
-      title: "Cosmic metros, UFO circus tops and a 3000C sun gun: the mesmerising architecture of Tashkent",
-      time: "28 Apr • By Oliver Wainwright",
-      image: "https://picsum.photos/seed/architecture/200/120",
+      source: "FIVB",
+      sourceIcon: "https://www.fivb.com/favicon.ico",
+      title: "Spotlight turns to Tashkent as Boys' U19 World Championship begins Thursday",
+      time: "23 Jul",
+      image: "https://picsum.photos/200/300",
     },
     {
       id: 3,
-      source: "ch-aviation",
-      sourceIcon: "https://picsum.photos/seed/aviation/40/40",
-      title: "Uzbekistan's Tashkent Air launches scheduled passenger ops",
-      time: "5 Jun",
-      image: "https://picsum.photos/seed/airplane/200/120",
+      source: "The Gymternet",
+      sourceIcon: "https://picsum.photos/200/300",
+      title: "2025 Tashkent Challenge Cup Results",
+      time: "22 Jun",
+      image: "https://picsum.photos/200/300",
     },
     {
       id: 4,
-      source: "The Stadium Business",
-      sourceIcon: "https://picsum.photos/seed/stadium/40/40",
-      title: "Tashkent stadium development project announced",
-      time: "12 May",
-      image: "https://picsum.photos/seed/sports/200/120",
+      source: "UzDaily",
+      sourceIcon: "https://www.uzdaily.uz/favicon.ico",
+      title: "Tashkent to host international conference on digital economy",
+      time: "15 Jul",
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      id: 5,
+      source: "BBC News",
+      sourceIcon: "https://www.bbc.com/favicon.ico",
+      title: "Tashkent's role in Central Asia's geopolitics",
+      time: "10 Jul",
+      image: "https://picsum.photos/200/300",
+
     },
   ]
 
@@ -49,7 +64,7 @@ const Local= () => {
             <Link href="/manage">
               <button
                 className={styles.filterButton}
-                onClick={() => setTimeout(() => {}, 3000)}
+
               >
                 <FiSliders size={18} />
               </button>
@@ -64,25 +79,14 @@ const Local= () => {
 
       <div className={styles.newsList}>
         {news.map((item) => (
-          <div key={item.id} className={styles.newsItem}>
-            <div className={styles.newsContent}>
-              <div className={styles.newsText}>
-                <div className={styles.sourceInfo}>
-                  <img src={item.sourceIcon || "/placeholder.svg"} alt={item.source} className={styles.sourceIcon} />
-                  <span className={styles.sourceName}>{item.source}</span>
-                </div>
-                <h2 className={styles.newsTitle}>{item.title}</h2>
-                <div className={styles.newsTime}>{item.time}</div>
-              </div>
-              <div className={styles.newsImage}>
-                <img src={item.image || "/placeholder.svg"} alt={item.title} />
-              </div>
-            </div>
-          </div>
+
+          <NewsItem key={item.id} {...item} />
         ))}
       </div>
     </div>
   )
 }
 
-export default Local
+
+
+export default LocalNews

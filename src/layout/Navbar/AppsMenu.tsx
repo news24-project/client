@@ -14,6 +14,10 @@ const AppsMenu: React.FC = () => {
 
   const t = translations[selectedLang]?.appsMenu || translations["en-US"].appsMenu;
 
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> e5639ffaf0b61d3eb6044012c4a3adc77573846c
   const mainAppsSrc = [
     "/images/drive.png","/images/email.png","/images/gemini-color.svg","/images/maps.png",
     "/images/google.png","/images/calendar.png","/images/news.png","/images/photos.png",
