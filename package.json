@@ -9,11 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "axios": "^1.11.0",
-    "classnames": "^2.5.1",
-    "lucide-react": "^0.540.0",
-=======
+
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-query": "^5.85.5",
     "animate.css": "^4.1.1",
@@ -21,7 +17,7 @@
     "classnames": "^2.5.1",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.541.0",
->>>>>>> e5639ffaf0b61d3eb6044012c4a3adc77573846c
+
     "next": "15.4.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

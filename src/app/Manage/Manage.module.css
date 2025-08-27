@@ -1,6 +1,6 @@
 .container {
   color: white;
-  background-color: #303030;
+  /* background-color: #303030; */
   width: 100%;
   max-width: 850px;
   margin: 0 auto;
@@ -74,7 +74,7 @@
 .searchContainer {
   display: flex;
   align-items: center;
-  background-color: #303030;
+  /* background-color: #303030; */
   border: 1px solid #374151;
   border-radius: 9999px;
   padding: 0 1rem;
@@ -184,7 +184,7 @@
 }
 
 .newsCard {
-  background-color: #303030;
+  /* background-color: #303030; */
   border-radius: 1rem;
   padding: 2rem;
   border: 1px solid #374151;
