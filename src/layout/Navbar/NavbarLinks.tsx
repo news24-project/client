@@ -65,7 +65,11 @@ const NavbarLinks: React.FC = () => {
         <React.Fragment key={index}>
           <Link
             href={cat.path}
-            className={`${pathname === cat.path ? cls.active : ""} ${
+            className={`${
+              pathname.split("?")[0] === cat.path.split("?")[0]
+                ? cls.active
+                : ""
+            } ${
               [t.home, t.following].includes(cat.name) ? cls["hide-mobile"] : ""
             }`}
           >

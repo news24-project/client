@@ -19,14 +19,14 @@ interface CategoryPageProps {
 
 const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
   const [tags, setTags] = useState<Tag[]>([]);
-  const [selectedTagId, setSelectedTagId] = useState<string | null>("all");
+  const [selectedTagId, setSelectedTagId] = useState<string>("all");
   const [tagArticles, setTagArticles] = useState<any[]>([]);
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const country = searchParams.get("country") || "america";
 
-  // Tagsni olish
+  // Taglarni olish
   useEffect(() => {
     if (!id) return;
     const fetchTags = async () => {
@@ -34,10 +34,9 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
         const { data } = await customAxios.get(
           `/categories/${id}?country=${country}`
         );
-        setTags(data?.data || []);
+        setTags(data.data || []);
       } catch (err) {
         console.error(err);
-        setTags([]);
       }
     };
     fetchTags();
@@ -50,32 +49,40 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
     const fetchArticles = async () => {
       try {
         if (selectedTagId === "all") {
-          const { data } = await customAxios.get(
-            `/categories/${id}?country=${country}`
+          // All tanlanganda har bir tag bo‘yicha so‘rov yuborib, barcha maqolalarni birlashtirish
+          const articlesArrays = await Promise.all(
+            tags.map((tag) =>
+              customAxios
+                .get(`/article-tags/tag/${tag.id}`)
+                .then((res) =>
+                  res.data.articleTags
+                    ? res.data.articleTags.map((item: any) => item.article)
+                    : []
+                )
+                .catch(() => [])
+            )
           );
-          const allArticles = (data?.data || [])
-            .map((tag: any) => tag.articles || [])
-            .flat()
-            .reverse();
+
+          const allArticles = articlesArrays.flat().reverse();
           setTagArticles(allArticles);
         } else {
+          // Faqat bitta tag tanlanganda
           const { data } = await customAxios.get(
             `/article-tags/tag/${selectedTagId}`
           );
-          const articles = (data?.articleTags || [])
-            .map((item: any) => item.article || [])
-            .flat()
-            .reverse();
-          setTagArticles(articles);
+          setTagArticles(
+            data.articleTags
+              ? data.articleTags.map((item: any) => item.article).reverse()
+              : []
+          );
         }
       } catch (err) {
         console.error(err);
-        setTagArticles([]);
       }
     };
 
     fetchArticles();
-  }, [selectedTagId, id, country]);
+  }, [selectedTagId, tags, id]);
 
   return (
     <div className={cls.container}>
@@ -87,11 +94,10 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
           if (index === 0) {
             setSelectedTagId("all");
           } else {
-            setSelectedTagId(tags[index - 1]?.id || null);
+            setSelectedTagId(tags[index - 1]?.id);
           }
         }}
       />
-
       <div className={cls["article-container"]}>
         {tagArticles.length > 0 &&
           tagArticles.map((article, idx) => (
