@@ -19,6 +19,7 @@ const NavbarLinks: React.FC = () => {
     { name: t.home, path: "/" },
     { name: t.forYou, path: "/foryou" },
     { name: t.following, path: "/following" },
+    { name: t.local, path: "/local" },
   ];
 
   const toSlug = (name: string) =>

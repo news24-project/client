@@ -29,7 +29,7 @@ export const translations = {
             buttons: { cancel: "Cancel", update: "Update" },
             language: "Language",
         },
-        navbarLinks: { home: "Home", forYou: "For you", following: "Following" },
+        navbarLinks: { home: "Home", forYou: "For you", following: "Following", local: "Local" },
         appsMenu: {
             main: ["Drive", "Gmail", "Gemini", "Maps", "Google", "Calendar", "News", "Photos",
                 "Meet", "Translate", "Sheets", "Docs", "Slides", "Google One"],
@@ -132,7 +132,7 @@ export const translations = {
             buttons: { cancel: "Отмена", update: "Обновить" },
             language: "Язык",
         },
-        navbarLinks: { home: "Главная", forYou: "Для вас", following: "Подписки" },
+        navbarLinks: { home: "Главная", forYou: "Для вас", following: "Подписки" , local: "Местные" },
         appsMenu: {
             main: ["Диск", "Gmail", "Gemini", "Карты", "Google", "Календарь", "Новости", "Фото",
                 "Meet", "Переводчик", "Таблицы", "Документы", "Презентации", "Google One"],
@@ -235,7 +235,7 @@ export const translations = {
             buttons: { cancel: "Bekor qilish", update: "Yangilash" },
             language: "Til",
         },
-        navbarLinks: { home: "Bosh sahifa", forYou: "Siz uchun", following: "Obunalar" },
+        navbarLinks: { home: "Bosh sahifa", forYou: "Siz uchun", following: "Obunalar", local: "Mahalliy" },
         appsMenu: {
             main: ["Disk", "Gmail", "Gemini", "Xaritalar", "Google", "Kalendar", "Yangiliklar", "Rasmlar",
                 "Meet", "Tarjimon", "Jadvallar", "Hujjatlar", "Slaydlar", "Google One"],
@@ -338,7 +338,7 @@ export const translations = {
             buttons: { cancel: "Бас тарту", update: "Жаңарту" },
             language: "Тіл",
         },
-        navbarLinks: { home: "Басты бет", forYou: "Сіз үшін", following: "Жазылулар" },
+        navbarLinks: { home: "Басты бет", forYou: "Сіз үшін", following: "Жазылулар", local: "Жергілікті" },
         appsMenu: {
             main: ["Диск", "Gmail", "Gemini", "Карталар", "Google", "Күнтізбе", "Жаңалықтар", "Фотосуреттер",
                 "Meet", "Аудармашы", "Кестелер", "Құжаттар", "Слайдтар", "Google One"],
@@ -441,7 +441,7 @@ export const translations = {
             buttons: { cancel: "रद्द करें", update: "अपडेट करें" },
             language: "भाषा",
         },
-        navbarLinks: { home: "होम", forYou: "आपके लिए", following: "फ़ॉलोइंग" },
+        navbarLinks: { home: "होम", forYou: "आपके लिए", following: "फ़ॉलोइंग", local: "स्थानीय" },
         appsMenu: {
             main: ["ड्राइव", "Gmail", "Gemini", "मैप्स", "Google", "कैलेंडर", "समाचार", "फ़ोटो",
                 "Meet", "अनुवाद", "शीट्स", "डॉक्स", "स्लाइड्स", "Google One"],
@@ -543,7 +543,7 @@ export const translations = {
             buttons: { cancel: "İptal", update: "Güncelle" },
             language: "Dil",
         },
-        navbarLinks: { home: "Ana Sayfa", forYou: "Sizin için", following: "Takip Edilen" },
+        navbarLinks: { home: "Ana Sayfa", forYou: "Sizin için", following: "Takip Edilen", local: "Yerel" },
         appsMenu: {
             main: ["Drive", "Gmail", "Gemini", "Haritalar", "Google", "Takvim", "Haberler", "Fotoğraflar",
                 "Meet", "Çeviri", "E-Tablolar", "Dokümanlar", "Slaytlar", "Google One"],
@@ -645,7 +645,7 @@ export const translations = {
             buttons: { cancel: "取消", update: "更新" },
             language: "語言",
         },
-        navbarLinks: { home: "首頁", forYou: "為你推薦", following: "追蹤中" },
+        navbarLinks: { home: "首頁", forYou: "為你推薦", following: "追蹤中", local: "本地新聞" },
         appsMenu: {
             main: ["雲端硬碟", "Gmail", "Gemini", "地圖", "Google", "日曆", "新聞", "相片",
                 "Meet", "翻譯", "試算表", "文件", "簡報", "Google One"],

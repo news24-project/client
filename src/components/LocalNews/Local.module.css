@@ -1,15 +1,12 @@
 .container {
-   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px 0;
-  border-bottom: 1px solid #ddd;
-  max-width: 840px;
-  margin: 0 auto;
   width: 100%;
-  font-family: Google Sans, sans-serif;
-}
+  max-width: 850px;
+  margin: 0 auto;
+  /* padding: 0 1rem; */
+  font-family: Google Sans, sans-serif  ;
 
+}
+  
 .header {
   margin-bottom: 2rem;
 }
