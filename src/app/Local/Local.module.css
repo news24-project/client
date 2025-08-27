@@ -78,7 +78,7 @@
 .newsList {
   display: flex;
   flex-direction: column;
-  background-color: #303134;
+  background-color: #131314;
   border-radius: 0.5rem;
   overflow: hidden;
 }
