@@ -7,16 +7,18 @@ import TargetIcon from "../../../public/icons/target";
 import cls from "./whether.module.css";
 import { useGetWeather } from "@/hooks/useGetWeather";
 import SunClouds from "../../../public/icons/sun_clouds";
+import { days } from "@/app/page";
+import { useLanguage } from "@/app/LanguageProvider";
 
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+export const todayVariants = {
+  "en-US": "Today",
+  "ru-RU": "Сегодня",
+  "uz-UZ": "Bugun",
+  "kz-KZ": "Бүгін",
+  "in-IN": "आज",
+  "tr-TR": "Bugün",
+  "zh-TW": "今天",
+};
 
 const WeatherCard = () => {
   const [show, setShow] = useState(false);
@@ -28,6 +30,7 @@ const WeatherCard = () => {
     null
   );
   const today = new Date();
+  const { selectedLang } = useLanguage();
 
   const { data, error, isLoading } = useGetWeather("Tashkent");
   const [smallAnimate, setSmallAnimate] = useState<Record<number, boolean>>({});
@@ -63,25 +66,25 @@ const WeatherCard = () => {
   };
   const forecast = [
     {
-      day: "Today",
+      day: todayVariants[selectedLang],
       high: Math.floor(data.list[0].main.temp),
       low: Math.floor(data.list[0].main.temp_min),
       weather: data.list[0].weather[0].main,
     },
     {
-      day: "Tomorrow",
+      day: days[(today.getDay() + 1) % 7][selectedLang].slice(0, 3),
       high: Math.floor(data.list[8].main.temp),
       low: Math.floor(data.list[8].main.temp_min),
       weather: data.list[8].weather[0].main,
     },
     {
-      day: days[(today.getDay() + 2) % 7].slice(0, 3),
+      day: days[(today.getDay() + 2) % 7][selectedLang].slice(0, 3),
       high: Math.floor(data.list[17].main.temp),
       low: Math.floor(data.list[17].main.temp_min),
       weather: data.list[17].weather[0].main,
     },
     {
-      day: days[(today.getDay() + 3) % 7].slice(0, 3),
+      day: days[(today.getDay() + 3) % 7][selectedLang].slice(0, 3),
       high: Math.floor(data.list[25].main.temp),
       low: Math.floor(data.list[25].main.temp_min),
       weather: data.list[25].weather[0].main,
