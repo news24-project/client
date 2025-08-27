@@ -1,9 +1,6 @@
-import React from 'react'
+import CategoryPage from "@/components/category/CategoryPage";
 
-const science = () => {
-  return (
-    <div>science</div>
-  )
+
+export default function SciencePage() {
+  return <CategoryPage title="Science" icon="🔬" />;
 }
-
-export default science

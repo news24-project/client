@@ -1,9 +1,6 @@
-import React from 'react'
+import CategoryPage from "@/components/category/CategoryPage";
 
-const entertainment = () => {
-  return (
-    <div>entertainment</div>
-  )
+
+export default function EntertainmentPage() {
+  return <CategoryPage title="Entertainment" icon="🎬" />;
 }
-
-export default entertainment

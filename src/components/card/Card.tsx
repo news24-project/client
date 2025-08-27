@@ -4,11 +4,11 @@ import { ICard } from "./interfaces";
 import CardBig from "./CardBig";
 import CardSmall from "./CardSmall";
 
-const Card = ({ cardMain, cards, smallCardOA, setIsActiveModal }: ICard) => {
+const Card = ({ cardMain, cards, smallCardOA}: ICard) => {
   if (cards?.length) {
-    return <CardBig cardMain={cardMain} cards={cards} setIsActiveModal={setIsActiveModal}/>;
+    return <CardBig cardMain={cardMain} cards={cards} />;
   }
-  return <CardSmall cardMain={cardMain} smallCardOA={smallCardOA} setIsActiveModal={setIsActiveModal}/>;
+  return <CardSmall cardMain={cardMain} smallCardOA={smallCardOA} />;
 };
 
 export default Card;

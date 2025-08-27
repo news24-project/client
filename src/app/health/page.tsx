@@ -1,9 +1,6 @@
-import React from 'react'
+import CategoryPage from "@/components/category/CategoryPage";
 
-const health = () => {
-  return (
-    <div>health</div>
-  )
+
+export default function HealthPage() {
+  return <CategoryPage title="Health" icon="🩺" />;
 }
-
-export default health
