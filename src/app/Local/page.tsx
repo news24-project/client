@@ -71,8 +71,10 @@ const LocalNews: React.FC = () => {
             </Link>
           </div>
           <div className={styles.locationInfo}>
-            <FiInfo size={14} />
-            <span>Why these locations?</span>
+            <a className={styles.infoLink} href="https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en-GB&authuser=0" target="_blank" rel="noopener noreferrer">
+              <FiInfo size={18} />
+              <span>Why these locations?</span>
+            </a>
           </div>
         </div>
       </div>

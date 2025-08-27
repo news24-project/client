@@ -90,10 +90,15 @@ export default function ManageLocalNews() {
           </Link>
           <h1 className={styles.title}>Manage local news</h1>
         </div>
-        <button className={styles.infoButton}>
+        <a
+          href="https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en-GB&authuser=0"
+          target="_blank"
+          rel="noreferrer"
+          className={styles.infoButton}
+        >
           <Info className={styles.icon} />
           <span className={styles.infoText}>Why these locations?</span>
-        </button>
+        </a>
       </div>
 
       <div className={styles.content}>

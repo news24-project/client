@@ -50,12 +50,13 @@
 }
 
 .infoButton:hover {
-  background-color: #303030;
-}
+  color: white;
+  }
 
 /* Added info text styling */
 .infoText {
   font-size: 0.875rem;
+  cursor: pointer;
 }
 
 .title {

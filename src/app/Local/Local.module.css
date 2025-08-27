@@ -75,6 +75,18 @@
   font-size: 0.875rem;
 }
 
+.infoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9ca3af;
+  font-size: 1rem;
+}
+.infoLink:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
 .newsList {
   display: flex;
   flex-direction: column;
