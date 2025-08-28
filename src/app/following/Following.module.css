@@ -1,0 +1,215 @@
+.container {
+  min-height: 100vh;
+  /* background-color: #121212; */
+  color: #ffffff;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 24px;
+}
+
+.tabBtn {
+  padding-bottom: 8px;
+  font-size: 15px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tabBtn:hover {
+  color: #ddd;
+}
+
+.active {
+  color: #4dabf7;
+  border-bottom: 2px solid #4dabf7;
+}
+
+.sectionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.section {
+  background: transparent;
+  padding: 20px;
+  border-radius: 0;
+  border-bottom: 1px solid #333;
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+/* Added styles for section header with manage button */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.manageBtn {
+  background: none;
+  border: none;
+  color: #4dabf7;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.manageBtn:hover {
+  text-decoration: underline;
+}
+
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  background-color: #1e1e1e;
+}
+
+/* Added icon wrapper for proper icon styling */
+.iconWrapper {
+  margin-bottom: 16px;
+}
+
+.emptyBox img {
+  border-radius: 8px;
+}
+
+.text {
+  margin-top: 12px;
+  color: #bbb;
+  max-width: 400px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.localBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 15rem;
+  background-color: #212121;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid #374151;
+}
+
+.localCard {
+  display: flex;
+  /* background: #2a2a2a; */
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  align-items: center;
+}
+
+.localImg {
+  
+  border-radius: 4px;
+  width: 120px;
+  height: 70px;
+  object-fit: cover;
+}
+
+.localText {
+  flex-grow: 1;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+
+}
+
+/* 3 ta nuqta tugmasi */
+.dotsBtn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dotsBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.menuWrapper {
+  position: relative; /* 🔥 bu bo'lmasa dropdown boshqa joyda chiqadi */
+  margin-left: auto;
+}
+
+/* Dropdown menyu */
+.dropdownMenu {
+  position: absolute;
+  right: 0;
+  top: 35px; /* tugmadan biroz pastroq chiqishi uchun */
+  background: #2d2d2d;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 6px 0;
+  z-index: 10;
+  min-width: 120px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.2s ease;
+}
+
+/* Animatsiya chiqishda */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Delete tugmasi */
+.deleteBtn {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #f87171; /* qizil rang */
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 12px;
+  text-align: left;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background: rgba(248, 113, 113, 0.1); /* qizil fon */
+  color: #fca5a5;
+}
