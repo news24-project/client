@@ -3,14 +3,15 @@ import React from "react";
 import cls from "./Language.module.css";
 import { IoIosSearch } from "react-icons/io";
 
-type Language =
+export type Language =
   | "en-US"
   | "ru-RU"
   | "uz-UZ"
   | "kz-KZ"
   | "in-IN"
   | "tr-TR"
-  | "zh-TW";
+  | "zh-TW"
+  | "ky-KG";
 
 interface LanguageModalProps {
   selectedLang: Language;

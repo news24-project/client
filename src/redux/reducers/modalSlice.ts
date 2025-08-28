@@ -1,4 +1,4 @@
-// modalSlice.ts
+
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ModalState {

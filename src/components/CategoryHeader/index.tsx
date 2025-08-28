@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cls from "./CategoryHeader.module.css";
 import { BsShare } from "react-icons/bs";
 import { IoIosStarOutline } from "react-icons/io";
@@ -9,12 +9,24 @@ import { IoStar } from "react-icons/io5";
 type Props = {
   title: string;
   icon?: React.ReactNode;
-  categories: string[];
+  categories?: string[];
+  onTagClick?: (index: number) => void;
 };
 
-const CategoryHeader = ({ title, icon = "💡", categories }: Props) => {
-  const [active, setActive] = useState(categories[0]);
+const CategoryHeader = ({
+  title,
+  icon = "💡",
+  categories = [],
+  onTagClick,
+}: Props) => {
+  const [fullCategories, setFullCategories] = useState<string[]>(["All"]);
+  const [active, setActive] = useState("All");
   const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    setFullCategories(["All", ...categories]);
+    setActive("All");
+  }, [categories]);
 
   const handleFollow = () => {
     setIsFollowing(!isFollowing);
@@ -46,11 +58,14 @@ const CategoryHeader = ({ title, icon = "💡", categories }: Props) => {
       </div>
 
       <div className={cls.buttons}>
-        {categories.map((cat) => (
+        {fullCategories.map((cat, idx) => (
           <button
             key={cat}
             className={`${cls.button} ${active === cat ? cls.active : ""}`}
-            onClick={() => setActive(cat)}
+            onClick={() => {
+              setActive(cat);
+              onTagClick?.(idx);
+            }}
           >
             {cat}
           </button>
