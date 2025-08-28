@@ -12,7 +12,7 @@ export function useUser() {
   if (token) {
     Cookies.set("access_token", token, {
       secure: false,
-      expires: 1,
+      expires: 1, 
     });
 
     if (typeof window !== "undefined") {
