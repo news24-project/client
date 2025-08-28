@@ -49,7 +49,6 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
     const fetchArticles = async () => {
       try {
         if (selectedTagId === "all") {
-          // All tanlanganda har bir tag bo‘yicha so‘rov yuborib, barcha maqolalarni birlashtirish
           const articlesArrays = await Promise.all(
             tags.map((tag) =>
               customAxios
@@ -66,7 +65,6 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
           const allArticles = articlesArrays.flat().reverse();
           setTagArticles(allArticles);
         } else {
-          // Faqat bitta tag tanlanganda
           const { data } = await customAxios.get(
             `/article-tags/tag/${selectedTagId}`
           );
@@ -90,14 +88,17 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
         title={title}
         icon={icon}
         categories={tags.map((tag) => tag.name)}
+        activeIndex={
+          selectedTagId === "all"
+            ? 0
+            : tags.findIndex((tag) => tag.id === selectedTagId) + 1
+        }
         onTagClick={(index) => {
-          if (index === 0) {
-            setSelectedTagId("all");
-          } else {
-            setSelectedTagId(tags[index - 1]?.id);
-          }
+          if (index === 0) setSelectedTagId("all");
+          else setSelectedTagId(tags[index - 1]?.id);
         }}
       />
+
       <div className={cls["article-container"]}>
         {tagArticles.length > 0 &&
           tagArticles.map((article, idx) => (
