@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 
-type Language =
+export type Language =
   | "en-US"
   | "ru-RU"
   | "uz-UZ"

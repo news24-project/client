@@ -1,91 +1,70 @@
 "use client";
 
-import type React from "react"
-import { FiSliders, FiInfo } from "react-icons/fi"
-import styles from "./Local.module.css"
-import Link from "next/link"
-import NewsItem from "../../components/LocalNews"
+import type React from "react";
+import { useEffect, useState } from "react";
+import { FiSliders, FiInfo } from "react-icons/fi";
+import styles from "./Local.module.css";
+import Link from "next/link";
+import Card from "@/components/card/Card";
+import { customAxios } from "@/api/customAxios";
 
 const LocalNews: React.FC = () => {
-  const news = [
-    {
-      id: 1,
-      source: "Euronews.com",
-      sourceIcon: "https://www.euronews.com/favicon.ico",
-      title: "New Tashkent: Uzbekistan's Urban Transformation",
-      time: "20 hours ago",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 2,
-      source: "FIVB",
-      sourceIcon: "https://www.fivb.com/favicon.ico",
-      title: "Spotlight turns to Tashkent as Boys' U19 World Championship begins Thursday",
-      time: "23 Jul",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 3,
-      source: "The Gymternet",
-      sourceIcon: "https://picsum.photos/200/300",
-      title: "2025 Tashkent Challenge Cup Results",
-      time: "22 Jun",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 4,
-      source: "UzDaily",
-      sourceIcon: "https://www.uzdaily.uz/favicon.ico",
-      title: "Tashkent to host international conference on digital economy",
-      time: "15 Jul",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 5,
-      source: "BBC News",
-      sourceIcon: "https://www.bbc.com/favicon.ico",
-      title: "Tashkent's role in Central Asia's geopolitics",
-      time: "10 Jul",
-      image: "https://picsum.photos/200/300",
-    },
-  ]
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUzNews = async () => {
+      try {
+        const { data } = await customAxios.get("/article-tags/uz");
+        setArticles(data.data);
+        console.log(data);
+      } catch (error) {
+        console.error("O‘zbekiston yangiliklarini olishda xatolik:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUzNews();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Your local news</h1>
-
-        <div className={styles.controls}>
-          <div className={styles.leftControls}>
-            <button className={styles.locationButton}>Tashkent</button>
-            <Link href="/manage">
-              <button
-                className={styles.filterButton}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setTimeout(() => {
-                    window.location.href = "/manage"
-                  }, 500)
-                }}
-              >
-                <FiSliders size={18} />
-              </button>
-            </Link>
-          </div>
-          <div className={styles.locationInfo}>
-            <FiInfo size={14} />
-            <span>Why these locations?</span>
-          </div>
+        <div className={styles.title}>Uzbekistan News</div>
+        <div className={styles.locationInfo}>
+          <FiInfo size={14} />
+          <Link
+            className={styles["link"]}
+            href={
+              "https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en&authuser=0"
+            }
+          >
+            Why these locations?
+          </Link>
         </div>
       </div>
 
-      <div className={styles.newsList}>
-        {news.map((item) => (
-          <NewsItem key={item.id} {...item} />
+      <div className={styles.controls}>
+        <div className={styles.leftControls}>
+          <button className={styles.locationButton}>Tashkent</button>
+          <Link href="/manage">
+            <button className={styles.filterButton}>
+              <FiSliders size={18} />
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      <div className={styles["article-container"]}>
+        {articles.map((article, idx) => (
+          <Card key={idx} cardMain={article} />
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LocalNews
+export default LocalNews;

@@ -1,14 +1,74 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+
+import React, { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import { customAxios } from "@/api/customAxios";
+import Card from "@/components/card/Card";
+import cls from "./Country.module.css";
+
+const BACKEND_URL = "http://localhost:4000";
 
 const Country = () => {
+  const { sulg } = useParams();
   const searchParams = useSearchParams();
-  const lang = searchParams.get("lang"); 
+  const lang = searchParams.get("lang");
+  console.log(sulg, "code");
+
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const formatArticle = (article: any) => ({
+    ...article,
+    iconUrl: article?.iconUrl
+      ? `${BACKEND_URL}/${article.iconUrl}`
+      : "/default-icon.png",
+  });
+
+  useEffect(() => {
+    if (!sulg) return;
+
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const { data } = await customAxios.get(`/article-tags/${sulg}`, {
+          params: { lang },
+        });
+
+        console.log(data.data);
+
+        const formatted = data?.data
+          ? data.data.map((item: any) => formatArticle(item.article || item))
+          : [];
+
+        setArticles(formatted.reverse());
+      } catch (err) {
+        console.error("Error fetching country articles:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, [sulg, lang]);
 
   return (
-    <div>
-      <h1>Country page</h1>
-      <p>Lang: {lang}</p>
+    <div className={cls["container"]}>
+      {loading ? (
+        <p>Loading...</p>
+      ) : articles.length === 0 ? (
+        <p>No articles found for {sulg}</p>
+      ) : (
+        <div className={cls["article-container"]}>
+          {articles.map((article, idx) => (
+            <Card
+              key={article.id || idx}
+              cardMain={article}
+              smallCardOA={idx === 0}
+              cards={idx === 1 ? articles.slice(2) : undefined}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

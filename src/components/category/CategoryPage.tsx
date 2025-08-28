@@ -24,38 +24,45 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const country = searchParams.get("country") || "america";
 
-  // Taglarni olish
+  const BACKEND_URL = "http://localhost:4000";
+
+  const formatArticle = (article: any) => ({
+    ...article,
+    iconUrl: article.iconUrl
+      ? `${BACKEND_URL}/${article.iconUrl}`
+      : "/default-icon.png",
+  });
+
   useEffect(() => {
     if (!id) return;
     const fetchTags = async () => {
       try {
-        const { data } = await customAxios.get(
-          `/categories/${id}?country=${country}`
-        );
+        const { data } = await customAxios.get(`/categories/${id}`);
         setTags(data.data || []);
       } catch (err) {
         console.error(err);
       }
     };
     fetchTags();
-  }, [id, country]);
+  }, [id]);
 
-  // Maqolalarni olish
   useEffect(() => {
     if (!id) return;
 
     const fetchArticles = async () => {
       try {
         if (selectedTagId === "all") {
+       
           const articlesArrays = await Promise.all(
             tags.map((tag) =>
               customAxios
                 .get(`/article-tags/tag/${tag.id}`)
                 .then((res) =>
                   res.data.articleTags
-                    ? res.data.articleTags.map((item: any) => item.article)
+                    ? res.data.articleTags.map((item: any) =>
+                        formatArticle(item.article)
+                      )
                     : []
                 )
                 .catch(() => [])
@@ -70,7 +77,9 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
           );
           setTagArticles(
             data.articleTags
-              ? data.articleTags.map((item: any) => item.article).reverse()
+              ? data.articleTags
+                  .map((item: any) => formatArticle(item.article))
+                  .reverse()
               : []
           );
         }
