@@ -233,8 +233,18 @@ const Home: React.FC = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.calendar_weather}>
-        <h1 style={{ fontWeight: 300 }}>{briefing[selectedLang]}</h1>
-        <p className={styles.weak}>{formattedDate}</p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "20px",
+          }}
+        >
+          <h1 style={{ fontWeight: "300" }}>{briefing[selectedLang]}</h1>
+          <p className={styles.weak}>{formattedDate}</p>
+        </div>
         <WeatherCard />
       </div>
 
