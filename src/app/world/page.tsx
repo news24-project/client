@@ -1,9 +1,78 @@
-import React from 'react'
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { customAxios } from "@/api/customAxios";
+import Card from "@/components/card/Card";
+import cls from "../country/[sulg]/Country.module.css";
+
+const BACKEND_URL = "http://localhost:4000";
 
 const World = () => {
-  return (
-    <div>World</div>
-  )
-}
+  const searchParams = useSearchParams();
+  const lang = searchParams.get("lang");
 
-export default World
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const formatArticle = (article: any) => ({
+    ...article,
+    iconUrl: article?.iconUrl
+      ? `${BACKEND_URL}/${article.iconUrl}`
+      : "/default-icon.png",
+  });
+
+  const countryCodes = ["en"];
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        let allArticles: any[] = [];
+
+        for (const code of countryCodes) {
+          const { data } = await customAxios.get(`/article-tags/${code}`, {
+            params: { lang },
+          });
+          if (data?.data?.length) {
+            const formatted = data.data.map((item: any) =>
+              formatArticle(item.article || item)
+            );
+            allArticles = [...allArticles, ...formatted];
+          }
+        }
+
+        setArticles(allArticles.reverse());
+      } catch (err) {
+        console.error("Error fetching all articles:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, [lang]);
+
+  return (
+    <div className={cls["container"]}>
+      {loading ? (
+        <p>Loading...</p>
+      ) : articles.length === 0 ? (
+        <p>No articles found</p>
+      ) : (
+        <div className={cls["article-container"]}>
+          {articles.map((article, idx) => (
+            <Card
+              key={article.id || idx}
+              cardMain={article}
+              smallCardOA={idx === 0}
+              cards={idx === 1 ? articles.slice(2) : undefined}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default World;
