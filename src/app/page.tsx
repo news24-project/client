@@ -39,10 +39,10 @@ const Home = () => {
   const formattedDate = `${dayName}, ${monthName} ${dateNum}`;
 
   const { data: articles = [], isLoading, isError } = useFindAllArticles();
-  
-  console.log(articles);
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Something went wrong!</p>;
+
+  const cards = articles.flatMap((article) =>
+    article.articleTags.map((tag) => tag.article)
+  );
 
   return (
     <div className={styles.wrapper}>
@@ -54,12 +54,15 @@ const Home = () => {
         <WeatherCard />
       </div>
 
-      {articles.length > 0 && (
+      {articles?.length > 0 && (
         <>
-          <Card cardMain={articles[0]} smallCardOA={true} />
+          <Card
+            cardMain={articles[0].articleTags[0].article}
+            smallCardOA={true}
+          />
 
-          {articles.length > 1 && (
-            <Card cardMain={articles[1]} cards={articles.slice(2)} />
+          {articles?.length > 1 && (
+            <Card cardMain={articles[1].articleTags[0].article} cards={cards.slice(2)} />
           )}
         </>
       )}
