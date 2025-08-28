@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Following = () => {
-  return (
-    <div className='container'>Following</div>
-  )
-}
+  return <div className="container">Following</div>;
+};
 
-export default Following
+export default Following;
