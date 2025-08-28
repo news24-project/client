@@ -1,20 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import styles from "./Following.module.css"
+import { useState } from "react";
+import styles from "./Following.module.css";
+import Link from "next/link";
 
 export default function FollowingPage() {
-  const [activeTab, setActiveTab] = useState("topics")
+  const [activeTab, setActiveTab] = useState("topics");
 
   const [locals, setLocals] = useState([
     { id: 1, name: "Tashkent", img: "https://picsum.photos/200/300" },
-  ])
-  const [menuOpen, setMenuOpen] = useState<number | null>(null)
+  ]);
+  const [menuOpen, setMenuOpen] = useState<number | null>(null);
 
   const handleDelete = (id: number) => {
-    setLocals(locals.filter((local) => local.id !== id))
-    setMenuOpen(null)
-  }
+    setLocals(locals.filter((local) => local.id !== id));
+    setMenuOpen(null);
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -73,45 +74,54 @@ export default function FollowingPage() {
             <section className={styles.section}>
               <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>Local</h2>
-                <button className={styles.manageBtn}>Manage local news</button>
+                <Link href="/manage" className={styles.manageBtn}>
+                  Manage local news
+                </Link>
               </div>
 
               {locals.length > 0 ? (
                 <div className={styles.localBox}>
-                  {locals.map((local) => (
-                    <div key={local.id} className={styles.localCard}>
-                      <img
-                        src={local.img}
-                        alt={local.name}
-                        className={styles.localImg}
-                      />
-                      <p className={styles.localText}>{local.name}</p>
+    {locals.map((local) => (
+  <Link
+    key={local.id}
+    href="/local"
+    className={styles.localCard}
+  >
+    <img
+      src={local.img}
+      alt={local.name}
+      className={styles.localImg}
+    />
+    <p className={styles.localText}>{local.name}</p>
 
-                      {/* 3 dots icon */}
-                      <div className={styles.menuWrapper}>
-                        <button
-                          className={styles.dotsBtn}
-                          onClick={() =>
-                            setMenuOpen(
-                              menuOpen === local.id ? null : local.id
-                            )
-                          }
-                        >
-                          ⋮
-                        </button>
-                        {menuOpen === local.id && (
-                          <div className={styles.dropdownMenu}>
-                            <button
-                              onClick={() => handleDelete(local.id)}
-                              className={styles.deleteBtn}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+    {/* 3 dots icon */}
+    <div className={styles.menuWrapper}>
+      <button
+        className={styles.dotsBtn}
+        onClick={(e) => {
+          e.preventDefault(); // ❗ sahifa o'tib ketmasligi uchun
+          setMenuOpen(menuOpen === local.id ? null : local.id);
+        }}
+      >
+        ⋮
+      </button>
+      {menuOpen === local.id && (
+        <div className={styles.dropdownMenu}>
+          <button
+            onClick={(e) => {
+              e.preventDefault(); // ❗ Delete bosilganda ham o'tib ketmasligi uchun
+              handleDelete(local.id);
+            }}
+            className={styles.deleteBtn}
+          >
+            Delete
+          </button>
+        </div>
+      )}
+    </div>
+  </Link>
+))}
+
                 </div>
               ) : (
                 <hr />
@@ -161,7 +171,7 @@ export default function FollowingPage() {
               </div>
             </section>
           </div>
-        )
+        );
 
       case "saved":
         return (
@@ -175,7 +185,14 @@ export default function FollowingPage() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <circle cx="40" cy="40" r="40" fill="#4299E1" />
-                <rect x="25" y="15" width="25" height="35" fill="white" rx="3" />
+                <rect
+                  x="25"
+                  y="15"
+                  width="25"
+                  height="35"
+                  fill="white"
+                  rx="3"
+                />
                 <path
                   d="M30 25h15M30 30h12M30 35h18M30 40h10"
                   stroke="#4A5568"
@@ -201,7 +218,7 @@ export default function FollowingPage() {
             </div>
             <p className={styles.text}>Your saved searches will appear here.</p>
           </div>
-        )
+        );
 
       case "stories":
         return (
@@ -215,7 +232,14 @@ export default function FollowingPage() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <circle cx="40" cy="40" r="40" fill="#ED8936" />
-                <rect x="25" y="15" width="25" height="35" fill="white" rx="3" />
+                <rect
+                  x="25"
+                  y="15"
+                  width="25"
+                  height="35"
+                  fill="white"
+                  rx="3"
+                />
                 <path
                   d="M30 25h15M30 30h12M30 35h18M30 40h10"
                   stroke="#4A5568"
@@ -242,12 +266,12 @@ export default function FollowingPage() {
             </div>
             <p className={styles.text}>Your saved stories will appear here.</p>
           </div>
-        )
+        );
 
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -282,5 +306,5 @@ export default function FollowingPage() {
       {/* Content */}
       {renderTabContent()}
     </div>
-  )
+  );
 }
