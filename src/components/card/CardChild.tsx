@@ -2,9 +2,9 @@ import React from "react";
 import cn from "classnames";
 import css from "./CardChild.module.css";
 import CardMenu from "./CardMenu";
-import { IArticle } from "@/api";
+import { IArticleChild } from "@/api";
 
-const CardChild = ({ cardMain }: { cardMain: IArticle }) => {
+const CardChild = ({ cardMain }: { cardMain: IArticleChild["article"] }) => {
   const { iconUrl, title, publishedAt, author, url } = cardMain;
 
   return (

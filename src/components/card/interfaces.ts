@@ -1,7 +1,7 @@
-import { IArticle } from "@/api";
+import { IArticleChild } from "@/api";
 
 export interface ICard {
-  cardMain: IArticle;
-  cards?: IArticle[];
+  cardMain: IArticleChild["article"];
+  cards?: IArticleChild["article"][];
   smallCardOA?: boolean;
 }

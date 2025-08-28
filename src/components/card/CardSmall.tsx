@@ -2,16 +2,16 @@ import React from "react";
 import cn from "classnames";
 import css from "./CardSmall.module.css";
 import shared from "./shared.module.css";
-import { IArticle } from "@/api";
+import { IArticleChild } from "@/api";
 
 const CardSmall = ({
   cardMain,
   smallCardOA,
 }: {
-  cardMain: IArticle;
+  cardMain: IArticleChild["article"];
   smallCardOA?: boolean;
 }) => {
-  const { imageUrl, iconUrl, title, publishedAt, author } = cardMain;
+  const { imageUrl, iconUrl, title, publishedAt, author, url } = cardMain;
 
   return (
     <div className={cn(css.cardSmall)}>
@@ -53,7 +53,7 @@ const CardSmall = ({
             className={cn(shared.toFullCoverageDiv)}
             style={{ backgroundColor: "transparent" }}
           >
-            <a href={cardMain.url} target="_blank" rel="noopener noreferrer">
+            <a href={url} target="_blank" rel="noopener noreferrer">
               <img
                 alt="full coverage"
                 src="/images/cardComponent/FullCoverage.webp"
