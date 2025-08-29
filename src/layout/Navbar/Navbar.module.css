@@ -728,3 +728,16 @@
     flex: 0 0 auto;
   }
 }
+.login{
+  color:#3280f5;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background-color: transparent;
+}
+.login:hover{
+  background-color: #3280f5;
+  color: #19191a;
+}

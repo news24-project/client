@@ -60,7 +60,7 @@ const LocalNews: React.FC = () => {
 
       <div className={styles["article-container"]}>
         {articles.map((article, idx) => (
-          <Card key={idx} cardMain={article} />
+          <Card key={idx} cardMain={article} smallCardOA />
         ))}
       </div>
     </div>

@@ -116,6 +116,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
               cardMain={article}
               smallCardOA={idx === 0}
               cards={idx === 1 ? tagArticles.slice(2) : undefined}
+              
             />
           ))}
       </div>
