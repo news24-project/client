@@ -251,13 +251,14 @@ const Home: React.FC = () => {
 
       {articles?.length > 0 && (
         <>
-          <Card
-            cardMain={articles[0].articleTags[0].article}
-            smallCardOA={true}
-          />
+          <Card cardMain={articles[0].articleTags[0].article} smallCardOA />
 
           {articles?.length > 1 && (
-            <Card cardMain={articles[1].articleTags[0].article} cards={cards.slice(2)} />
+            <Card
+              cardMain={articles[1].articleTags[0].article}
+              cards={cards.slice(2)}
+              smallCardOA
+            />
           )}
         </>
       )}
