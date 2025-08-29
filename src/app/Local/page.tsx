@@ -8,6 +8,8 @@ import Link from "next/link";
 import Card from "@/components/card/Card";
 import { customAxios } from "@/api/customAxios";
 
+const BACKEND_URL = "http://localhost:4000";
+
 const LocalNews: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -16,8 +18,20 @@ const LocalNews: React.FC = () => {
     const fetchUzNews = async () => {
       try {
         const { data } = await customAxios.get("/article-tags/uz");
-        setArticles(data.data);
-        console.log(data);
+
+        // Backend URL qo‘shish, imageUrl mavjud bo‘lmaganlarni tashlab ketish va sort qilish
+        const formattedArticles = data.data
+          .map((item: any) => ({
+            ...item,
+            iconUrl: item.iconUrl ? `${BACKEND_URL}/${item.iconUrl}` : "",
+          }))
+          .filter((item: any) => item.imageUrl) // imageUrl bo‘lmaganlarni tashlaymiz
+          .sort(
+            (a: any, b: any) =>
+              new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+          );
+
+        setArticles(formattedArticles);
       } catch (error) {
         console.error("O‘zbekiston yangiliklarini olishda xatolik:", error);
       } finally {
@@ -60,7 +74,7 @@ const LocalNews: React.FC = () => {
 
       <div className={styles["article-container"]}>
         {articles.map((article, idx) => (
-          <Card key={idx} cardMain={article} />
+          <Card key={article.id || idx} cardMain={article} smallCardOA />
         ))}
       </div>
     </div>

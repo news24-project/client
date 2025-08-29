@@ -17,9 +17,7 @@ const World = () => {
 
   const formatArticle = (article: any) => ({
     ...article,
-    iconUrl: article?.iconUrl
-      ? `${BACKEND_URL}/${article.iconUrl}`
-      : "/default-icon.png",
+    iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
   });
 
   const countryCodes = ["en"];
@@ -31,18 +29,21 @@ const World = () => {
         let allArticles: any[] = [];
 
         for (const code of countryCodes) {
-          const { data } = await customAxios.get(`/article-tags/${code}`, {
-            params: { lang },
-          });
+          const { data } = await customAxios.get(`/article-tags/${code}`);
           if (data?.data?.length) {
-            const formatted = data.data.map((item: any) =>
-              formatArticle(item.article || item)
-            );
+            const formatted = data.data
+              .map((item: any) => formatArticle(item.article || item))
+              .filter((item: any) => item.imageUrl); // imageUrl bo‘lmaganlarni tashlaymiz
             allArticles = [...allArticles, ...formatted];
           }
         }
 
-        setArticles(allArticles.reverse());
+        setArticles(
+          allArticles.sort(
+            (a, b) =>
+              new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+          )
+        );
       } catch (err) {
         console.error("Error fetching all articles:", err);
       } finally {
@@ -65,7 +66,7 @@ const World = () => {
             <Card
               key={article.id || idx}
               cardMain={article}
-              smallCardOA={idx === 0}
+              smallCardOA
               cards={idx === 1 ? articles.slice(2) : undefined}
             />
           ))}
