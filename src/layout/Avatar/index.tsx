@@ -21,10 +21,10 @@ function getInitials(name: string) {
 
 function getColorByName(name: string) {
   let code = 0;
-  for (let i = 0; i < name.length; i++) {
+  for (let i = 0; i < name?.length; i++) {
     code += name.charCodeAt(i);
   }
-  return colors[code % colors.length];
+  return colors[code % colors?.length];
 }
 
 const Avatar: React.FC<AvatarProps> = ({ name, image, style }) => {

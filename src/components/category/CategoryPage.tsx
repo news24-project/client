@@ -19,63 +19,77 @@ interface CategoryPageProps {
 
 const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
   const [tags, setTags] = useState<Tag[]>([]);
-  const [selectedTagId, setSelectedTagId] = useState<string | null>("all");
+  const [selectedTagId, setSelectedTagId] = useState<string>("all");
   const [tagArticles, setTagArticles] = useState<any[]>([]);
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const country = searchParams.get("country") || "america";
 
-  // Tagsni olish
+  const BACKEND_URL = "http://localhost:4000";
+
+  const formatArticle = (article: any) => ({
+    ...article,
+    iconUrl: article.iconUrl
+      ? `${BACKEND_URL}/${article.iconUrl}`
+      : "/default-icon.png",
+  });
+
   useEffect(() => {
     if (!id) return;
     const fetchTags = async () => {
       try {
-        const { data } = await customAxios.get(
-          `/categories/${id}?country=${country}`
-        );
-        setTags(data?.data || []);
+        const { data } = await customAxios.get(`/categories/${id}`);
+        setTags(data.data || []);
       } catch (err) {
         console.error(err);
-        setTags([]);
       }
     };
     fetchTags();
-  }, [id, country]);
+  }, [id]);
 
-  // Maqolalarni olish
   useEffect(() => {
     if (!id) return;
 
     const fetchArticles = async () => {
       try {
         if (selectedTagId === "all") {
-          const { data } = await customAxios.get(
-            `/categories/${id}?country=${country}`
+       
+          const articlesArrays = await Promise.all(
+            tags.map((tag) =>
+              customAxios
+                .get(`/article-tags/tag/${tag.id}`)
+                .then((res) =>
+                  res.data.articleTags
+                    ? res.data.articleTags.map((item: any) =>
+                        formatArticle(item.article)
+                      )
+                    : []
+                )
+                .catch(() => [])
+            )
           );
-          const allArticles = (data?.data || [])
-            .map((tag: any) => tag.articles || [])
-            .flat()
-            .reverse();
+
+          const allArticles = articlesArrays.flat().reverse();
           setTagArticles(allArticles);
         } else {
           const { data } = await customAxios.get(
             `/article-tags/tag/${selectedTagId}`
           );
-          const articles = (data?.articleTags || [])
-            .map((item: any) => item.article || [])
-            .flat()
-            .reverse();
-          setTagArticles(articles);
+          setTagArticles(
+            data.articleTags
+              ? data.articleTags
+                  .map((item: any) => formatArticle(item.article))
+                  .reverse()
+              : []
+          );
         }
       } catch (err) {
         console.error(err);
-        setTagArticles([]);
       }
     };
 
     fetchArticles();
-  }, [selectedTagId, id, country]);
+  }, [selectedTagId, tags, id]);
 
   return (
     <div className={cls.container}>
@@ -83,12 +97,14 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
         title={title}
         icon={icon}
         categories={tags.map((tag) => tag.name)}
+        activeIndex={
+          selectedTagId === "all"
+            ? 0
+            : tags.findIndex((tag) => tag.id === selectedTagId) + 1
+        }
         onTagClick={(index) => {
-          if (index === 0) {
-            setSelectedTagId("all");
-          } else {
-            setSelectedTagId(tags[index - 1]?.id || null);
-          }
+          if (index === 0) setSelectedTagId("all");
+          else setSelectedTagId(tags[index - 1]?.id);
         }}
       />
 

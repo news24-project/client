@@ -2,11 +2,14 @@
 
 "use client";
 
-import type React from "react"
-import { FiSliders, FiInfo } from "react-icons/fi"
-import styles from "./Local.module.css"
-import Link from "next/link"
-import NewsItem from "../../components/LocalNews"
+import type React from "react";
+import { useEffect, useState } from "react";
+import { FiSliders, FiInfo } from "react-icons/fi";
+import styles from "./Local.module.css";
+import Link from "next/link";
+import Card from "@/components/card/Card";
+import { customAxios } from "@/api/customAxios";
+import NewsItem from "@/components/LocalNews";
 
 const LocalNews: React.FC = () => {
   const news = [
@@ -82,12 +85,12 @@ const LocalNews: React.FC = () => {
       <div className={styles.newsList}>
         {news.map((item) => (
 
-          <NewsItem key={item.id} {...item} />
+          <NewsItem  key={item.id} {...item} />
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 
 

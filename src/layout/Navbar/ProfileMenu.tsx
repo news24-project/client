@@ -8,18 +8,15 @@ import Link from "next/link";
 import Avatar from "../Avatar";
 import { useLanguage } from "@/app/LanguageProvider";
 import { translations } from "@/app/translation";
+import { useUser } from "@/hooks/useUsers";
 
 const ProfileMenu: React.FC = () => {
   const { selectedLang } = useLanguage();
   const [openProfile, setOpenProfile] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-
-  const user = {
-    name: "nurken",
-    email: "nurkenqaldybaev2001@gmail.com",
-  };
-
   const t = translations[selectedLang].profileMenu;
+
+  const { data: user, isLoading, isError } = useUser();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -39,11 +36,18 @@ const ProfileMenu: React.FC = () => {
     };
   }, [openProfile]);
 
-  return (
+
+
+  if (isLoading) <p>Загрузка...</p>;
+  if (isError ) <p>Error</p>;
+  console.log(user);
+
+
+  return user ? (
     <div className={cls.relative} ref={menuRef}>
       <div onClick={() => setOpenProfile(!openProfile)}>
         <Avatar
-          name={user.name}
+          name={user?.name || ""}
           style={{ width: "28px", height: "28px", cursor: "pointer" }}
         />
       </div>
@@ -67,12 +71,12 @@ const ProfileMenu: React.FC = () => {
               }}
             />
             <IoIosCamera className={cls["cam-icon"]} />
-            <p>{t.greeting}, {user.name}!</p>
+            <p>
+              {t.greeting}, {user.name}!
+            </p>
           </div>
 
-          <button className={cls["manage-button"]}>
-            {t.manageAccount}
-          </button>
+          <button className={cls["manage-button"]}>{t.manageAccount}</button>
 
           <div className={cls["profile-actions"]}>
             <button className={cls["add-account"]}>
@@ -97,6 +101,10 @@ const ProfileMenu: React.FC = () => {
         </div>
       )}
     </div>
+  ) : (
+    <>
+      <a href="http://localhost:4000/api/users/google">sign in</a>
+    </>
   );
 };
 

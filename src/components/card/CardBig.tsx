@@ -3,16 +3,17 @@ import cn from "classnames";
 import css from "./CardBig.module.css";
 import shared from "./shared.module.css";
 import CardChild from "./CardChild";
-import { IArticle } from "@/api";
+import { IArticleChild } from "@/api";
 
 const CardBig = ({
   cardMain,
   cards,
 }: {
-  cardMain: IArticle;
-  cards: IArticle[];
+  cardMain: IArticleChild["article"];
+  cards: IArticleChild["article"][];
 }) => {
-  const { imageUrl, iconUrl, title, publishedAt, author } = cardMain;
+  const { imageUrl, iconUrl, title, publishedAt, author, url } =
+    cardMain;
 
   return (
     <div className={cn(css.cardBig)}>
@@ -57,7 +58,7 @@ const CardBig = ({
       </div>
 
       <div className={cn(shared.toFullCoverageDiv)}>
-        <a href={cardMain.url} target="_blank">
+        <a href={url} target="_blank">
           <img
             alt="full coverage"
             src="/images/cardComponent/FullCoverage.webp"

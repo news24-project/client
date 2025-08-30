@@ -10,6 +10,7 @@ type Props = {
   title: string;
   icon?: React.ReactNode;
   categories?: string[];
+  activeIndex?: number; 
   onTagClick?: (index: number) => void;
 };
 
@@ -17,16 +18,11 @@ const CategoryHeader = ({
   title,
   icon = "💡",
   categories = [],
+  activeIndex = 0,
   onTagClick,
 }: Props) => {
-  const [fullCategories, setFullCategories] = useState<string[]>(["All"]);
-  const [active, setActive] = useState("All");
+  const fullCategories = ["All", ...categories];
   const [isFollowing, setIsFollowing] = useState(false);
-
-  useEffect(() => {
-    setFullCategories(["All", ...categories]);
-    setActive("All");
-  }, [categories]);
 
   const handleFollow = () => {
     setIsFollowing(!isFollowing);
@@ -61,11 +57,8 @@ const CategoryHeader = ({
         {fullCategories.map((cat, idx) => (
           <button
             key={cat}
-            className={`${cls.button} ${active === cat ? cls.active : ""}`}
-            onClick={() => {
-              setActive(cat);
-              onTagClick?.(idx);
-            }}
+            className={`${cls.button} ${activeIndex === idx ? cls.active : ""}`}
+            onClick={() => onTagClick?.(idx)}
           >
             {cat}
           </button>
