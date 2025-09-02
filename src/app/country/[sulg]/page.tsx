@@ -12,16 +12,13 @@ const Country = () => {
   const { sulg } = useParams();
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
-  console.log(sulg, "code");
 
   const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const formatArticle = (article: any) => ({
     ...article,
-    iconUrl: article?.iconUrl
-      ? `${BACKEND_URL}/${article.iconUrl}`
-      : "/default-icon.png",
+    iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
   });
 
   useEffect(() => {
@@ -34,10 +31,10 @@ const Country = () => {
           params: { lang },
         });
 
-        console.log(data.data);
-
         const formatted = data?.data
-          ? data.data.map((item: any) => formatArticle(item.article || item))
+          ? data.data
+              .map((item: any) => formatArticle(item.article || item))
+              .filter((item: any) => item.imageUrl) // imageUrl bo‘lmaganlarni tashlaymiz
           : [];
 
         setArticles(formatted.reverse());
@@ -63,7 +60,7 @@ const Country = () => {
             <Card
               key={article.id || idx}
               cardMain={article}
-              smallCardOA={idx === 0}
+              smallCardOA
               cards={idx === 1 ? articles.slice(2) : undefined}
             />
           ))}

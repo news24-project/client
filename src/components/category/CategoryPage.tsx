@@ -29,10 +29,14 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
 
   const formatArticle = (article: any) => ({
     ...article,
-    iconUrl: article.iconUrl
-      ? `${BACKEND_URL}/${article.iconUrl}`
-      : "/default-icon.png",
+    iconUrl: article.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
   });
+
+  const sortByDateDesc = (articles: any[]) =>
+    articles.sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    );
 
   useEffect(() => {
     if (!id) return;
@@ -53,23 +57,22 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
     const fetchArticles = async () => {
       try {
         if (selectedTagId === "all") {
-       
           const articlesArrays = await Promise.all(
             tags.map((tag) =>
               customAxios
                 .get(`/article-tags/tag/${tag.id}`)
                 .then((res) =>
                   res.data.articleTags
-                    ? res.data.articleTags.map((item: any) =>
-                        formatArticle(item.article)
-                      )
+                    ? res.data.articleTags
+                        .map((item: any) => formatArticle(item.article))
+                        .filter((article: any) => article.imageUrl) // imageUrl bo‘lmaganlarni tashlab ketish
                     : []
                 )
                 .catch(() => [])
             )
           );
 
-          const allArticles = articlesArrays.flat().reverse();
+          const allArticles = sortByDateDesc(articlesArrays.flat());
           setTagArticles(allArticles);
         } else {
           const { data } = await customAxios.get(
@@ -77,9 +80,11 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
           );
           setTagArticles(
             data.articleTags
-              ? data.articleTags
-                  .map((item: any) => formatArticle(item.article))
-                  .reverse()
+              ? sortByDateDesc(
+                  data.articleTags
+                    .map((item: any) => formatArticle(item.article))
+                    .filter((article: any) => article.imageUrl)
+                )
               : []
           );
         }
@@ -114,7 +119,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
             <Card
               key={article.id || idx}
               cardMain={article}
-              smallCardOA={idx === 0}
+              smallCardOA
               cards={idx === 1 ? tagArticles.slice(2) : undefined}
             />
           ))}

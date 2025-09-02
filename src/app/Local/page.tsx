@@ -11,6 +11,8 @@ import Card from "@/components/card/Card";
 import { customAxios } from "@/api/customAxios";
 import NewsItem from "@/components/LocalNews";
 
+const BACKEND_URL = "http://localhost:4000";
+
 const LocalNews: React.FC = () => {
   const news = [
     {
