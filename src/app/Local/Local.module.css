@@ -35,10 +35,10 @@
 }
 
 .locationButton {
-  background-color: #2563eb;
+  background-color: #00687d;
   color: white;
   padding: 0.5rem 1rem;
-  border-radius: 9999px;
+  border-radius: 9px;
   font-size: 0.875rem;
   font-weight: 500;
   border: none;
@@ -47,7 +47,7 @@
 }
 
 .locationButton:hover {
-  background-color: #1d4ed8;
+  background-color: #015b6d;
 }
 
 .filterButton {
