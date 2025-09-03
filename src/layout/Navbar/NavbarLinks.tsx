@@ -20,6 +20,7 @@ const NavbarLinks: React.FC = () => {
     { name: t.home, path: "/" },
     { name: t.forYou, path: "/foryou" },
     { name: t.following, path: "/following" },
+    { name: t.local, path: "/local" },
   ];
 
   useEffect(() => {
@@ -73,9 +74,8 @@ const NavbarLinks: React.FC = () => {
             {cat.name}
           </Link>
 
-
-          {index === staticCategories?.length - 1 && (
-
+         
+          {index === staticCategories.length - 1 && (
             <span className={cls["hide-mobile"]}>|</span>
           )}
         </React.Fragment>

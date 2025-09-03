@@ -1,3 +1,5 @@
+
+
 "use client";
 
 import type React from "react";
@@ -7,78 +9,91 @@ import styles from "./Local.module.css";
 import Link from "next/link";
 import Card from "@/components/card/Card";
 import { customAxios } from "@/api/customAxios";
+import NewsItem from "@/components/LocalNews";
 
 const BACKEND_URL = "http://localhost:4000";
 
 const LocalNews: React.FC = () => {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const news = [
+    {
+      id: 1,
+      source: "Euronews.com",
+      sourceIcon: "https://www.euronews.com/favicon.ico",
+      title: "New Tashkent: Uzbekistan's Urban Transformation",
+      time: "20 hours ago",
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      id: 2,
+      source: "FIVB",
+      sourceIcon: "https://www.fivb.com/favicon.ico",
+      title: "Spotlight turns to Tashkent as Boys' U19 World Championship begins Thursday",
+      time: "23 Jul",
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      id: 3,
+      source: "The Gymternet",
+      sourceIcon: "https://picsum.photos/200/300",
+      title: "2025 Tashkent Challenge Cup Results",
+      time: "22 Jun",
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      id: 4,
+      source: "UzDaily",
+      sourceIcon: "https://www.uzdaily.uz/favicon.ico",
+      title: "Tashkent to host international conference on digital economy",
+      time: "15 Jul",
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      id: 5,
+      source: "BBC News",
+      sourceIcon: "https://www.bbc.com/favicon.ico",
+      title: "Tashkent's role in Central Asia's geopolitics",
+      time: "10 Jul",
+      image: "https://picsum.photos/200/300",
 
-  useEffect(() => {
-    const fetchUzNews = async () => {
-      try {
-        const { data } = await customAxios.get("/article-tags/uz");
-
-        // Backend URL qo‘shish, imageUrl mavjud bo‘lmaganlarni tashlab ketish va sort qilish
-        const formattedArticles = data.data
-          .map((item: any) => ({
-            ...item,
-            iconUrl: item.iconUrl ? `${BACKEND_URL}/${item.iconUrl}` : "",
-          }))
-          .filter((item: any) => item.imageUrl) // imageUrl bo‘lmaganlarni tashlaymiz
-          .sort(
-            (a: any, b: any) =>
-              new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-          );
-
-        setArticles(formattedArticles);
-      } catch (error) {
-        console.error("O‘zbekiston yangiliklarini olishda xatolik:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUzNews();
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
+    },
+  ]
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.title}>Uzbekistan News</div>
-        <div className={styles.locationInfo}>
-          <FiInfo size={14} />
-          <Link
-            className={styles["link"]}
-            href={
-              "https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en&authuser=0"
-            }
-          >
-            Why these locations?
-          </Link>
+        <h1 className={styles.title}>Your local news</h1>
+
+        <div className={styles.controls}>
+          <div className={styles.leftControls}>
+            <button className={styles.locationButton}>Tashkent</button>
+            <Link href="/manage">
+              <button
+                className={styles.filterButton}
+
+              >
+                <FiSliders size={18} />
+              </button>
+            </Link>
+          </div>
+          <div className={styles.locationInfo}>
+            <a className={styles.infoLink} href="https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en-GB&authuser=0" target="_blank" rel="noopener noreferrer">
+              <FiInfo size={18} />
+              <span>Why these locations?</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div className={styles.controls}>
-        <div className={styles.leftControls}>
-          <button className={styles.locationButton}>Tashkent</button>
-          <Link href="/manage">
-            <button className={styles.filterButton}>
-              <FiSliders size={18} />
-            </button>
-          </Link>
-        </div>
-      </div>
+      <div className={styles.newsList}>
+        {news.map((item) => (
 
-      <div className={styles["article-container"]}>
-        {articles.map((article, idx) => (
-          <Card key={article.id || idx} cardMain={article} smallCardOA />
+          <NewsItem  key={item.id} {...item} />
         ))}
       </div>
     </div>
   );
 };
 
-export default LocalNews;
+
+
+export default LocalNews
