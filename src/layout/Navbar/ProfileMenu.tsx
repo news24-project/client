@@ -48,7 +48,7 @@ const ProfileMenu: React.FC = () => {
       <div onClick={() => setOpenProfile(!openProfile)}>
         <Avatar
           name={user?.name || ""}
-          style={{ width: "28px", height: "28px", cursor: "pointer" }}
+          style={{ width: "30px", height: "30px", cursor: "pointer" }}
         />
       </div>
 

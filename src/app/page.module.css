@@ -1,9 +1,7 @@
 .wrapper {
-  max-width: 1140px;
+  max-width: 1120px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   margin: 0;
   margin-inline: auto;
   color: white;
@@ -24,6 +22,91 @@
 
 .weak {
   color: rgb(189, 193, 198);
+  font-size: 14px;
+}
+
+.home-container {
+  max-width: 740px;
+  padding: 0 16px 16px 16px;
+  background-color: #1f1f1f;
+  border-radius: 16px;
+  width: 100%;
+}
+.home {
+  background-color: #1f1f1f;
+  max-width: 740px;
+  border-radius: 16px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.title {
+  padding: 16px 16px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  color: #8bb8f8;
+  cursor: pointer;
+}
+.hr {
+  width: fit-content;
+  margin: 20px auto;
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+.home-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+}
+.home2 {
+  background-color: #1f1f1f;
+  border-radius: 16px;
+  padding: 0;
+  margin: 0;
+  height: fit-content;
+}
+.home-container2 {
+  padding: 0 16px 16px 16px;
+  background-color: #1f1f1f;
+  border-radius: 16px;
+}
+.title-pick {
+  padding: 16px 16px 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  color: #a596b8;
+  cursor: pointer;
+}
+.for-title {
+  font-size: 24px;
+  margin: 20px 0 10px 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.for-in {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #bdc1c6;
+}
+.for-in span{
+  color: #bdc1c6;
+  cursor: pointer;
+}
+.for-in span:hover{
+  color: #8bb8f8;
 }
 
 @media (max-width: 600px) {

@@ -1,13 +1,15 @@
 "use client";
 
 import WeatherCard from "@/components/WeatherCard";
-import styles from "./page.module.css";
+import cls from "./page.module.css";
 import Card from "@/components/card/Card";
 import ModalShare from "@/components/modalShare";
-import React from "react";
+import React, { useState } from "react";
 import { useLanguage } from "./LanguageProvider";
 import { useFindAllArticles } from "@/hooks/useArticles";
-import { ICard } from "@/components/card/interfaces";
+import { IoIosArrowForward } from "react-icons/io";
+import { FaRegCircleQuestion } from "react-icons/fa6";
+import CategoryModal from "@/components/CategoryModal/CategoryModal";
 
 export const days = [
   {
@@ -216,8 +218,11 @@ export const briefing = {
   "ky-KG": "Сиздин кыскача маалымат",
 };
 
+const BACKEND_URL = "http://localhost:4000";
+
 const Home: React.FC = () => {
   const { selectedLang } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
   const today = new Date();
   const dayName = days[today.getDay()][selectedLang as keyof (typeof days)[0]];
   const monthName =
@@ -225,43 +230,88 @@ const Home: React.FC = () => {
   const dateNum = today.getDate();
   const formattedDate = `${dayName}, ${monthName} ${dateNum}`;
 
-  const { data: articles = [], isLoading, isError } = useFindAllArticles();
+  const { data: articles = [] } = useFindAllArticles();
 
-  const cards = articles.flatMap((article) =>
-    article.articleTags.map((tag) => tag.article)
-  );
+  const formatArticle = (article: any) => ({
+    ...article,
+    iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+  });
+
+  const cards = articles
+    .flatMap((article) =>
+      article.articleTags.map((tag) => formatArticle(tag.article))
+    )
+    .filter((a) => a.imageUrl);
+
+  const latestTen = [...cards]
+    .sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    )
+    .slice(0, 10);
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.calendar_weather}>
+    <div className={cls.wrapper}>
+      <div className={cls.calendar_weather}>
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             flexDirection: "column",
             alignItems: "center",
-            gap: "20px",
+            gap: "10px",
           }}
         >
-          <h1 style={{ fontWeight: "300" }}>{briefing[selectedLang]}</h1>
-          <p className={styles.weak}>{formattedDate}</p>
+          <div style={{ fontWeight: "300", fontSize: "28px" }}>
+            {briefing[selectedLang]}
+          </div>
+          <p className={cls.weak}>{formattedDate}</p>
         </div>
         <WeatherCard />
       </div>
 
-      {articles?.length > 0 && (
-        <>
-          <Card cardMain={articles[0].articleTags[0].article} smallCardOA />
-
-          {articles?.length > 1 && (
-            <Card
-              cardMain={articles[1].articleTags[0].article}
-              cards={cards.slice(2)}
-              smallCardOA
-            />
-          )}
-        </>
-      )}
+      <div className={cls["home-content"]}>
+        {latestTen.length >= 4 && (
+          <div className={cls["home"]}>
+            <div className={cls["title"]}>
+              Top stories <IoIosArrowForward />
+            </div>
+            <hr className={cls.hr} />
+            <div className={cls["home-container"]}>
+              <Card cardMain={latestTen[0]} cards={latestTen.slice(1, 4)} />
+              <Card cardMain={latestTen[1]} cards={latestTen.slice(4, 7)} />
+              <Card cardMain={latestTen[2]} smallCardOA />
+              <Card cardMain={latestTen[3]} smallCardOA />
+            </div>
+          </div>
+        )}
+        {cards.length >= 3 && (
+          <div className={cls["home2"]}>
+            <div className={cls["title-pick"]}>
+              Picks for you <FaRegCircleQuestion color="white" />
+            </div>
+            <hr className={cls.hr} />
+            <div className={cls["home-container2"]}>
+              {cards.slice(0, 3).map((article, idx) => (
+                <Card key={article.id || idx} cardMain={article} smallCardOA />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div>
+        <div className={cls["for-title"]}>
+          For you <IoIosArrowForward />
+        </div>
+        <div className={cls["for-in"]}>
+          Recommended based on your interests
+          <span>
+            <FaRegCircleQuestion />
+          </span>
+        </div>
+        <button onClick={() => setIsOpen(true)}>Kategoriya qo‘shish</button>
+        <CategoryModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      </div>
 
       <ModalShare />
     </div>
