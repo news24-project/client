@@ -14,10 +14,6 @@ export function useUser() {
       secure: false,
       expires: 1, 
     });
-
-    if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", window.location.pathname);
-    }
   }
 
   const cookieToken = Cookies.get("access_token");

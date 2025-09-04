@@ -228,7 +228,7 @@ const Home: React.FC = () => {
   const { data: articles = [], isLoading, isError } = useFindAllArticles();
 
   const cards = articles.flatMap((article) =>
-    article.articleTags.map((tag) => tag.article)
+    article.articleTags.map((tag) => tag)
   );
 
   return (
@@ -248,19 +248,22 @@ const Home: React.FC = () => {
         </div>
         <WeatherCard />
       </div>
+      {/* Expreriment Div */}
+      <div style={{width:"70%"}}>
+        {articles?.length > 0 && (
+          <>
+            <Card cardMain={articles[0].articleTags[0]} smallCardOA={true} />
 
-      {articles?.length > 0 && (
-        <>
-          <Card
-            cardMain={articles[0].articleTags[0].article}
-            smallCardOA={true}
-          />
-
-          {articles?.length > 1 && (
-            <Card cardMain={articles[1].articleTags[0].article} cards={cards.slice(2)} />
-          )}
-        </>
-      )}
+            {articles?.length > 1 && (
+              <Card
+                cardMain={articles[1].articleTags[0]}
+                cards={cards.slice(2)}
+              />
+            )}
+          </>
+        )}
+      </div>
+      {/* Expreriment Div */}
 
       <ModalShare />
     </div>
