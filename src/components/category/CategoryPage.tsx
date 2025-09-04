@@ -99,6 +99,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, icon }) => {
   return (
     <div className={cls.container}>
       <CategoryHeader
+        id={id as string}
         title={title}
         icon={icon}
         categories={tags.map((tag) => tag.name)}
