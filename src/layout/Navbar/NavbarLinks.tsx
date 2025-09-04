@@ -73,9 +73,8 @@ const NavbarLinks: React.FC = () => {
             {cat.name}
           </Link>
 
-
-          {index === staticCategories?.length - 1 && (
-
+         
+          {index === staticCategories.length - 1 && (
             <span className={cls["hide-mobile"]}>|</span>
           )}
         </React.Fragment>

@@ -1,6 +1,6 @@
 .container {
   color: white;
-  background-color: transparent;
+  /* background-color: #303030; */
   width: 100%;
   max-width: 850px;
   margin: 0 auto;
@@ -49,14 +49,13 @@
   gap: 0.5rem;
 }
 
+.infoButton:hover {
+  color: white;
+  }
 
 .infoText {
-  font-size: 16px;
-  font-weight: 600;
-  color: #9ca3af;
-}
-.infoText:hover{
-   color: rgb(46, 92, 185);
+  font-size: 0.875rem;
+  cursor: pointer;
 }
 
 .title {
@@ -75,8 +74,8 @@
 .searchContainer {
   display: flex;
   align-items: center;
-  background-color: transparent;
-  border: 1px solid #5f6368;
+  /* background-color: #303030; */
+  border: 1px solid #374151;
   border-radius: 9999px;
   padding: 0 1rem;
 }
@@ -185,7 +184,7 @@
 }
 
 .newsCard {
-  background-color: transparent;
+  /* background-color: #303030; */
   border-radius: 1rem;
   padding: 2rem;
   border: 1px solid #5f6368;

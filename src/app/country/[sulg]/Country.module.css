@@ -1,12 +1,11 @@
 .container {
   margin: 0 auto;
   max-width: 870px;
-  padding: 16px;
   width: 100%;
 }
 .article-container {
   margin: 0 auto;
-  padding: 16px;
+  padding: 0 16px 16px 16px;
   background-color: #1f1f1f;
   border-radius: 16px;
   width: 100%;

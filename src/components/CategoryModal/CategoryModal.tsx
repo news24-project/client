@@ -9,6 +9,7 @@ import { MdOutlineDragIndicator } from "react-icons/md";
 interface Tag {
   id: string;
   name: string;
+  articles?: any[];
 }
 
 interface Category {
@@ -20,6 +21,7 @@ interface Category {
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  onSave: (tags: Tag[]) => void;
 }
 
 const categoryData: { [key: string]: { icon: string; color: string } } = {
@@ -31,27 +33,82 @@ const categoryData: { [key: string]: { icon: string; color: string } } = {
   business: { icon: "/images/business.webp", color: "#FBC02D" },
   world: { icon: "/images/newspaper.png", color: "#039be5" },
 };
-
+const BACKEND_URL = "http://localhost:4000";
 const MAX_SELECTION = 12;
 
-const CategoryModal: React.FC<Props> = ({ isOpen, onClose }) => {
+const CategoryModal: React.FC<Props> = ({ isOpen, onClose, onSave }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
+  const fetchCategories = async () => {
+    try {
+      const { data } = await customAxios.get("/categories/with-tags");
+      setCategories(data.data);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  };
+
+  const fetchUserTags = async () => {
+    try {
+      const { data } = await customAxios.get("/user/topics");
+
+      const tags: Tag[] = Array.isArray(data)
+        ? data.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+
+            articles: (item.articleTags || []).map((a: any) => ({
+              ...a.article,
+              iconUrl: a.article?.iconUrl
+                ? `${BACKEND_URL}/${a.article.iconUrl}`
+                : "",
+            })),
+          }))
+        : [];
+
+      setSelectedTags(tags);
+    } catch (err) {
+      console.error("Error fetching user topics:", err);
+    }
+  };
+
   useEffect(() => {
     if (isOpen) {
-      const fetchCategories = async () => {
-        try {
-          const { data } = await customAxios.get("/categories/with-tags");
-          console.log(data.data);
-          setCategories(data.data);
-        } catch (err) {
-          console.error("Error fetching categories:", err);
-        }
-      };
       fetchCategories();
+      fetchUserTags();
     }
   }, [isOpen]);
+
+const handleSave = async () => {
+  try {
+    const tagIds = selectedTags.map((t) => t.id);
+
+    await customAxios.post("/user/topics", { tags: tagIds });
+
+    const { data } = await customAxios.get("/user/topics");
+
+    const tags: Tag[] = Array.isArray(data)
+      ? data.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          articles: (item.articleTags || []).map((a: any) => ({
+            ...a.article,
+            iconUrl: a.article?.iconUrl
+              ? `${BACKEND_URL}/${a.article.iconUrl}`
+              : "",
+          })),
+        }))
+      : [];
+
+    setSelectedTags(tags);
+    onSave(tags);
+    onClose();
+  } catch (err) {
+    console.error("Error saving:", err);
+  }
+};
+
 
   const toggleTag = (tag: Tag) => {
     const isSelected = selectedTags.some((t) => t.id === tag.id);
@@ -65,17 +122,6 @@ const CategoryModal: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   const resetSelection = () => setSelectedTags([]);
-
-  const handleSave = async () => {
-    try {
-      await customAxios.post("/user/topics", {
-        tags: selectedTags.map((t) => t.id),
-      });
-      onClose();
-    } catch (err) {
-      console.error("Error saving:", err);
-    }
-  };
 
   if (!isOpen) return null;
 
@@ -184,7 +230,7 @@ const CategoryModal: React.FC<Props> = ({ isOpen, onClose }) => {
             <button
               onClick={handleSave}
               className={cls.save}
-              disabled={selectedTags.length === 0}
+              disabled={selectedTags.length <= 1 }
             >
               Save & close
             </button>

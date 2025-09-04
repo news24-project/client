@@ -184,17 +184,15 @@ export default function ManageLocalNews() {
           </Link>
           <h1 className={styles.title}>Manage local news</h1>
         </div>
-        <button className={styles.infoButton}>
+        <a
+          href="https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en-GB&authuser=0"
+          target="_blank"
+          rel="noreferrer"
+          className={styles.infoButton}
+        >
           <Info className={styles.icon} />
-          <Link
-            href={
-              "https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en&authuser=0"
-            }
-            className={styles.infoText}
-          >
-            Why these locations?
-          </Link>
-        </button>
+          <span className={styles.infoText}>Why these locations?</span>
+        </a>
       </div>
 
       <div className={styles.content}>

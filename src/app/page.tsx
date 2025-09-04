@@ -4,12 +4,14 @@ import WeatherCard from "@/components/WeatherCard";
 import cls from "./page.module.css";
 import Card from "@/components/card/Card";
 import ModalShare from "@/components/modalShare";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLanguage } from "./LanguageProvider";
 import { useFindAllArticles } from "@/hooks/useArticles";
-import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowForward, IoMdOptions } from "react-icons/io";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import CategoryModal from "@/components/CategoryModal/CategoryModal";
+import { IArticle } from "@/api";
+import { customAxios } from "@/api/customAxios";
 
 export const days = [
   {
@@ -217,12 +219,22 @@ export const briefing = {
   "zh-TW": "您的簡報",
   "ky-KG": "Сиздин кыскача маалымат",
 };
+interface Tag {
+  id: string;
+  name: string;
+  articles?: IArticleChild[];
+}
+interface IArticleChild {
+  id: string;
+  article: IArticle; // asl maqola shu yerda
+}
 
 const BACKEND_URL = "http://localhost:4000";
 
 const Home: React.FC = () => {
   const { selectedLang } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const [userTopics, setUserTopics] = useState<Tag[]>([]);
   const today = new Date();
   const dayName = days[today.getDay()][selectedLang as keyof (typeof days)[0]];
   const monthName =
@@ -249,6 +261,31 @@ const Home: React.FC = () => {
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     )
     .slice(0, 10);
+
+  const fetchUserTopics = async () => {
+  try {
+    const { data } = await customAxios.get("/user/topics");
+    console.log("User topics:", data);
+
+    const tags: Tag[] = Array.isArray(data)
+      ? data.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          articles: item.articles
+            ? item.articles.map((a: any) => formatArticle(a))
+            : [],
+        }))
+      : [];
+
+    setUserTopics(tags);
+  } catch (err) {
+    console.error("Error fetching user topics:", err);
+  }
+};
+
+  useEffect(() => {
+    fetchUserTopics();
+  }, []);
 
   return (
     <div className={cls.wrapper}>
@@ -309,8 +346,61 @@ const Home: React.FC = () => {
             <FaRegCircleQuestion />
           </span>
         </div>
-        <button onClick={() => setIsOpen(true)}>Kategoriya qo‘shish</button>
-        <CategoryModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      </div>
+      <div>
+        <div className={cls["topic"]}>
+          <div className={cls["for-title"]}>Your topics</div>
+          <button
+            onClick={() => setIsOpen(true)}
+            className={cls["customize-btn"]}
+          >
+            <IoMdOptions /> Customize
+          </button>
+        </div>
+        <div className={cls["topic-list"]}>
+          {userTopics.map((tag) => (
+            <div key={tag.id} className={cls.topicWrapper}>
+              <div className={cls.topicCards}>
+                <h2 className={cls.topicTitle}>
+                  {tag.name} <IoIosArrowForward />
+                </h2>
+                <div className={cls.topicCardsGrid}>
+                  {tag.articles && tag.articles.length > 0 ? (
+                    tag.articles
+                      .slice(0, 3)
+                      .map((article, idx) => (
+                        <Card
+                          key={article.id || idx}
+                          cardMain={article}
+                          smallCardOA
+                        />
+                      ))
+                  ) : (
+                    <p>No articles for this topic</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <CategoryModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            onSave={() => fetchUserTopics()}
+          />
+        </div>
+      </div>
+
+      <div>
+        <div className={cls["for-title"]}>Beyond the front page</div>
+        <div className={cls["for-in"]}>
+          Notable stories and conversation starters
+        </div>
+        <div className={cls.beyondContent}>
+          {latestTen.slice(4, 8).map((article, idx) => (
+            <Card key={article.id || idx} cardMain={article} smallCardOA />
+          ))}
+        </div>
       </div>
 
       <ModalShare />

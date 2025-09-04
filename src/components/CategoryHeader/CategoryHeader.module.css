@@ -2,8 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 0;
-  /* border-bottom: 1px solid #ddd; */
+  padding:  0  0 20px 0;
   max-width: 840px;
   margin: 0 auto;
   width: 100%;
@@ -21,7 +20,7 @@
 }
 
 .icon {
-  font-size: 38px;
+  font-size: 28px;
 }
 
 .buttons {
@@ -35,17 +34,35 @@
 .buttons::-webkit-scrollbar {
   display: none;
 }
+.iconWrapper {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.iconWrapper img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
 
 .button {
   flex-shrink: 0;
-  padding: 8px 20px;
+  padding: 6px 16px;
   border: 1px solid #aaa;
   border-radius: 8px;
   background-color: transparent;
-  font-size: 16px;
-  color: #ffffff;
+  font-size: 14px;
+  color: #c4c7c5;
   cursor: pointer;
   transition: all 0.2s;
+  text-transform: capitalize;
+  
 }
 
 .active {
@@ -61,18 +78,18 @@
 
 .follow {
   background-color: transparent;
-  color: white;
-  border: 1px solid;
-  padding: 10px 15px;
+  color: #c4c7c5;
+  border: 1px solid rgba(131, 131, 131, 0.5);
+  padding: 10px 14px;
   border-radius: 22px;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .follow-icon {
-  font-size: 20px;
+  font-size: 16px;
 }
 .following {
   background-color: #35689e;
@@ -93,7 +110,7 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 14px;
   padding: 2px 12px;
   display: flex;
   align-items: center;
