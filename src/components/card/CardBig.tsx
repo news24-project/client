@@ -14,9 +14,15 @@ const CardBig = ({
   cardMain: IArticleChild;
   cards: IArticleChild[];
 }) => {
-  const articleId = cardMain.articleId;
-  const { imageUrl, iconUrl, title, publishedAt, author, url } =
-    cardMain.article;
+  const articleId = cardMain.id;
+  const {
+    imageUrl = "",
+    iconUrl = "",
+    title = "",
+    publishedAt = "",
+    author,
+    url,
+  } = cardMain || {};
 
   return (
     <div className={cn(css.cardBig)}>
@@ -47,11 +53,11 @@ const CardBig = ({
         </div>
       </div>
 
-        <div className={cn(css.cardRight)}>
-          {cards.slice(0, 3).map((child, i) => (
-            <CardChild key={i} cardMain={child} />
-          ))}
-        </div>
+      <div className={cn(css.cardRight)}>
+        {cards.slice(0, 3).map((child, i) => (
+          <CardChild key={i} cardMain={child} />
+        ))}
+      </div>
 
       <div className={cn(shared.toFullCoverageDiv)}>
         <a href={url} target="_blank">

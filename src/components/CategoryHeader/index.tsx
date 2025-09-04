@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import cls from "./CategoryHeader.module.css";
 import { BsShare } from "react-icons/bs";
 import { IoIosStarOutline } from "react-icons/io";
@@ -8,20 +8,30 @@ import { IoStar } from "react-icons/io5";
 
 type Props = {
   title: string;
-  icon?: React.ReactNode;
+  image?: string;
   categories?: string[];
-  activeIndex?: number; 
+  activeIndex?: number;
   onTagClick?: (index: number) => void;
+  backgroundColor?: string;
 };
 
 const CategoryHeader = ({
   title,
-  icon = "💡",
+  image,
   categories = [],
   activeIndex = 0,
   onTagClick,
+  backgroundColor,
 }: Props) => {
-  const fullCategories = ["All", ...categories];
+const fullCategories =
+  title.toLowerCase() === "world"
+    ? [] 
+    : categories && categories.length > 0
+    ? ["Latest", ...categories]
+    : [];
+
+
+
   const [isFollowing, setIsFollowing] = useState(false);
 
   const handleFollow = () => {
@@ -32,7 +42,14 @@ const CategoryHeader = ({
     <div className={cls.categoryHeader}>
       <div className={cls.titleSection}>
         <div className={cls.flex}>
-          <div className={cls.icon}>{icon}</div>
+          <div
+            className={cls.iconWrapper}
+            style={{ backgroundColor: backgroundColor }}
+          >
+            {image && (
+              <img src={image} alt="category icon" className={cls.icon} />
+            )}
+          </div>
           <h1>{title}</h1>
         </div>
         <div className={cls.followShare}>
@@ -56,7 +73,7 @@ const CategoryHeader = ({
       <div className={cls.buttons}>
         {fullCategories.map((cat, idx) => (
           <button
-            key={cat}
+            key={`${cat}-${idx}`}
             className={`${cls.button} ${activeIndex === idx ? cls.active : ""}`}
             onClick={() => onTagClick?.(idx)}
           >

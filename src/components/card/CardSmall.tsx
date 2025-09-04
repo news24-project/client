@@ -13,9 +13,15 @@ const CardSmall = ({
   cardMain: IArticleChild;
   smallCardOA?: boolean;
 }) => {
-  const { imageUrl, iconUrl, title, publishedAt, author, url } =
-    cardMain.article;
-  const articleId = cardMain.articleId;
+  const {
+    imageUrl = "",
+    iconUrl = "",
+    title = "",
+    publishedAt,
+    author,
+    url,
+  } = cardMain || {};
+  const articleId = cardMain.id;
 
   return (
     <div className={cn(css.cardSmall)}>
