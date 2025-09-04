@@ -111,6 +111,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
   return (
     <div className={cls.container}>
       <CategoryHeader
+        id={id as string}
         title={title}
         image={categoryInfo.icon}
         backgroundColor={categoryInfo.color}
