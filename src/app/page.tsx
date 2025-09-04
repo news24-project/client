@@ -249,7 +249,8 @@ const Home: React.FC = () => {
         <WeatherCard />
       </div>
       {/* Expreriment Div */}
-      <div style={{width:"70%"}}>
+      <div style={{
+        width:"70%"}}>
         {articles?.length > 0 && (
           <>
             <Card cardMain={articles[0].articleTags[0]} smallCardOA={true} />
