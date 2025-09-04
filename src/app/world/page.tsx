@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "../country/[sulg]/Country.module.css";
+import CategoryHeader from "@/components/CategoryHeader";
+import CategoryPage from "@/components/category/CategoryPage";
 
 const BACKEND_URL = "http://localhost:4000";
 
@@ -33,7 +35,7 @@ const World = () => {
           if (data?.data?.length) {
             const formatted = data.data
               .map((item: any) => formatArticle(item.article || item))
-              .filter((item: any) => item.imageUrl); // imageUrl bo‘lmaganlarni tashlaymiz
+              .filter((item: any) => item.imageUrl);
             allArticles = [...allArticles, ...formatted];
           }
         }
@@ -41,7 +43,8 @@ const World = () => {
         setArticles(
           allArticles.sort(
             (a, b) =>
-              new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+              new Date(b.publishedAt).getTime() -
+              new Date(a.publishedAt).getTime()
           )
         );
       } catch (err) {
@@ -56,20 +59,23 @@ const World = () => {
 
   return (
     <div className={cls["container"]}>
+      <CategoryPage title="World" />
       {loading ? (
         <p>Loading...</p>
       ) : articles.length === 0 ? (
         <p>No articles found</p>
       ) : (
         <div className={cls["article-container"]}>
-          {articles.map((article, idx) => (
-            <Card
-              key={article.id || idx}
-              cardMain={article}
-              smallCardOA
-              cards={idx === 1 ? articles.slice(2) : undefined}
-            />
-          ))}
+          {articles
+            .filter((_, idx) => idx % 3 === 0)
+            .map((_, groupIdx) => (
+              <Card
+                key={groupIdx}
+                cardMain={articles[groupIdx * 3]}
+                smallCardOA
+                cards={articles.slice(groupIdx * 3, groupIdx * 3 + 3)} // 3 ta guruhlab
+              />
+            ))}
         </div>
       )}
     </div>

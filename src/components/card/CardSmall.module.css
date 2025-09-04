@@ -1,9 +1,10 @@
 .cardSmall {
   background-color: transparent;
-  border-top: 1px solid #e3e3e3;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.163);
   margin-top: 16px;
   padding-top: 16px;
-  width: 800px;
+  max-width: 800px;
+  width: 100%;
   display: flex;
   gap: 10px;
   align-items: center;
@@ -38,7 +39,6 @@
 .cardSmallLeftDiv:hover h2 {
   text-decoration: underline;
 }
-
 
 .cardSmallRightDiv {
   width: 15%;
@@ -79,11 +79,6 @@
   font-size: 12px;
   font-weight: 500;
 }
-.cardLeftDivText:first-child {
-  color: #dfdfdf;
-  position: relative;
-  top: 0.3px;
-}
 
 .smallWrapper {
   position: absolute;
@@ -103,4 +98,57 @@
   gap: 3px;
   position: relative;
   bottom: 5px;
+}
+
+@media screen and (max-width: 1280px) {
+  .cardSmall {
+    height: 130px;
+  }
+  .cardSmallLeftDiv {
+    width: 88%;
+    position: static;
+  }
+  .cardSmallRightDiv {
+    width: 12%;
+  }
+  .smallWrapper article {
+    visibility: visible;
+  }
+  .cardSmallLeftDiv article {
+    visibility: visible;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .cardSmallLeftDiv h2 {
+    color: whitesmoke;
+    font-size: 15px;
+    font-weight: lighter;
+    line-height: 1.4;
+  }
+
+  .cardSmallLeftDiv {
+    width: 80%;
+  }
+
+  .cardSmallRightDiv {
+    width: 20%;
+  }
+}
+
+@media screen and (max-width: 650px) { 
+    .cardSmallLeftDiv h2 {
+    color: whitesmoke;
+    font-size: 12px;
+    font-weight: lighter;
+    line-height: 1.4;
+  }
+
+  .cardSmallLeftDiv {
+    width: 70%;
+  }
+
+  .cardSmallRightDiv {
+    width: 30%;
+  }
 }

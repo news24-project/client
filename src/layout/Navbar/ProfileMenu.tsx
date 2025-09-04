@@ -9,14 +9,40 @@ import Avatar from "../Avatar";
 import { useLanguage } from "@/app/LanguageProvider";
 import { translations } from "@/app/translation";
 import { useUser } from "@/hooks/useUsers";
+import { useDispatch } from "react-redux";
+import { addUserData, clearUserData } from "@/redux/reducers/userSlice";
 
 const ProfileMenu: React.FC = () => {
   const { selectedLang } = useLanguage();
   const [openProfile, setOpenProfile] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const t = translations[selectedLang].profileMenu;
+  const dispatch = useDispatch();
 
   const { data: user, isLoading, isError } = useUser();
+  console.log(user);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(
+        addUserData({
+          id: user.id,
+          email: user.email,
+          image: user.image,
+          name: user.name,
+          bookmarks: user.bookmarks,
+        })
+      );
+    } else {
+      dispatch(clearUserData());
+    }
+  }, [user, dispatch]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -36,19 +62,15 @@ const ProfileMenu: React.FC = () => {
     };
   }, [openProfile]);
 
-
-
   if (isLoading) <p>Загрузка...</p>;
-  if (isError ) <p>Error</p>;
-  console.log(user);
-
+  if (isError) <p>Error</p>;
 
   return user ? (
     <div className={cls.relative} ref={menuRef}>
       <div onClick={() => setOpenProfile(!openProfile)}>
         <Avatar
           name={user?.name || ""}
-          style={{ width: "28px", height: "28px", cursor: "pointer" }}
+          style={{ width: "30px", height: "30px", cursor: "pointer" }}
         />
       </div>
 

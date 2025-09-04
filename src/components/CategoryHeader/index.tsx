@@ -13,22 +13,30 @@ import {
 
 type Props = {
   title: string;
-  icon?: React.ReactNode;
+  image?: string;
   categories?: string[];
   activeIndex?: number;
   onTagClick?: (index: number) => void;
   id: string;
+  backgroundColor?: string;
 };
 
 const CategoryHeader = ({
   title,
-  icon = "💡",
+  image,
   categories = [],
   activeIndex = 0,
   onTagClick,
   id,
+  backgroundColor,
 }: Props) => {
-  const fullCategories = ["All", ...categories];
+const fullCategories =
+  title.toLowerCase() === "world"
+    ? [] 
+    : categories && categories.length > 0
+    ? ["Latest", ...categories]
+    : [];
+  
   const { data } = useGetAllFollows();
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -56,7 +64,14 @@ const CategoryHeader = ({
     <div className={cls.categoryHeader}>
       <div className={cls.titleSection}>
         <div className={cls.flex}>
-          <div className={cls.icon}>{icon}</div>
+          <div
+            className={cls.iconWrapper}
+            style={{ backgroundColor: backgroundColor }}
+          >
+            {image && (
+              <img src={image} alt="category icon" className={cls.icon} />
+            )}
+          </div>
           <h1>{title}</h1>
         </div>
         <div className={cls.followShare}>
@@ -80,7 +95,7 @@ const CategoryHeader = ({
       <div className={cls.buttons}>
         {fullCategories.map((cat, idx) => (
           <button
-            key={cat}
+            key={`${cat}-${idx}`}
             className={`${cls.button} ${activeIndex === idx ? cls.active : ""}`}
             onClick={() => onTagClick?.(idx)}
           >
