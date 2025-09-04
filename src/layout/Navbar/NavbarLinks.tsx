@@ -20,14 +20,8 @@ const NavbarLinks: React.FC = () => {
     { name: t.home, path: "/" },
     { name: t.forYou, path: "/foryou" },
     { name: t.following, path: "/following" },
+    { name: t.local, path: "/local" },
   ];
-
-  const toSlug = (name: string) =>
-    "/" +
-    name
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]/g, "");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -37,25 +31,29 @@ const NavbarLinks: React.FC = () => {
           `/categories?lang=${selectedLang}`
         );
 
-        console.log(data, "dhflcbhbvhbfcvh");
-
         const mapped = (data.categories || []).map((cat: any) => ({
           name: cat.name,
           path: `/${cat.slug}?id=${cat.id}`,
         }));
 
-        const countryPath = `/country/${data?.country?.slug}?lang=${selectedLang}`;
+        const dynamicCats: CategoryType[] = [...mapped];
 
-        setCategories([
-          ...staticCategories,
-          { name: data.country.name, path: countryPath },
-          ...mapped,
-        ]);
+       
+        if (data?.country) {
+          const countryPath = `/country/${data.country.slug}?lang=${selectedLang}`;
+          dynamicCats.unshift({
+            name: data.country.name,
+            path: countryPath,
+          });
+        }
+
+        setCategories([...staticCategories, ...dynamicCats]);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
         setCategories(staticCategories);
       }
     };
+
     fetchCategories();
   }, [selectedLang]);
 
@@ -65,14 +63,19 @@ const NavbarLinks: React.FC = () => {
         <React.Fragment key={index}>
           <Link
             href={cat.path}
-            className={`${pathname === cat.path ? cls.active : ""} ${
+            className={`${
+              pathname.split("?")[0] === cat.path.split("?")[0]
+                ? cls.active
+                : ""
+            } ${
               [t.home, t.following].includes(cat.name) ? cls["hide-mobile"] : ""
             }`}
           >
             {cat.name}
           </Link>
 
-          {index === staticCategories?.length - 1 && (
+         
+          {index === staticCategories.length - 1 && (
             <span className={cls["hide-mobile"]}>|</span>
           )}
         </React.Fragment>

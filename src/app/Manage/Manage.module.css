@@ -1,10 +1,9 @@
 .container {
   color: white;
-  background-color: #303030;
+  /* background-color: #303030; */
   width: 100%;
   max-width: 850px;
   margin: 0 auto;
-  /* padding: 0 1rem; */
   font-family: Google Sans, sans-serif;
 }
 
@@ -13,7 +12,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid transparent;
 }
 
 .headerLeft {
@@ -21,6 +20,7 @@
   align-items: center;
   gap: 0.75rem;
 }
+
 
 .iconButton {
   background: transparent;
@@ -33,7 +33,7 @@
 }
 
 .iconButton:hover {
-  background-color: #303030;
+  background-color: transparent;
 }
 
 .infoButton {
@@ -50,18 +50,18 @@
 }
 
 .infoButton:hover {
-  background-color: #303030;
-}
+  color: white;
+  }
 
-/* Added info text styling */
 .infoText {
   font-size: 0.875rem;
+  cursor: pointer;
 }
 
 .title {
-  font-size: 1.125rem;
+  font-size: 28px;
   font-weight: 500;
-  margin: 0;
+  margin: 20px 0;
 }
 
 .content {
@@ -74,7 +74,7 @@
 .searchContainer {
   display: flex;
   align-items: center;
-  background-color: #303030;
+  /* background-color: #303030; */
   border: 1px solid #374151;
   border-radius: 9999px;
   padding: 0 1rem;
@@ -91,7 +91,7 @@
   background: transparent;
   border: none;
   color: white;
-  padding: 0.75rem;
+  padding: 15px 20px;
   font-size: 1rem;
   outline: none;
 }
@@ -104,7 +104,7 @@
   border-color: #4b5563;
 }
 
-/* Added clear button styling */
+
 .clearButton {
   background: transparent;
   border: none;
@@ -150,7 +150,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
-  background-color: #4b5563;
+  background-color: transparent;
 }
 
 .cityInfo {
@@ -177,17 +177,17 @@
 }
 
 .sectionTitle {
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 500;
   color: #d1d5db;
-  margin: 0;
+  margin: 20px 0;
 }
 
 .newsCard {
-  background-color: #303030;
+  /* background-color: #303030; */
   border-radius: 1rem;
   padding: 2rem;
-  border: 1px solid #374151;
+  border: 1px solid #5f6368;
 }
 
 .newsCardContent {
@@ -202,20 +202,10 @@
   position: relative;
 }
 
-.locationIconOuter {
-  width: 5rem;
-  height: 5rem;
-  background-color: #4b5563;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .locationIconMiddle {
-  width: 4rem;
-  height: 4rem;
-  background-color: #6b7280;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -249,11 +239,11 @@
 
 .suggestionCard {
   width: 100%;
-  max-width: 15rem;
-  background-color: #212121;
-  border-radius: 1rem;
-  padding: 1rem;
-  border: 1px solid #374151;
+  max-width: 340px;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  padding: 15px;
+  border: none;
 }
 
 .suggestionCard2 {
@@ -262,7 +252,7 @@
   background-color: #212121;
   border-radius: 1rem;
   padding: 1rem;
-  border: 1px solid #374151;
+  border: 1px solid #5f6368;
 }
 
 .suggestionContent {
@@ -300,7 +290,8 @@
   border: none;
   color: #9ca3af;
   padding: 0.5rem;
-  border-radius: 0.375rem;
+  border-radius: 50%;
+  border: 1px solid;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -309,7 +300,6 @@
   background-color: #374151;
 }
 
-/* Added filled star styling */
 .starFilled {
   color: #fbbf24 !important;
   fill: #fbbf24;
@@ -351,7 +341,7 @@
   top: 100%;
   right: 0;
   background-color: #212121;
-  border: 1px solid #374151;
+  border: 1px solid #5f6368;
   border-radius: 0.5rem;
   padding: 0.25rem;
   min-width: 8rem;

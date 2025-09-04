@@ -1,10 +1,13 @@
 .container {
-  width: 100%;
-  max-width: 850px;
+   display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #ddd;
+  max-width: 840px;
   margin: 0 auto;
-  /* padding: 0 1rem; */
-  font-family: Google Sans, sans-serif  ;
-
+  width: 100%;
+  font-family: Google Sans, sans-serif;
 }
 
 .header {
@@ -12,7 +15,7 @@
 }
 
 .title {
-  color: black;
+  color: rgb(255, 255, 255);
   font-size: 1.875rem;
   font-weight: 400;
   margin-bottom: 1.5rem;
@@ -32,10 +35,10 @@
 }
 
 .locationButton {
-  background-color: #2563eb;
+  background-color: #00687d;
   color: white;
   padding: 0.5rem 1rem;
-  border-radius: 9999px;
+  border-radius: 9px;
   font-size: 0.875rem;
   font-weight: 500;
   border: none;
@@ -44,7 +47,7 @@
 }
 
 .locationButton:hover {
-  background-color: #1d4ed8;
+  background-color: #015b6d;
 }
 
 .filterButton {
@@ -72,10 +75,22 @@
   font-size: 0.875rem;
 }
 
+.infoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9ca3af;
+  font-size: 1rem;
+}
+.infoLink:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
 .newsList {
   display: flex;
   flex-direction: column;
-  background-color: #303134;
+  background-color: #131314;
   border-radius: 0.5rem;
   overflow: hidden;
 }

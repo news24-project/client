@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import styles from "./Manage.module.css";
 import Link from "next/link";
+import { IoIosStarOutline } from "react-icons/io";
 const cities = [
   {
     name: "Dresden",
@@ -110,7 +111,7 @@ const cities = [
     name: "Tashkent",
     country: "Uzbekistan",
     flag: "🇺🇿",
-    image: "https://picsum.photos/200/300",
+    image: "/images/Tashkent.jpg",
   },
 ];
 
@@ -183,10 +184,15 @@ export default function ManageLocalNews() {
           </Link>
           <h1 className={styles.title}>Manage local news</h1>
         </div>
-        <button className={styles.infoButton}>
+        <a
+          href="https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en-GB&authuser=0"
+          target="_blank"
+          rel="noreferrer"
+          className={styles.infoButton}
+        >
           <Info className={styles.icon} />
           <span className={styles.infoText}>Why these locations?</span>
-        </button>
+        </a>
       </div>
 
       <div className={styles.content}>
@@ -255,7 +261,10 @@ export default function ManageLocalNews() {
                         <div className={styles.suggestionLeft}>
                           <div className={styles.locationImage}>
                             <img
-                              src={city.image || "/placeholder.svg"}
+                              src={
+                                cities.find((c) => c.name === "Tashkent")
+                                  ?.image || "/images/Tashkent.jpg"
+                              }
                               alt={city.name}
                               className={styles.image}
                             />
@@ -298,8 +307,12 @@ export default function ManageLocalNews() {
                     <div className={styles.locationIconContainer}>
                       <div className={styles.locationIconOuter}>
                         <div className={styles.locationIconMiddle}>
-                          <div className={styles.locationIconInner}>
-                            <MapPin className={styles.mapPinIcon} />
+                          <div>
+                            <img
+                              className={styles.image}
+                              src="/images/unnamed.webp"
+                              alt="Map"
+                            />
                           </div>
                         </div>
                       </div>
@@ -316,31 +329,35 @@ export default function ManageLocalNews() {
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>Suggested for you</h2>
 
-              <div className={styles.suggestionCard}>
-                <div className={styles.suggestionContent}>
-                  <div className={styles.suggestionLeft}>
-                    <div className={styles.locationImage}>
-                      <img
-                        src="https://picsum.photos/200/300"
-                        alt="Tashkent"
-                        className={styles.image}
-                      />
+              {!favorites.includes("Tashkent") && (
+                <div className={styles.suggestionCard}>
+                  <div className={styles.suggestionContent}>
+                    <div className={styles.suggestionLeft}>
+                      <div className={styles.locationImage}>
+                        <img
+                          src="/images/Tashkent.jpg"
+                          alt="Tashkent"
+                          className={styles.image}
+                        />
+                      </div>
+                      <span className={styles.locationName}>Tashkent</span>
                     </div>
-                    <span className={styles.locationName}>Tashkent</span>
-                  </div>
 
-                  <button
-                    onClick={(e) => toggleFavorite(e, "Tashkent")}
-                    className={styles.starButton}
-                  >
-                    <Star
-                      className={`${styles.icon} ${
-                        favorites.includes("Tashkent") ? styles.starFilled : ""
-                      }`}
-                    />
-                  </button>
+                    <button
+                      onClick={(e) => toggleFavorite(e, "Tashkent")}
+                      className={styles.starButton}
+                    >
+                      <IoIosStarOutline
+                        className={`${styles.icon} ${
+                          favorites.includes("Tashkent")
+                            ? styles.starFilled
+                            : ""
+                        }`}
+                      />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </>
         )}
