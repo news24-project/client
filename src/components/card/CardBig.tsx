@@ -14,7 +14,7 @@ const CardBig = ({
   cardMain: IArticleChild;
   cards: IArticleChild[];
 }) => {
-  const articleId = cardMain.articleId;
+  const articleId = cardMain.id;
   const {
     imageUrl = "",
     iconUrl = "",
@@ -22,7 +22,7 @@ const CardBig = ({
     publishedAt = "",
     author,
     url,
-  } = cardMain.article || {};
+  } = cardMain || {};
 
   return (
     <div className={cn(css.cardBig)}>

@@ -226,7 +226,7 @@ interface Tag {
 }
 interface IArticleChild {
   id: string;
-  article: IArticle; // asl maqola shu yerda
+  article: IArticle;
 }
 
 const BACKEND_URL = "http://localhost:4000";
@@ -246,15 +246,31 @@ const Home: React.FC = () => {
 
   const formatArticle = (article: any) => ({
     ...article,
-    iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+    id: article.id || article.articleId,
+    title: article.title || article.article?.title,
+    url: article.url || article.article?.url,
+    summary: article.summary || article.article?.summary,
+    content: article.content || article.article?.content,
+    imageUrl: article.imageUrl || article.article?.imageUrl,
+
+    author: article.author || article.article?.author,
+    publishedAt: article.publishedAt || article.article?.publishedAt,
+    type: article.type || article.article?.type,
+    score: article.score || article.article?.score,
+    createdAt: article.createdAt || article.article?.createdAt,
+    sourceId: article.sourceId || article.article?.sourceId,
+    iconUrl: article.iconUrl
+      ? `${BACKEND_URL}/${article.iconUrl}`
+      : article.article?.iconUrl
+      ? `${BACKEND_URL}/${article.article.iconUrl}`
+      : "",
   });
 
   const cards = articles
     .flatMap(
       (article) =>
-        article.articleTags?.map((tag) =>
-          tag?.article ? formatArticle(tag.article) : null
-        ) || []
+        article.articleTags?.map((tag) => (tag ? formatArticle(tag) : null)) ||
+        []
     )
     .filter(Boolean);
 
@@ -265,10 +281,12 @@ const Home: React.FC = () => {
     )
     .slice(0, 10);
 
+  console.log(latestTen[0]);
+
   const fetchUserTopics = async () => {
     try {
       const { data } = await customAxios.get("/user/topics");
-      console.log("User topics:", data);
+      console.log("User topics raw:", data);
 
       const tags: Tag[] = Array.isArray(data)
         ? data.map((item: any) => ({
@@ -280,6 +298,7 @@ const Home: React.FC = () => {
           }))
         : [];
 
+      console.log("User topics formatted:", tags);
       setUserTopics(tags);
     } catch (err) {
       console.error("Error fetching user topics:", err);
@@ -289,7 +308,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     fetchUserTopics();
   }, []);
-  console.log(articles ,"sdckascvkghsvdgcvashcvsdghk")
+  console.log(articles, "sdckascvkghsvdgcvashcvsdghk");
 
   return (
     <div className={cls.wrapper}>
@@ -310,10 +329,10 @@ const Home: React.FC = () => {
         </div>
         <WeatherCard />
       </div>
-      <div style={{ width: "70%" }}>
+
+      <div>
         {articles?.length > 0 && (
           <>
-            <Card cardMain={articles[0]?.articleTags[0]} smallCardOA={true} />
             <div className={cls["home-content"]}>
               {latestTen.length >= 4 && (
                 <div className={cls["home"]}>
@@ -382,7 +401,7 @@ const Home: React.FC = () => {
                         {tag.name} <IoIosArrowForward />
                       </h2>
                       <div className={cls.topicCardsGrid}>
-                        {tag.articles && tag.articles.length > 0 ? (
+                        {tag.articles && tag.articles?.length > 0 ? (
                           tag.articles
                             .slice(0, 3)
                             .map((article, idx) => (
@@ -422,13 +441,6 @@ const Home: React.FC = () => {
                 ))}
               </div>
             </div>
-
-            {articles?.length > 1 && (
-              <Card
-                cardMain={articles[1].articleTags[0]}
-                cards={cards.slice(2)}
-              />
-            )}
           </>
         )}
       </div>

@@ -20,8 +20,8 @@ const CardSmall = ({
     publishedAt,
     author,
     url,
-  } = cardMain.article || {};
-  const articleId = cardMain.articleId;
+  } = cardMain || {};
+  const articleId = cardMain.id;
 
   return (
     <div className={cn(css.cardSmall)}>

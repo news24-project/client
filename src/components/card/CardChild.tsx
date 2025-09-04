@@ -6,8 +6,8 @@ import { IArticleChild } from "@/api";
 import { formatDate } from "@/utils/dataText";
 
 const CardChild = ({ cardMain }: { cardMain: IArticleChild }) => {
-  const { iconUrl = "", title, publishedAt, author, url } = cardMain.article || {};
-  const articleId = cardMain.articleId;
+  const { iconUrl = "", title, publishedAt, author, url } = cardMain || {};
+  const articleId = cardMain.id;
 
   return (
     <div className={cn(css.cardRightDivGlobal)}>
