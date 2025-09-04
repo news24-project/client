@@ -533,6 +533,20 @@
   color: #fff;
 }
 
+.signIn {
+  color: white;
+  padding: 6px 15px;
+  background-color: #3280f5;
+  font-size: 15px;
+  font-weight: 400;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.signIn:hover {
+  background-color: #1e75f8;
+}
+
 @media (max-width: 768px) {
   .mobile-search {
     display: block;

@@ -40,7 +40,6 @@
   text-decoration: underline;
 }
 
-
 .cardSmallRightDiv {
   width: 15%;
   height: 83%;
@@ -80,11 +79,6 @@
   font-size: 12px;
   font-weight: 500;
 }
-.cardLeftDivText:first-child {
-  color: #dfdfdf;
-  position: relative;
-  top: 0.3px;
-}
 
 .smallWrapper {
   position: absolute;
@@ -104,4 +98,40 @@
   gap: 3px;
   position: relative;
   bottom: 5px;
+}
+
+@media screen and (max-width: 1280px) {
+  .cardSmall {
+    height: 130px;
+  }
+  .cardSmallLeftDiv {
+    width: 88%;
+    position: static;
+  }
+  .cardSmallRightDiv {
+    width: 12%;
+  }
+  .smallWrapper article {
+    visibility: visible;
+  }
+  .cardSmallLeftDiv article {
+    visibility: visible;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .cardSmallLeftDiv h2 {
+    color: whitesmoke;
+    font-size: 15px;
+    font-weight: lighter;
+    line-height: 1.4;
+  }
+
+  .cardSmallLeftDiv {
+    width: 80%;
+  }
+
+  .cardSmallRightDiv {
+    width: 20%;
+  }
 }

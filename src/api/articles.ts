@@ -17,7 +17,7 @@ export interface IArticleChild {
     url: string;
     summary: string | null;
     content: string | null;
-    imageUrl: string | null;
+    imageUrl?: string | null;
     author: string | null;
     publishedAt: string;
     type: string;

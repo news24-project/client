@@ -3,15 +3,25 @@ import cn from "classnames";
 import css from "./CardSmall.module.css";
 import shared from "./shared.module.css";
 import { IArticleChild } from "@/api";
+import CardMenu from "./CardMenu";
+import { formatDate } from "@/utils/dataText";
 
 const CardSmall = ({
   cardMain,
   smallCardOA,
 }: {
-  cardMain: IArticleChild["article"];
+  cardMain: IArticleChild;
   smallCardOA?: boolean;
 }) => {
-  const { imageUrl, iconUrl, title, publishedAt, author, url } = cardMain;
+  const {
+    imageUrl = "",
+    iconUrl = "",
+    title = "",
+    publishedAt,
+    author,
+    url,
+  } = cardMain.article || {};
+  const articleId = cardMain.articleId;
 
   return (
     <div className={cn(css.cardSmall)}>
@@ -23,10 +33,18 @@ const CardSmall = ({
         {smallCardOA && (
           <div>
             <div className={cn(css.cardLeftDivIconDiv)}>
-              <img alt={title} src={iconUrl || "https://ih1.redbubble.net/image.4905811472.8675/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"} />
+              {iconUrl ? <img alt={title} src={iconUrl} /> : null}
               <span>{author}</span>
             </div>
             <h2>{title}</h2>
+            <CardMenu
+              url={url}
+              title={title}
+              author={author || ""}
+              iconUrl={iconUrl || ""}
+              articleId={articleId}
+              isSmallMenu
+            />
           </div>
         )}
         {!smallCardOA && <h2>{title}</h2>}
@@ -37,20 +55,26 @@ const CardSmall = ({
           [css.cardSmallRightDivActive]: !smallCardOA,
         })}
       >
-        <img alt={title} src={imageUrl || "https://ih1.redbubble.net/image.4905811472.8675/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"} />
+        {imageUrl ? <img alt={title} src={imageUrl} /> : null}
       </div>
 
       <div className={cn(css.smallWrapper)}>
         <p>
-          {publishedAt
-            ? new Date(publishedAt).toLocaleDateString()
-            : "Нет даты"}{" "}
-          • {author}
+          {formatDate(publishedAt)} •{" "}
+          <span className={cn(css.cardLeftDivText)}>{author}</span>
         </p>
-
+        {smallCardOA ? null : (
+          <CardMenu
+            url={url}
+            title={title}
+            author={author || ""}
+            iconUrl={iconUrl || ""}
+            articleId={articleId}
+          />
+        )}
         {smallCardOA && (
           <div
-            className={cn(shared.toFullCoverageDiv)}
+            className={cn(shared.toFullCoverageDivSmall)}
             style={{ backgroundColor: "transparent" }}
           >
             <a href={url} target="_blank" rel="noopener noreferrer">

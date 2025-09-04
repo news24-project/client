@@ -1,8 +1,13 @@
 .cardBig {
   background-color: transparent;
+
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.163);
   padding: 16px 0;
   max-width: 800px;
+
+  border-top: 1px solid #e3e3e3;
+ 
+
   width: 100%;
   display: flex;
   gap: 30px;
@@ -85,15 +90,49 @@
   font-size: 12px;
   font-weight: 500;
 }
-.cardLeftDivText:first-child {
-  color: #dfdfdf;
-  position: relative;
-  top: 0.3px;
-}
-
 .cardRight {
   width: 67%;
   display: flex;
   flex-direction: column;
+
   gap: 10px;
+
+ 
+}
+
+@media screen and (max-width: 1280px) {
+  .cardBig {
+    flex-wrap: wrap;
+  }
+  .cardLeft {
+    width: 100%;
+  }
+  .cardRight {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: visible;
+    height: 130px;
+    margin-bottom: 50px;
+    gap: 5px;
+  }
+  .cardLeftDiv article {
+    visibility: visible;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .cardLeftDiv h2 {
+    color: whitesmoke;
+    font-size: 15px;
+    font-weight: lighter;
+    line-height: 1.4;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .cardRight {
+    height: 100px;
+  }
+
 }

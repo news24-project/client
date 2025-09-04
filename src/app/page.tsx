@@ -250,10 +250,13 @@ const Home: React.FC = () => {
   });
 
   const cards = articles
-    .flatMap((article) =>
-      article.articleTags.map((tag) => formatArticle(tag.article))
+    .flatMap(
+      (article) =>
+        article.articleTags?.map((tag) =>
+          tag?.article ? formatArticle(tag.article) : null
+        ) || []
     )
-    .filter((a) => a.imageUrl);
+    .filter(Boolean);
 
   const latestTen = [...cards]
     .sort(
@@ -263,29 +266,30 @@ const Home: React.FC = () => {
     .slice(0, 10);
 
   const fetchUserTopics = async () => {
-  try {
-    const { data } = await customAxios.get("/user/topics");
-    console.log("User topics:", data);
+    try {
+      const { data } = await customAxios.get("/user/topics");
+      console.log("User topics:", data);
 
-    const tags: Tag[] = Array.isArray(data)
-      ? data.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          articles: item.articles
-            ? item.articles.map((a: any) => formatArticle(a))
-            : [],
-        }))
-      : [];
+      const tags: Tag[] = Array.isArray(data)
+        ? data.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            articles: item.articles
+              ? item.articles.map((a: any) => formatArticle(a))
+              : [],
+          }))
+        : [];
 
-    setUserTopics(tags);
-  } catch (err) {
-    console.error("Error fetching user topics:", err);
-  }
-};
+      setUserTopics(tags);
+    } catch (err) {
+      console.error("Error fetching user topics:", err);
+    }
+  };
 
   useEffect(() => {
     fetchUserTopics();
   }, []);
+  console.log(articles ,"sdckascvkghsvdgcvashcvsdghk")
 
   return (
     <div className={cls.wrapper}>
@@ -306,101 +310,127 @@ const Home: React.FC = () => {
         </div>
         <WeatherCard />
       </div>
-
-      <div className={cls["home-content"]}>
-        {latestTen.length >= 4 && (
-          <div className={cls["home"]}>
-            <div className={cls["title"]}>
-              Top stories <IoIosArrowForward />
-            </div>
-            <hr className={cls.hr} />
-            <div className={cls["home-container"]}>
-              <Card cardMain={latestTen[0]} cards={latestTen.slice(1, 4)} />
-              <Card cardMain={latestTen[1]} cards={latestTen.slice(4, 7)} />
-              <Card cardMain={latestTen[2]} smallCardOA />
-              <Card cardMain={latestTen[3]} smallCardOA />
-            </div>
-          </div>
-        )}
-        {cards.length >= 3 && (
-          <div className={cls["home2"]}>
-            <div className={cls["title-pick"]}>
-              Picks for you <FaRegCircleQuestion color="white" />
-            </div>
-            <hr className={cls.hr} />
-            <div className={cls["home-container2"]}>
-              {cards.slice(0, 3).map((article, idx) => (
-                <Card key={article.id || idx} cardMain={article} smallCardOA />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-      <div>
-        <div className={cls["for-title"]}>
-          For you <IoIosArrowForward />
-        </div>
-        <div className={cls["for-in"]}>
-          Recommended based on your interests
-          <span>
-            <FaRegCircleQuestion />
-          </span>
-        </div>
-      </div>
-      <div>
-        <div className={cls["topic"]}>
-          <div className={cls["for-title"]}>Your topics</div>
-          <button
-            onClick={() => setIsOpen(true)}
-            className={cls["customize-btn"]}
-          >
-            <IoMdOptions /> Customize
-          </button>
-        </div>
-        <div className={cls["topic-list"]}>
-          {userTopics.map((tag) => (
-            <div key={tag.id} className={cls.topicWrapper}>
-              <div className={cls.topicCards}>
-                <h2 className={cls.topicTitle}>
-                  {tag.name} <IoIosArrowForward />
-                </h2>
-                <div className={cls.topicCardsGrid}>
-                  {tag.articles && tag.articles.length > 0 ? (
-                    tag.articles
-                      .slice(0, 3)
-                      .map((article, idx) => (
-                        <Card
-                          key={article.id || idx}
-                          cardMain={article}
-                          smallCardOA
-                        />
-                      ))
-                  ) : (
-                    <p>No articles for this topic</p>
-                  )}
+      <div style={{ width: "70%" }}>
+        {articles?.length > 0 && (
+          <>
+            <Card cardMain={articles[0]?.articleTags[0]} smallCardOA={true} />
+            <div className={cls["home-content"]}>
+              {latestTen.length >= 4 && (
+                <div className={cls["home"]}>
+                  <div className={cls["title"]}>
+                    Top stories <IoIosArrowForward />
+                  </div>
+                  <hr className={cls.hr} />
+                  <div className={cls["home-container"]}>
+                    <Card
+                      cardMain={latestTen[0]}
+                      cards={latestTen.slice(1, 4)}
+                    />
+                    <Card
+                      cardMain={latestTen[1]}
+                      cards={latestTen.slice(4, 7)}
+                    />
+                    <Card cardMain={latestTen[2]} smallCardOA />
+                    <Card cardMain={latestTen[3]} smallCardOA />
+                  </div>
                 </div>
+              )}
+              {cards.length >= 3 && (
+                <div className={cls["home2"]}>
+                  <div className={cls["title-pick"]}>
+                    Picks for you <FaRegCircleQuestion color="white" />
+                  </div>
+                  <hr className={cls.hr} />
+                  <div className={cls["home-container2"]}>
+                    {cards.slice(0, 3).map((article, idx) => (
+                      <Card
+                        key={article.id || idx}
+                        cardMain={article}
+                        smallCardOA
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div>
+              <div className={cls["for-title"]}>
+                For you <IoIosArrowForward />
+              </div>
+              <div className={cls["for-in"]}>
+                Recommended based on your interests
+                <span>
+                  <FaRegCircleQuestion />
+                </span>
               </div>
             </div>
-          ))}
+            <div>
+              <div className={cls["topic"]}>
+                <div className={cls["for-title"]}>Your topics</div>
+                <button
+                  onClick={() => setIsOpen(true)}
+                  className={cls["customize-btn"]}
+                >
+                  <IoMdOptions /> Customize
+                </button>
+              </div>
+              <div className={cls["topic-list"]}>
+                {userTopics.map((tag) => (
+                  <div key={tag.id} className={cls.topicWrapper}>
+                    <div className={cls.topicCards}>
+                      <h2 className={cls.topicTitle}>
+                        {tag.name} <IoIosArrowForward />
+                      </h2>
+                      <div className={cls.topicCardsGrid}>
+                        {tag.articles && tag.articles.length > 0 ? (
+                          tag.articles
+                            .slice(0, 3)
+                            .map((article, idx) => (
+                              <Card
+                                key={article.id || idx}
+                                cardMain={article}
+                                smallCardOA
+                              />
+                            ))
+                        ) : (
+                          <p>No articles for this topic</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
 
-          <CategoryModal
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            onSave={() => fetchUserTopics()}
-          />
-        </div>
-      </div>
+                <CategoryModal
+                  isOpen={isOpen}
+                  onClose={() => setIsOpen(false)}
+                  onSave={() => fetchUserTopics()}
+                />
+              </div>
+            </div>
+            <div>
+              <div className={cls["for-title"]}>Beyond the front page</div>
+              <div className={cls["for-in"]}>
+                Notable stories and conversation starters
+              </div>
+              <div className={cls.beyondContent}>
+                {latestTen.slice(4, 8).map((article, idx) => (
+                  <Card
+                    key={article.id || idx}
+                    cardMain={article}
+                    smallCardOA
+                  />
+                ))}
+              </div>
+            </div>
 
-      <div>
-        <div className={cls["for-title"]}>Beyond the front page</div>
-        <div className={cls["for-in"]}>
-          Notable stories and conversation starters
-        </div>
-        <div className={cls.beyondContent}>
-          {latestTen.slice(4, 8).map((article, idx) => (
-            <Card key={article.id || idx} cardMain={article} smallCardOA />
-          ))}
-        </div>
+            {articles?.length > 1 && (
+              <Card
+                cardMain={articles[1].articleTags[0]}
+                cards={cards.slice(2)}
+              />
+            )}
+          </>
+        )}
       </div>
 
       <ModalShare />

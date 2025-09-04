@@ -13,10 +13,9 @@ import { useLanguage } from "@/app/LanguageProvider";
 
 const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { selectedLang, setSelectedLang } = useLanguage(); 
-
+  const { selectedLang, setSelectedLang } = useLanguage();
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
-
+  
   return (
     <div className={cls["navbar-wrapper"]}>
       <div className={cls["navbar-top"]}>
@@ -24,22 +23,19 @@ const Navbar = () => {
         <h1 className={cls["title"]}>News24</h1>
         <div className={cls["navbar-center"]}>
           <SearchBar />
-          <HelpDropdown  />
-          <SettingsDropdown /> 
+          <HelpDropdown />
+          <SettingsDropdown />
         </div>
 
-        <Sidebar
-          sidebarOpen={sidebarOpen}
-          toggleSidebar={toggleSidebar}
-        />
+        <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
         <div className={cls["navbar-flex"]}>
-          <AppsMenu  />
-          <ProfileMenu  />
+          <AppsMenu />
+          <ProfileMenu />
         </div>
       </div>
       <div>
-        <NavbarLinks  />
+        <NavbarLinks />
       </div>
     </div>
   );
