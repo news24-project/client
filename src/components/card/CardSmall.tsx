@@ -9,14 +9,16 @@ import { formatDate } from "@/utils/dataText";
 const CardSmall = ({
   cardMain,
   smallCardOA,
+  isImgBig
 }: {
   cardMain: IArticleChild;
   smallCardOA?: boolean;
+  isImgBig?:boolean
 }) => {
   const { imageUrl, iconUrl, title, publishedAt, author, url } =
     cardMain.article;
   const articleId = cardMain.articleId;
-
+  
   return (
     <div className={cn(css.cardSmall)}>
       <div

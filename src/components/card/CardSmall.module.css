@@ -52,8 +52,8 @@
 }
 
 .cardSmallRightDiv img {
-  width: 100%;
-  height: 100%;
+  width: 115px;
+  height: 115px;
   border-radius: 12px;
 }
 
@@ -116,9 +116,13 @@
   .cardSmallLeftDiv article {
     visibility: visible;
   }
+  .cardSmallRightDiv img {
+    width: 90px;
+    height: 90px;
+  }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1000px) {
   .cardSmallLeftDiv h2 {
     color: whitesmoke;
     font-size: 15px;
@@ -132,11 +136,13 @@
 
   .cardSmallRightDiv {
     width: 20%;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 
-@media screen and (max-width: 650px) { 
-    .cardSmallLeftDiv h2 {
+@media screen and (max-width: 650px) {
+  .cardSmallLeftDiv h2 {
     color: whitesmoke;
     font-size: 12px;
     font-weight: lighter;
