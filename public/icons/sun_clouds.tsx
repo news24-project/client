@@ -67,7 +67,7 @@ const SunClouds = ({ width, height }: IconsTypes) => (
         <stop offset="100%" stopColor="rgb(251,188,4)"></stop>
       </linearGradient>
     </defs>
-    <g clip-path="url(#__lottie_element_130)">
+    <g clipPath="url(#__lottie_element_130)">
       <g
         transform="matrix(1.4667999744415283,0,0,1.4667999744415283,1102.0927734375,991.7191772460938)"
         opacity="0.9999995324186324"

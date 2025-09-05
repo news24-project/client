@@ -3,6 +3,10 @@
 import { useState } from "react";
 import styles from "./Following.module.css";
 import Link from "next/link";
+import {
+  useGetAllFollowedCategories,
+  useUnFollowMutation,
+} from "@/hooks/useFollow";
 
 export default function FollowingPage() {
   const [activeTab, setActiveTab] = useState("topics");
@@ -12,6 +16,8 @@ export default function FollowingPage() {
   ]);
   const [menuOpen, setMenuOpen] = useState<number | null>(null);
 
+  const { data } = useGetAllFollowedCategories();
+  const unfollow = useUnFollowMutation();
   const handleDelete = (id: number) => {
     setLocals(locals.filter((local) => local.id !== id));
     setMenuOpen(null);
@@ -25,49 +31,104 @@ export default function FollowingPage() {
             {/* Topics */}
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Topics</h2>
-              <div className={styles.emptyBox}>
-                <div className={styles.iconWrapper}>
-                  <svg
-                    width="80"
-                    height="80"
-                    viewBox="0 0 80 80"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="40" cy="40" r="40" fill="#4A5568" />
-                    <circle cx="40" cy="40" r="25" fill="#2D3748" />
-                    <circle cx="40" cy="40" r="8" fill="#1A202C" />
-                    <circle cx="25" cy="25" r="8" fill="#E53E3E" />
-                    <circle cx="55" cy="25" r="8" fill="#E53E3E" />
-                    <circle cx="25" cy="55" r="8" fill="#E53E3E" />
-                    <circle cx="55" cy="55" r="8" fill="#E53E3E" />
-                    <circle cx="25" cy="25" r="3" fill="#1A202C" />
-                    <circle cx="55" cy="25" r="3" fill="#1A202C" />
-                    <circle cx="25" cy="55" r="3" fill="#1A202C" />
-                    <circle cx="55" cy="55" r="3" fill="#1A202C" />
-                    <rect
-                      x="35"
-                      y="20"
-                      width="10"
-                      height="4"
-                      fill="#F7931E"
-                      rx="2"
-                    />
-                    <rect
-                      x="35"
-                      y="56"
-                      width="10"
-                      height="4"
-                      fill="#F7931E"
-                      rx="2"
-                    />
-                  </svg>
+              {data?.data?.length == 0 ? (
+                <div className={styles.emptyBox}>
+                  <div className={styles.iconWrapper}>
+                    <svg
+                      width="80"
+                      height="80"
+                      viewBox="0 0 80 80"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="40" cy="40" r="40" fill="#4A5568" />
+                      <circle cx="40" cy="40" r="25" fill="#2D3748" />
+                      <circle cx="40" cy="40" r="8" fill="#1A202C" />
+                      <circle cx="25" cy="25" r="8" fill="#E53E3E" />
+                      <circle cx="55" cy="25" r="8" fill="#E53E3E" />
+                      <circle cx="25" cy="55" r="8" fill="#E53E3E" />
+                      <circle cx="55" cy="55" r="8" fill="#E53E3E" />
+                      <circle cx="25" cy="25" r="3" fill="#1A202C" />
+                      <circle cx="55" cy="25" r="3" fill="#1A202C" />
+                      <circle cx="25" cy="55" r="3" fill="#1A202C" />
+                      <circle cx="55" cy="55" r="3" fill="#1A202C" />
+                      <rect
+                        x="35"
+                        y="20"
+                        width="10"
+                        height="4"
+                        fill="#F7931E"
+                        rx="2"
+                      />
+                      <rect
+                        x="35"
+                        y="56"
+                        width="10"
+                        height="4"
+                        fill="#F7931E"
+                        rx="2"
+                      />
+                    </svg>
+                  </div>
+                  <p className={styles.text}>
+                    When you follow a topic, it will appear here. You'll also
+                    see more related stories in the "For You" feed.
+                  </p>
                 </div>
-                <p className={styles.text}>
-                  When you follow a topic, it will appear here. You'll also see
-                  more related stories in the "For You" feed.
-                </p>
-              </div>
+              ) : (
+                <div className={styles.topicBox}>
+                  {data?.data?.map((topic: any) => (
+                    <div key={topic.id} className={styles.topicCard}>
+                      <div className={styles.icon}>
+                        {topic.name === "technology"
+                          ? "💻"
+                          : topic.name === "entertainment"
+                          ? "🎬"
+                          : topic.name === "sport"
+                          ? "🏅"
+                          : topic.name === "science"
+                          ? "🔬"
+                          : topic.name === "health"
+                          ? "🩺"
+                          : topic.name === "business"
+                          ? "💼"
+                          : ""}
+                      </div>
+                      <p className={styles.topicName}>{topic.name}</p>
+
+                      {/* 3 dots menu */}
+                      <div className={styles.menuWrapper}>
+                        <button
+                          className={styles.dotsBtn}
+                          onClick={() =>
+                            setMenuOpen(menuOpen === topic.id ? null : topic.id)
+                          }
+                        >
+                          ⋮
+                        </button>
+                        {menuOpen === topic.id && (
+                          <div className={styles.dropdownMenu}>
+                            <button
+                              onClick={() => {
+                                if (data?.data) {
+                                  data.data = data.data.filter(
+                                    (t: any) => t.id !== topic.id
+                                  );
+                                }
+                                unfollow.mutate(topic.id);
+                                setMenuOpen(null);
+                              }}
+                              className={styles.deleteBtn}
+                            >
+                              Unfollow
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
 
             {/* Local */}
@@ -81,47 +142,48 @@ export default function FollowingPage() {
 
               {locals.length > 0 ? (
                 <div className={styles.localBox}>
-    {locals.map((local) => (
-  <Link
-    key={local.id}
-    href="/local"
-    className={styles.localCard}
-  >
-    <img
-      src={local.img}
-      alt={local.name}
-      className={styles.localImg}
-    />
-    <p className={styles.localText}>{local.name}</p>
+                  {locals.map((local) => (
+                    <Link
+                      key={local.id}
+                      href="/local"
+                      className={styles.localCard}
+                    >
+                      <img
+                        src={local.img}
+                        alt={local.name}
+                        className={styles.localImg}
+                      />
+                      <p className={styles.localText}>{local.name}</p>
 
-    {/* 3 dots icon */}
-    <div className={styles.menuWrapper}>
-      <button
-        className={styles.dotsBtn}
-        onClick={(e) => {
-          e.preventDefault(); // ❗ sahifa o'tib ketmasligi uchun
-          setMenuOpen(menuOpen === local.id ? null : local.id);
-        }}
-      >
-        ⋮
-      </button>
-      {menuOpen === local.id && (
-        <div className={styles.dropdownMenu}>
-          <button
-            onClick={(e) => {
-              e.preventDefault(); // ❗ Delete bosilganda ham o'tib ketmasligi uchun
-              handleDelete(local.id);
-            }}
-            className={styles.deleteBtn}
-          >
-            Delete
-          </button>
-        </div>
-      )}
-    </div>
-  </Link>
-))}
-
+                      {/* 3 dots icon */}
+                      <div className={styles.menuWrapper}>
+                        <button
+                          className={styles.dotsBtn}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setMenuOpen(
+                              menuOpen === local.id ? null : local.id
+                            );
+                          }}
+                        >
+                          ⋮
+                        </button>
+                        {menuOpen === local.id && (
+                          <div className={styles.dropdownMenu}>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleDelete(local.id);
+                              }}
+                              className={styles.deleteBtn}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               ) : (
                 <hr />

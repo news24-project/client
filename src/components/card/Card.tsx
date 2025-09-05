@@ -5,6 +5,7 @@ import CardBig from "./CardBig";
 import CardSmall from "./CardSmall";
 
 const Card = ({ cardMain, cards, smallCardOA}: ICard) => {
+  console.log(cardMain, cards, "sad")
   if (cards?.length) {
     return <CardBig cardMain={cardMain} cards={cards} />;
   }
