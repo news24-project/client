@@ -23,14 +23,12 @@ const CategoryHeader = ({
   onTagClick,
   backgroundColor,
 }: Props) => {
-const fullCategories =
-  title.toLowerCase() === "world"
-    ? [] 
-    : categories && categories.length > 0
-    ? ["Latest", ...categories]
-    : [];
-
-
+  const fullCategories =
+    title.toLowerCase() === "world"
+      ? []
+      : categories && categories.length > 0
+      ? ["Latest", ...categories]
+      : [];
 
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -62,8 +60,9 @@ const fullCategories =
             ) : (
               <IoIosStarOutline className={cls["follow-icon"]} />
             )}
-            {isFollowing ? "Following" : "Follow"}
+            <span>{isFollowing ? "Following" : "Follow"}</span>
           </button>
+
           <button className={cls.share}>
             <BsShare />
           </button>

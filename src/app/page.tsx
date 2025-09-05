@@ -212,24 +212,44 @@ export const months = [
 export const briefing = {
   "en-US": "Your briefing",
   "ru-RU": "Ваше резюме",
-  "uz-UZ": "Sizning qisqacha ma’lumotingiz",
+  "uz-UZ": "Sizning qisqacha ma'lumotingiz",
   "kz-KZ": "Сіздің қысқаша мәліметіңіз",
   "in-IN": "आपकी सारांश सूचना",
   "tr-TR": "Sizin brifinginiz",
   "zh-TW": "您的簡報",
   "ky-KG": "Сиздин кыскача маалымат",
 };
+
 interface Tag {
   id: string;
   name: string;
   articles?: IArticleChild[];
 }
+
 interface IArticleChild {
   id: string;
   article: IArticle;
 }
 
 const BACKEND_URL = "http://localhost:4000";
+
+// Dynamic grid class function
+const getDynamicGridClass = (cardCount:number) => {
+  if (cardCount === 0) return '';
+  if (cardCount === 1) return cls['grid-1'];
+  if (cardCount === 2) return cls['grid-2'];
+  if (cardCount === 3) return cls['grid-3'];
+  if (cardCount === 4) return cls['grid-4'];
+  if (cardCount === 5) return cls['grid-5'];
+  if (cardCount === 6) return cls['grid-6'];
+  if (cardCount === 7) return cls['grid-7'];
+  if (cardCount === 8) return cls['grid-8'];
+  if (cardCount === 9) return cls['grid-9'];
+  if (cardCount === 10) return cls['grid-10'];
+  if (cardCount === 11) return cls['grid-11'];
+  if (cardCount === 12) return cls['grid-12'];
+  return cls['grid-default'];
+};
 
 const Home: React.FC = () => {
   const { selectedLang } = useLanguage();
@@ -252,7 +272,6 @@ const Home: React.FC = () => {
     summary: article.summary || article.article?.summary,
     content: article.content || article.article?.content,
     imageUrl: article.imageUrl || article.article?.imageUrl,
-
     author: article.author || article.article?.author,
     publishedAt: article.publishedAt || article.article?.publishedAt,
     type: article.type || article.article?.type,
@@ -308,7 +327,6 @@ const Home: React.FC = () => {
   useEffect(() => {
     fetchUserTopics();
   }, []);
-  console.log(articles, "sdckascvkghsvdgcvashcvsdghk");
 
   return (
     <div className={cls.wrapper}>
@@ -400,10 +418,11 @@ const Home: React.FC = () => {
                       <h2 className={cls.topicTitle}>
                         {tag.name} <IoIosArrowForward />
                       </h2>
-                      <div className={cls.topicCardsGrid}>
+                      {/* Dynamic grid layout for topic articles */}
+                      <div className={`${cls.topicCardsGrid} ${getDynamicGridClass(tag.articles?.length || 0)}`}>
                         {tag.articles && tag.articles?.length > 0 ? (
                           tag.articles
-                            .slice(0, 3)
+                            .slice(0, 12) // Max 12 cards
                             .map((article, idx) => (
                               <Card
                                 key={article.id || idx}
@@ -431,7 +450,8 @@ const Home: React.FC = () => {
               <div className={cls["for-in"]}>
                 Notable stories and conversation starters
               </div>
-              <div className={cls.beyondContent}>
+              {/* Dynamic grid layout for beyond content */}
+              <div className={`${cls.beyondContent} ${getDynamicGridClass(latestTen.slice(4, 8).length)}`}>
                 {latestTen.slice(4, 8).map((article, idx) => (
                   <Card
                     key={article.id || idx}

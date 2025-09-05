@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import cls from "./Navbar.module.css";
 import { IoIosCamera } from "react-icons/io";
 import { IoAddOutline } from "react-icons/io5";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiUser } from "react-icons/fi";
 import Link from "next/link";
 import Avatar from "../Avatar";
 import { useLanguage } from "@/app/LanguageProvider";
@@ -75,7 +75,7 @@ const ProfileMenu: React.FC = () => {
       </div>
 
       {openProfile && (
-        <div className={cls["profile-popup"]}>
+        <div className={cls["profile-popup"] } >
           <span
             className={cls["close-btn"]}
             onClick={() => setOpenProfile(false)}
@@ -125,7 +125,14 @@ const ProfileMenu: React.FC = () => {
     </div>
   ) : (
     <>
-      <Link className={cls["login"]} href="http://localhost:4000/api/users/google">Sign in</Link>
+       <Link href="http://localhost:4000/api/users/google" className={`${cls["login"]} ${cls.hideOnMobile}`}>
+      Sign in
+    </Link>
+
+    
+    <Link href="http://localhost:4000/api/users/google" className={`${cls["login-mobile"]} ${cls.hideMobile}`}>
+      <FiUser />
+    </Link>
     </>
   );
 };
