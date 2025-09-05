@@ -6,7 +6,7 @@ import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "./Search.module.css";
 
-const BACKEND_URL = "http://localhost:4000";
+const BACKEND_URL = "http://45.76.94.219:7777";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();

@@ -229,7 +229,7 @@ interface IArticleChild {
   article: IArticle;
 }
 
-const BACKEND_URL = "http://localhost:4000";
+const BACKEND_URL = "http://45.76.94.219:7777";
 
 const Home: React.FC = () => {
   const { selectedLang } = useLanguage();
