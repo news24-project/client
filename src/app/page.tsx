@@ -366,6 +366,7 @@ const Home: React.FC = () => {
                         key={article.id || idx}
                         cardMain={article}
                         smallCardOA
+                        isSmallImgCard
                       />
                     ))}
                   </div>
