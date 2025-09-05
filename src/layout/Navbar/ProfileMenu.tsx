@@ -125,7 +125,12 @@ const ProfileMenu: React.FC = () => {
     </div>
   ) : (
     <>
-      <Link className={cls["login"]} href="http://localhost:4000/api/users/google">Sign in</Link>
+      <Link
+        className={cls["login"]}
+        href="http://localhost:4000/api/users/google"
+      >
+        Sign in
+      </Link>
     </>
   );
 };
