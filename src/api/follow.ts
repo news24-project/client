@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { customAxios } from "./customAxios";
 
 export interface followBody {
@@ -31,6 +32,10 @@ export async function follow(follow: followBody) {
     const res = await customAxios.post("/follows", follow);
     return res.data;
   } catch (error) {
+    const axiosError = error as any;
+    if (axiosError.response?.status == 401) {
+      toast.error("Please login");
+    }
     console.log("create follow error:", error);
     throw error;
   }
@@ -41,6 +46,10 @@ export async function deleteFollow(id: string) {
     const res = await customAxios.delete(`/follows/category/${id}`);
     return res.data;
   } catch (error) {
+    const axiosError = error as any;
+    if (axiosError.response?.status == 401) {
+      toast.error("Please login");
+    }
     console.log("delete follow error:", error);
     throw error;
   }

@@ -30,13 +30,13 @@ const CategoryHeader = ({
   id,
   backgroundColor,
 }: Props) => {
-const fullCategories =
-  title.toLowerCase() === "world"
-    ? [] 
-    : categories && categories.length > 0
-    ? ["Latest", ...categories]
-    : [];
-  
+  const fullCategories =
+    title.toLowerCase() === "world"
+      ? []
+      : categories && categories.length > 0
+      ? ["Latest", ...categories]
+      : [];
+
   const { data } = useGetAllFollows();
   const [isFollowing, setIsFollowing] = useState(false);
 
@@ -52,11 +52,20 @@ const fullCategories =
 
   const handleFollow = () => {
     if (isFollowing) {
-      unfollow.mutate(id);
-      setIsFollowing(false);
+      unfollow.mutate(id, {
+        onSuccess() {
+          setIsFollowing(false);
+        },
+      });
     } else {
-      followUser.mutate({ categoryId: id });
-      setIsFollowing(true);
+      followUser.mutate(
+        { categoryId: id },
+        {
+          onSuccess() {
+            setIsFollowing(true);
+          },
+        }
+      );
     }
   };
 
