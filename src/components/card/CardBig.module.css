@@ -21,7 +21,7 @@
 .cardLeftImgDiv {
   min-width: 280px;
   width: 100%;
-  height: 50%;
+  height: 175px;
   border-radius: 12px;
 }
 .cardLeftImgDiv img {
@@ -114,6 +114,18 @@
   .cardLeftDiv article {
     visibility: visible;
   }
+  .cardLeftImgDiv {
+    height: 400px;
+  }
+  .cardLeftImgDiv img {
+    /* object-fit: contain; */
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .cardLeftImgDiv {
+    height: 300px;
+  }
 }
 
 @media screen and (max-width: 700px) {
@@ -123,11 +135,16 @@
     font-weight: lighter;
     line-height: 1.4;
   }
+  .cardLeftImgDiv {
+    height: 250px;
+  }
 }
 
 @media screen and (max-width: 600px) {
   .cardRight {
     height: 100px;
   }
-
+  .cardLeftImgDiv {
+    height: 200px;
+  }
 }

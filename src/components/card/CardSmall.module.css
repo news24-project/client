@@ -1,19 +1,25 @@
 .cardSmall {
   background-color: transparent;
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.163);
-  margin-top: 16px;
   padding-top: 16px;
   max-width: 800px;
   width: 100%;
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: space-between;
   position: relative;
-  height: 168px;
+  /* padding-bottom: 30px; */
+  height: 140px;
+}
+
+.cardSmallActive {
+  height: auto;
+  padding-bottom: 25px;
 }
 
 .cardSmallLeftDiv {
-  width: 85%;
+  width: 75%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -35,17 +41,24 @@
   font-size: 18px;
   font-weight: lighter;
   line-height: 1.4;
+  width: 90%;
+  margin-top: 10px;
 }
 .cardSmallLeftDiv:hover h2 {
   text-decoration: underline;
 }
 
+.cardSmallLeftDiv .titleActive {
+  font-size: 15px;
+}
+
 .cardSmallRightDiv {
-  width: 15%;
-  height: 83%;
+  width: 25%;
   border-radius: 12px;
   position: relative;
   bottom: 15px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .cardSmallRightDivActive {
@@ -53,9 +66,14 @@
 }
 
 .cardSmallRightDiv img {
-  width: 100%;
-  height: 100%;
+  width: 100px;
+  height: 100px;
   border-radius: 12px;
+}
+
+.cardSmallRightDiv .imgActive {
+  width: 60px;
+  height: 60px;
 }
 
 .cardLeftDivIconDiv {
@@ -117,9 +135,13 @@
   .cardSmallLeftDiv article {
     visibility: visible;
   }
+  .cardSmallRightDiv img {
+    width: 80px;
+    height: 80px;
+  }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1000px) {
   .cardSmallLeftDiv h2 {
     color: whitesmoke;
     font-size: 15px;
@@ -130,14 +152,10 @@
   .cardSmallLeftDiv {
     width: 80%;
   }
-
-  .cardSmallRightDiv {
-    width: 20%;
-  }
 }
 
-@media screen and (max-width: 650px) { 
-    .cardSmallLeftDiv h2 {
+@media screen and (max-width: 650px) {
+  .cardSmallLeftDiv h2 {
     color: whitesmoke;
     font-size: 12px;
     font-weight: lighter;
