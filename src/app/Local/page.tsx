@@ -1,12 +1,9 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useState } from "react";
 import { FiSliders, FiInfo } from "react-icons/fi";
 import styles from "./Local.module.css";
 import Link from "next/link";
-import Card from "@/components/card/Card";
-import { customAxios } from "@/api/customAxios";
 import NewsItem from "@/components/LocalNews";
 
 const BACKEND_URL = "http://45.76.94.219:7777";

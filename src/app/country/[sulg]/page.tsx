@@ -5,7 +5,6 @@ import { useParams, useSearchParams } from "next/navigation";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "./Country.module.css";
-import CategoryPage from "@/components/category/CategoryPage";
 
 const BACKEND_URL = "http://45.76.94.219:7777";
 

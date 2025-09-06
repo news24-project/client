@@ -1,6 +1,6 @@
-import { customAxios } from "@/api/customAxios";
+"use client";
+
 import CategoryHeader from "@/components/CategoryHeader";
-import NewsItem from "@/components/LocalNews";
 
 interface News {
   source: string;
@@ -24,8 +24,8 @@ const ForYou = () => {
     <div className="container">
       <div>
         <CategoryHeader
+          id="tech"
           title="Technology"
-          icon="💡"
           categories={[
             "Latest",
             "Mobile",

@@ -7,8 +7,8 @@ import TargetIcon from "../../../public/icons/target";
 import cls from "./whether.module.css";
 import { useGetWeather } from "@/hooks/useGetWeather";
 import SunClouds from "../../../public/icons/sun_clouds";
-import { days } from "@/app/page";
 import { useLanguage } from "@/app/LanguageProvider";
+import { days } from "@/utils/dates";
 
 export const todayVariants = {
   "en-US": "Today",
@@ -20,7 +20,6 @@ export const todayVariants = {
   "zh-TW": "今天",
   "ky-KG": "Бүгүн",
 };
-
 
 const WeatherCard = () => {
   const [show, setShow] = useState(false);
