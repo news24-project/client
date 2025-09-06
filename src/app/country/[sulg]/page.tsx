@@ -1,65 +1,60 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "./Country.module.css";
-import CategoryPage from "@/components/category/CategoryPage";
 
-const BACKEND_URL = "http://45.76.94.219:7777";
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+
+const formatArticle = (article: any) => ({
+  ...article,
+  iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+});
 
 const Country = () => {
   const { sulg } = useParams();
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
 
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+ 
+  const {
+    data: articles = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["countryArticles", sulg, lang],
+    queryFn: async () => {
+      const { data } = await customAxios.get(`/article-tags/${sulg}`, {
+        params: { lang },
+      });
 
-  const formatArticle = (article: any) => ({
-    ...article,
-    iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+      const formatted = data?.data
+        ? data.data
+            .map((item: any) => formatArticle(item.article || item))
+            .filter((item: any) => item.imageUrl)
+        : [];
+
+      return formatted.reverse();
+    },
+    enabled: !!sulg, 
   });
-
-  useEffect(() => {
-    if (!sulg) return;
-
-    const fetchArticles = async () => {
-      try {
-        setLoading(true);
-        const { data } = await customAxios.get(`/article-tags/${sulg}`, {
-          params: { lang },
-        });
-
-        const formatted = data?.data
-          ? data.data
-              .map((item: any) => formatArticle(item.article || item))
-              .filter((item: any) => item.imageUrl)
-          : [];
-
-        setArticles(formatted.reverse());
-      } catch (err) {
-        console.error("Error fetching country articles:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
-  }, [sulg, lang]);
 
   return (
     <div className={cls["container"]}>
-      {loading ? (
+      {isLoading ? (
         <p>Loading...</p>
+      ) : isError ? (
+        <p>Error loading articles</p>
       ) : articles.length === 0 ? (
         <p>No articles found for {sulg}</p>
       ) : (
         <div className={cls["article-container"]}>
           {articles
-            .filter((_, idx) => idx % 3 === 0)
-            .map((_, groupIdx) => (
+            .filter((_: any, idx: number) => idx % 3 === 0)
+            .map((_: any, groupIdx: number) => (
               <Card
                 key={groupIdx}
                 cardMain={articles[groupIdx * 3]}

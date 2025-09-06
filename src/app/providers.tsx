@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, Suspense, useState } from "react";
 import { LanguageProvider } from "./LanguageProvider";
 import { Provider } from "react-redux";
 import { store } from "@/redux/storeState";
@@ -12,7 +12,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <Suspense>{children}</Suspense>
+        </LanguageProvider>
       </QueryClientProvider>
     </Provider>
   );

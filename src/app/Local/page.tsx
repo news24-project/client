@@ -1,15 +1,15 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useState } from "react";
 import { FiSliders, FiInfo } from "react-icons/fi";
 import styles from "./Local.module.css";
 import Link from "next/link";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "../country/[sulg]/Country.module.css";
+import { useEffect, useState } from "react";
 
-const BACKEND_URL = "http://45.76.94.219:7777";
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
 const LocalNews: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);

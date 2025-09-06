@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/api/customAxios";
 import CategoryHeader from "@/components/CategoryHeader";
 import Card from "@/components/card/Card";
 import cls from "./Category.module.css";
+import LoadingCard from "@/components/LoadingCard";
 
 interface Tag {
   id: string;
@@ -17,6 +19,8 @@ interface CategoryPageProps {
   image?: string;
 }
 
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+
 const categoryData: { [key: string]: { icon: string; color: string } } = {
   technology: { icon: "/images/technology.webp", color: "#039be5" },
   sports: { icon: "/images/sports.webp", color: "#ef6c00" },
@@ -27,86 +31,83 @@ const categoryData: { [key: string]: { icon: string; color: string } } = {
   world: { icon: "/images/world1.webp", color: "#689f38" },
 };
 
-const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [selectedTagId, setSelectedTagId] = useState<string>("latest");
-  const [tagArticles, setTagArticles] = useState<any[]>([]);
+const formatArticle = (article: any) => ({
+  ...article,
+  iconUrl: article.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+});
 
+const sortByDateDesc = (articles: any[]) =>
+  articles.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+
+const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
+  const [selectedTagId, setSelectedTagId] = useState<string>("latest");
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
-  const BACKEND_URL = "http://localhost:4000";
   const key = title.toLowerCase();
   const categoryInfo = categoryData[key] || categoryData["world"];
 
-  const formatArticle = (article: any) => ({
-    ...article,
-    iconUrl: article.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+  // 🔹 Tagsni olish query
+  const {
+    data: tags = [],
+    isLoading: tagsLoading,
+    isError: tagsError,
+  } = useQuery<Tag[]>({
+    queryKey: ["tags", id],
+    queryFn: async () => {
+      const { data } = await customAxios.get(`/categories/${id}`);
+      return data.data || [];
+    },
+    enabled: !!id,
   });
 
-  const sortByDateDesc = (articles: any[]) =>
-    articles.sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    );
+  // 🔹 Maqolalarni olish query
+  const {
+    data: tagArticles = [],
+    isLoading: articlesLoading,
+    isError: articlesError,
+  } = useQuery<any[]>({
+    queryKey: ["articles", selectedTagId, id],
+    queryFn: async () => {
+      if (!id || tags.length === 0) return [];
 
-  useEffect(() => {
-    if (!id) return;
-    const fetchTags = async () => {
-      try {
-        const { data } = await customAxios.get(`/categories/${id}`);
-        setTags(data.data || []);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchTags();
-  }, [id]);
+      if (selectedTagId === "latest") {
+        const articlesArrays = await Promise.all(
+          tags.map((tag) =>
+            customAxios
+              .get(`/article-tags/tag/${tag.id}`)
+              .then((res) =>
+                res.data.articleTags
+                  ? res.data.articleTags
+                      .map((item: any) => formatArticle(item.article))
+                      .filter((article: any) => article.imageUrl)
+                  : []
+              )
+              .catch(() => [])
+          )
+        );
 
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchArticles = async () => {
-      try {
-        if (selectedTagId === "latest") {
-          const articlesArrays = await Promise.all(
-            tags.map((tag) =>
-              customAxios
-                .get(`/article-tags/tag/${tag.id}`)
-                .then((res) =>
-                  res.data.articleTags
-                    ? res.data.articleTags
-                        .map((item: any) => formatArticle(item.article))
-                        .filter((article: any) => article.imageUrl)
-                    : []
-                )
-                .catch(() => [])
+        return sortByDateDesc(articlesArrays.flat());
+      } else {
+        const { data } = await customAxios.get(
+          `/article-tags/tag/${selectedTagId}`
+        );
+        return data.articleTags
+          ? sortByDateDesc(
+              data.articleTags
+                .map((item: any) => formatArticle(item.article))
+                .filter((article: any) => article.imageUrl)
             )
-          );
-
-          const allArticles = sortByDateDesc(articlesArrays.flat());
-          setTagArticles(allArticles);
-        } else {
-          const { data } = await customAxios.get(
-            `/article-tags/tag/${selectedTagId}`
-          );
-          setTagArticles(
-            data.articleTags
-              ? sortByDateDesc(
-                  data.articleTags
-                    .map((item: any) => formatArticle(item.article))
-                    .filter((article: any) => article.imageUrl)
-                )
-              : []
-          );
-        }
-      } catch (err) {
-        console.error(err);
+          : [];
       }
-    };
+    },
+    enabled: !!id && tags.length > 0,
+  });
 
-    fetchArticles();
-  }, [selectedTagId, tags, id]);
+  const loading = tagsLoading || articlesLoading;
 
   return (
     <div className={cls.container}>
@@ -130,18 +131,24 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
         }}
       />
 
-      <div className={cls["article-container"]}>
-        {tagArticles
-          .filter((_, idx) => idx % 3 === 0)
-          .map((_, groupIdx) => (
-            <Card
-              key={groupIdx}
-              cardMain={tagArticles[groupIdx * 3]}
-              smallCardOA
-              cards={tagArticles.slice(groupIdx * 3, groupIdx * 3 + 3)}
-            />
-          ))}
-      </div>
+      {loading ? (
+        <LoadingCard count={3} />
+      ) : tagArticles.length === 0 ? (
+        <p>No articles found</p>
+      ) : (
+        <div className={cls["article-container"]}>
+          {tagArticles
+            .filter((_, idx) => idx % 3 === 0)
+            .map((_, groupIdx) => (
+              <Card
+                key={groupIdx}
+                cardMain={tagArticles[groupIdx * 3]}
+                smallCardOA
+                cards={tagArticles.slice(groupIdx * 3, groupIdx * 3 + 3)}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

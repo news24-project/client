@@ -4,237 +4,102 @@ import WeatherCard from "@/components/WeatherCard";
 import cls from "./page.module.css";
 import Card from "@/components/card/Card";
 import ModalShare from "@/components/modalShare";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "./LanguageProvider";
 import { useFindAllArticles } from "@/hooks/useArticles";
 import { IoIosArrowForward, IoMdOptions } from "react-icons/io";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import CategoryModal from "@/components/CategoryModal/CategoryModal";
-import { IArticle } from "@/api";
 import { customAxios } from "@/api/customAxios";
+import { days, months } from "@/utils/dates";
+import { useQuery } from "@tanstack/react-query";
 
-export const days = [
-  {
-    "en-US": "Sunday",
-    "ru-RU": "Воскресенье",
-    "uz-UZ": "Yakshanba",
-    "kz-KZ": "Жексенбі",
-    "in-IN": "रविवार",
-    "tr-TR": "Pazar",
-    "zh-TW": "星期日",
-    "ky-KG": "Жекшемби",
-  },
-  {
-    "en-US": "Monday",
-    "ru-RU": "Понедельник",
-    "uz-UZ": "Dushanba",
-    "kz-KZ": "Дүйсенбі",
-    "in-IN": "सोमवार",
-    "tr-TR": "Pazartesi",
-    "zh-TW": "星期一",
-    "ky-KG": "Дүйшөмбү",
-  },
-  {
-    "en-US": "Tuesday",
-    "ru-RU": "Вторник",
-    "uz-UZ": "Seshanba",
-    "kz-KZ": "Сейсенбі",
-    "in-IN": "मंगलवार",
-    "tr-TR": "Salı",
-    "zh-TW": "星期二",
-    "ky-KG": "Шейшемби",
-  },
-  {
-    "en-US": "Wednesday",
-    "ru-RU": "Среда",
-    "uz-UZ": "Chorshanba",
-    "kz-KZ": "Сәрсенбі",
-    "in-IN": "बुधवार",
-    "tr-TR": "Çarşamba",
-    "zh-TW": "星期三",
-    "ky-KG": "Шаршемби",
-  },
-  {
-    "en-US": "Thursday",
-    "ru-RU": "Четверг",
-    "uz-UZ": "Payshanba",
-    "kz-KZ": "Бейсенбі",
-    "in-IN": "गुरुवार",
-    "tr-TR": "Perşembe",
-    "zh-TW": "星期四",
-    "ky-KG": "Бейшемби",
-  },
-  {
-    "en-US": "Friday",
-    "ru-RU": "Пятница",
-    "uz-UZ": "Juma",
-    "kz-KZ": "Жұма",
-    "in-IN": "शुक्रवार",
-    "tr-TR": "Cuma",
-    "zh-TW": "星期五",
-    "ky-KG": "Жума",
-  },
-  {
-    "en-US": "Saturday",
-    "ru-RU": "Суббота",
-    "uz-UZ": "Shanba",
-    "kz-KZ": "Сенбі",
-    "in-IN": "शनिवार",
-    "tr-TR": "Cumartesi",
-    "zh-TW": "星期六",
-    "ky-KG": "Ишемби",
-  },
-];
-
-export const months = [
-  {
-    "en-US": "January",
-    "ru-RU": "Январь",
-    "uz-UZ": "Yanvar",
-    "kz-KZ": "Қаңтар",
-    "in-IN": "जनवरी",
-    "tr-TR": "Ocak",
-    "zh-TW": "一月",
-    "ky-KG": "Январь",
-  },
-  {
-    "en-US": "February",
-    "ru-RU": "Февраль",
-    "uz-UZ": "Fevral",
-    "kz-KZ": "Ақпан",
-    "in-IN": "फ़रवरी",
-    "tr-TR": "Şubat",
-    "zh-TW": "二月",
-    "ky-KG": "Февраль",
-  },
-  {
-    "en-US": "March",
-    "ru-RU": "Март",
-    "uz-UZ": "Mart",
-    "kz-KZ": "Наурыз",
-    "in-IN": "मार्च",
-    "tr-TR": "Mart",
-    "zh-TW": "三月",
-    "ky-KG": "Март",
-  },
-  {
-    "en-US": "April",
-    "ru-RU": "Апрель",
-    "uz-UZ": "Aprel",
-    "kz-KZ": "Сәуір",
-    "in-IN": "अप्रैल",
-    "tr-TR": "Nisan",
-    "zh-TW": "四月",
-    "ky-KG": "Апрель",
-  },
-  {
-    "en-US": "May",
-    "ru-RU": "Май",
-    "uz-UZ": "May",
-    "kz-KZ": "Мамыр",
-    "in-IN": "मई",
-    "tr-TR": "Mayıs",
-    "zh-TW": "五月",
-    "ky-KG": "Май",
-  },
-  {
-    "en-US": "June",
-    "ru-RU": "Июнь",
-    "uz-UZ": "Iyun",
-    "kz-KZ": "Маусым",
-    "in-IN": "जून",
-    "tr-TR": "Haziran",
-    "zh-TW": "六月",
-    "ky-KG": "Июнь",
-  },
-  {
-    "en-US": "July",
-    "ru-RU": "Июль",
-    "uz-UZ": "Iyul",
-    "kz-KZ": "Шілде",
-    "in-IN": "जुलाई",
-    "tr-TR": "Temmuz",
-    "zh-TW": "七月",
-    "ky-KG": "Июль",
-  },
-  {
-    "en-US": "August",
-    "ru-RU": "Август",
-    "uz-UZ": "Avgust",
-    "kz-KZ": "Тамыз",
-    "in-IN": "अगस्त",
-    "tr-TR": "Ağustos",
-    "zh-TW": "八月",
-    "ky-KG": "Август",
-  },
-  {
-    "en-US": "September",
-    "ru-RU": "Сентябрь",
-    "uz-UZ": "Sentyabr",
-    "kz-KZ": "Қыркүйек",
-    "in-IN": "सितंबर",
-    "tr-TR": "Eylül",
-    "zh-TW": "九月",
-    "ky-KG": "Сентябрь",
-  },
-  {
-    "en-US": "October",
-    "ru-RU": "Октябрь",
-    "uz-UZ": "Oktyabr",
-    "kz-KZ": "Қазан",
-    "in-IN": "अक्टूबर",
-    "tr-TR": "Ekim",
-    "zh-TW": "十月",
-    "ky-KG": "Октябрь",
-  },
-  {
-    "en-US": "November",
-    "ru-RU": "Ноябрь",
-    "uz-UZ": "Noyabr",
-    "kz-KZ": "Қараша",
-    "in-IN": "नवंबर",
-    "tr-TR": "Kasım",
-    "zh-TW": "十一月",
-    "ky-KG": "Ноябрь",
-  },
-  {
-    "en-US": "December",
-    "ru-RU": "Декабрь",
-    "uz-UZ": "Dekabr",
-    "kz-KZ": "Желтоқсан",
-    "in-IN": "दिसंबर",
-    "tr-TR": "Aralık",
-    "zh-TW": "十二月",
-    "ky-KG": "Декабрь",
-  },
-];
-
-export const briefing = {
+const briefing = {
   "en-US": "Your briefing",
   "ru-RU": "Ваше резюме",
-  "uz-UZ": "Sizning qisqacha ma’lumotingiz",
+  "uz-UZ": "Sizning qisqacha ma'lumotingiz",
   "kz-KZ": "Сіздің қысқаша мәліметіңіз",
   "in-IN": "आपकी सारांश सूचना",
   "tr-TR": "Sizin brifinginiz",
   "zh-TW": "您的簡報",
   "ky-KG": "Сиздин кыскача маалымат",
 };
+
 interface Tag {
   id: string;
   name: string;
-  articles?: IArticleChild[];
-}
-interface IArticleChild {
-  id: string;
-  article: IArticle;
+  articles?: any[];
 }
 
-const BACKEND_URL = "http://45.76.94.219:7777";
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+
+// 🔹 Cookie ichida token bor-yo‘qligini tekshirish
+const hasToken = () => {
+  return document.cookie
+    .split("; ")
+    .some((row) => row.startsWith("accessToken="));
+};
+
+// 🔹 Dynamic grid class
+const getDynamicGridClass = (cardCount: number) => {
+  if (cardCount === 0) return "";
+  if (cardCount === 1) return cls["grid-1"];
+  if (cardCount === 2) return cls["grid-2"];
+  if (cardCount === 3) return cls["grid-3"];
+  if (cardCount === 4) return cls["grid-4"];
+  if (cardCount === 5) return cls["grid-5"];
+  if (cardCount === 6) return cls["grid-6"];
+  if (cardCount === 7) return cls["grid-7"];
+  if (cardCount === 8) return cls["grid-8"];
+  if (cardCount === 9) return cls["grid-9"];
+  if (cardCount === 10) return cls["grid-10"];
+  if (cardCount === 11) return cls["grid-11"];
+  if (cardCount === 12) return cls["grid-12"];
+  return cls["grid-default"];
+};
+
+// 🔹 Article formatter
+const formatArticle = (article: any) => ({
+  ...article,
+  id: article.id || article.articleId,
+  title: article.title || article.article?.title,
+  url: article.url || article.article?.url,
+  summary: article.summary || article.article?.summary,
+  content: article.content || article.article?.content,
+  imageUrl: article.imageUrl || article.article?.imageUrl,
+  author: article.author || article.article?.author,
+  publishedAt: article.publishedAt || article.article?.publishedAt,
+  type: article.type || article.article?.type,
+  score: article.score || article.article?.score,
+  createdAt: article.createdAt || article.article?.createdAt,
+  sourceId: article.sourceId || article.article?.sourceId,
+  iconUrl: article.iconUrl
+    ? `${BACKEND_URL}/${article.iconUrl}`
+    : article.article?.iconUrl
+    ? `${BACKEND_URL}/${article.article.iconUrl}`
+    : "",
+});
+
+// 🔹 User topics fetcher
+const fetchUserTopics = async (): Promise<Tag[]> => {
+  if (!hasToken()) return [];
+
+  const { data } = await customAxios.get("/user/topics");
+  return Array.isArray(data)
+    ? data.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        articles: item.articles
+          ? item.articles.map((a: any) => formatArticle(a))
+          : [],
+      }))
+    : [];
+};
 
 const Home: React.FC = () => {
   const { selectedLang } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [userTopics, setUserTopics] = useState<Tag[]>([]);
+
   const today = new Date();
   const dayName = days[today.getDay()][selectedLang as keyof (typeof days)[0]];
   const monthName =
@@ -242,35 +107,27 @@ const Home: React.FC = () => {
   const dateNum = today.getDate();
   const formattedDate = `${dayName}, ${monthName} ${dateNum}`;
 
+  // 🔹 All articles query
   const { data: articles = [] } = useFindAllArticles();
 
-  const formatArticle = (article: any) => ({
-    ...article,
-    id: article.id || article.articleId,
-    title: article.title || article.article?.title,
-    url: article.url || article.article?.url,
-    summary: article.summary || article.article?.summary,
-    content: article.content || article.article?.content,
-    imageUrl: article.imageUrl || article.article?.imageUrl,
-
-    author: article.author || article.article?.author,
-    publishedAt: article.publishedAt || article.article?.publishedAt,
-    type: article.type || article.article?.type,
-    score: article.score || article.article?.score,
-    createdAt: article.createdAt || article.article?.createdAt,
-    sourceId: article.sourceId || article.article?.sourceId,
-    iconUrl: article.iconUrl
-      ? `${BACKEND_URL}/${article.iconUrl}`
-      : article.article?.iconUrl
-      ? `${BACKEND_URL}/${article.article.iconUrl}`
-      : "",
+  // 🔹 User topics query
+  const {
+    data: userTopics = [],
+    refetch: refetchUserTopics,
+  } = useQuery({
+    queryKey: ["userTopics"],
+    queryFn: fetchUserTopics,
+    enabled: hasToken(), // faqat token bo‘lsa ishlaydi
   });
 
+  // 🔹 Cards formatting
   const cards = articles
     .flatMap(
       (article) =>
-        article.articleTags?.map((tag) => (tag ? formatArticle(tag) : null)) ||
-        []
+        article.articleTags?.map((tag) => {
+          const formatted = formatArticle(tag);
+          return formatted.imageUrl ? formatted : null;
+        }) || []
     )
     .filter(Boolean);
 
@@ -281,37 +138,9 @@ const Home: React.FC = () => {
     )
     .slice(0, 10);
 
-  console.log(latestTen[0]);
-
-  const fetchUserTopics = async () => {
-    try {
-      const { data } = await customAxios.get("/user/topics");
-      console.log("User topics raw:", data);
-
-      const tags: Tag[] = Array.isArray(data)
-        ? data.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            articles: item.articles
-              ? item.articles.map((a: any) => formatArticle(a))
-              : [],
-          }))
-        : [];
-
-      console.log("User topics formatted:", tags);
-      setUserTopics(tags);
-    } catch (err) {
-      console.error("Error fetching user topics:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserTopics();
-  }, []);
-  console.log(articles, "sdckascvkghsvdgcvashcvsdghk");
-
   return (
     <div className={cls.wrapper}>
+      {/* Calendar & Weather */}
       <div className={cls.calendar_weather}>
         <div
           style={{
@@ -333,6 +162,7 @@ const Home: React.FC = () => {
       <div>
         {articles?.length > 0 && (
           <>
+            {/* Top Stories */}
             <div className={cls["home-content"]}>
               {latestTen.length >= 4 && (
                 <div className={cls["home"]}>
@@ -354,6 +184,8 @@ const Home: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              {/* Picks for You */}
               {cards.length >= 3 && (
                 <div className={cls["home2"]}>
                   <div className={cls["title-pick"]}>
@@ -373,6 +205,8 @@ const Home: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* For You */}
             <div>
               <div className={cls["for-title"]}>
                 For you <IoIosArrowForward />
@@ -384,60 +218,78 @@ const Home: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div>
-              <div className={cls["topic"]}>
-                <div className={cls["for-title"]}>Your topics</div>
-                <button
-                  onClick={() => setIsOpen(true)}
-                  className={cls["customize-btn"]}
-                >
-                  <IoMdOptions /> Customize
-                </button>
-              </div>
-              <div className={cls["topic-list"]}>
-                {userTopics.map((tag) => (
-                  <div key={tag.id} className={cls.topicWrapper}>
-                    <div className={cls.topicCards}>
-                      <h2 className={cls.topicTitle}>
-                        {tag.name} <IoIosArrowForward />
-                      </h2>
-                      <div className={cls.topicCardsGrid}>
-                        {tag.articles && tag.articles?.length > 0 ? (
-                          tag.articles
-                            .slice(0, 3)
-                            .map((article, idx) => (
-                              <Card
-                                key={article.id || idx}
-                                cardMain={article}
-                                smallCardOA
-                              />
-                            ))
-                        ) : (
-                          <p>No articles for this topic</p>
-                        )}
+
+            {/* Your Topics (faqat token bo‘lsa) */}
+            {hasToken() && userTopics.length > 0 && (
+              <div>
+                <div className={cls["topic"]}>
+                  <div className={cls["for-title"]}>Your topics</div>
+                  <button
+                    onClick={() => setIsOpen(true)}
+                    className={cls["customize-btn"]}
+                  >
+                    <IoMdOptions /> Customize
+                  </button>
+                </div>
+                <div className={cls["topic-list"]}>
+                  {userTopics.map((tag) => (
+                    <div key={tag.id} className={cls.topicWrapper}>
+                      <div className={cls.topicCards}>
+                        <h2 className={cls.topicTitle}>
+                          {tag.name} <IoIosArrowForward />
+                        </h2>
+
+                        <div
+                          className={`${cls.topicCardsGrid} ${getDynamicGridClass(
+                            tag.articles?.length || 0
+                          )}`}
+                        >
+                          {tag.articles && tag.articles?.length > 0 ? (
+                            tag.articles
+                              .slice(0, 12)
+                              .map((article, idx) => (
+                                <Card
+                                  key={article.id || idx}
+                                  cardMain={article}
+                                  smallCardOA
+                                  isSmallImgCard
+                                />
+                              ))
+                          ) : (
+                            <p>No articles for this topic</p>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
-                <CategoryModal
-                  isOpen={isOpen}
-                  onClose={() => setIsOpen(false)}
-                  onSave={() => fetchUserTopics()}
-                />
+                  <CategoryModal
+                    isOpen={isOpen}
+                    onClose={() => setIsOpen(false)}
+                    onSave={() => refetchUserTopics()}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Beyond the front page */}
             <div>
               <div className={cls["for-title"]}>Beyond the front page</div>
               <div className={cls["for-in"]}>
                 Notable stories and conversation starters
               </div>
-              <div className={cls.beyondContent}>
+
+              <div
+                className={`${cls.beyondContent} ${getDynamicGridClass(
+                  latestTen.slice(4, 8).length
+                )}`}
+              >
                 {latestTen.slice(4, 8).map((article, idx) => (
                   <Card
                     key={article.id || idx}
                     cardMain={article}
                     smallCardOA
+                    isSmallImgCard
                   />
                 ))}
               </div>
