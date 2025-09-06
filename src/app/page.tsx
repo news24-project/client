@@ -31,7 +31,7 @@ interface Tag {
   articles?: any[];
 }
 
-const BACKEND_URL = "http://45.76.94.219:7777";
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
 // 🔹 Cookie ichida token bor-yo‘qligini tekshirish
 const hasToken = () => {

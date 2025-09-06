@@ -27,7 +27,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
-  const BACKEND_URL = "http://localhost:4000";
+
 
   const categoryData: { [key: string]: { icon: string; color: string } } = {
     technology: { icon: "/images/technology.webp", color: "#039be5" },
@@ -38,6 +38,9 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
     business: { icon: "/images/business.webp", color: "#259b24" },
     world: { icon: "/images/world1.webp", color: "#689f38" },
   };
+
+
+  const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
   const key = title.toLowerCase();
   const categoryInfo = categoryData[key] || categoryData["world"];
