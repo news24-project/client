@@ -126,14 +126,14 @@ const ProfileMenu: React.FC = () => {
   ) : (
     <>
       <Link
-        href="http://localhost:4000/api/users/google"
+        href="https://news24.muhammad-yusuf.uz/api/users/google"
         className={`${cls["login"]} ${cls.hideOnMobile}`}
       >
         Sign in
       </Link>
 
       <Link
-        href="http://localhost:4000/api/users/google"
+        href="https://news24.muhammad-yusuf.uz/api/users/google"
         className={`${cls["login-mobile"]} ${cls.hideMobile}`}
       >
         <FiUser />

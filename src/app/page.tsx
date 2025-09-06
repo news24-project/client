@@ -4,15 +4,15 @@ import WeatherCard from "@/components/WeatherCard";
 import cls from "./page.module.css";
 import Card from "@/components/card/Card";
 import ModalShare from "@/components/modalShare";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "./LanguageProvider";
 import { useFindAllArticles } from "@/hooks/useArticles";
 import { IoIosArrowForward, IoMdOptions } from "react-icons/io";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import CategoryModal from "@/components/CategoryModal/CategoryModal";
-import { IArticle } from "@/api";
 import { customAxios } from "@/api/customAxios";
 import { days, months } from "@/utils/dates";
+import { useQuery } from "@tanstack/react-query";
 
 const briefing = {
   "en-US": "Your briefing",
@@ -58,10 +58,48 @@ const getDynamicGridClass = (cardCount: number) => {
   return cls["grid-default"];
 };
 
+// 🔹 Article formatter
+const formatArticle = (article: any) => ({
+  ...article,
+  id: article.id || article.articleId,
+  title: article.title || article.article?.title,
+  url: article.url || article.article?.url,
+  summary: article.summary || article.article?.summary,
+  content: article.content || article.article?.content,
+  imageUrl: article.imageUrl || article.article?.imageUrl,
+  author: article.author || article.article?.author,
+  publishedAt: article.publishedAt || article.article?.publishedAt,
+  type: article.type || article.article?.type,
+  score: article.score || article.article?.score,
+  createdAt: article.createdAt || article.article?.createdAt,
+  sourceId: article.sourceId || article.article?.sourceId,
+  iconUrl: article.iconUrl
+    ? `${BACKEND_URL}/${article.iconUrl}`
+    : article.article?.iconUrl
+    ? `${BACKEND_URL}/${article.article.iconUrl}`
+    : "",
+});
+
+// 🔹 User topics fetcher
+const fetchUserTopics = async (): Promise<Tag[]> => {
+  if (!hasToken()) return [];
+
+  const { data } = await customAxios.get("/user/topics");
+  return Array.isArray(data)
+    ? data.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        articles: item.articles
+          ? item.articles.map((a: any) => formatArticle(a))
+          : [],
+      }))
+    : [];
+};
+
 const Home: React.FC = () => {
   const { selectedLang } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [userTopics, setUserTopics] = useState<Tag[]>([]);
+
   const today = new Date();
   const dayName = days[today.getDay()][selectedLang as keyof (typeof days)[0]];
   const monthName =
@@ -69,29 +107,20 @@ const Home: React.FC = () => {
   const dateNum = today.getDate();
   const formattedDate = `${dayName}, ${monthName} ${dateNum}`;
 
+  // 🔹 All articles query
   const { data: articles = [] } = useFindAllArticles();
 
-  const formatArticle = (article: any) => ({
-    ...article,
-    id: article.id || article.articleId,
-    title: article.title || article.article?.title,
-    url: article.url || article.article?.url,
-    summary: article.summary || article.article?.summary,
-    content: article.content || article.article?.content,
-    imageUrl: article.imageUrl || article.article?.imageUrl,
-    author: article.author || article.article?.author,
-    publishedAt: article.publishedAt || article.article?.publishedAt,
-    type: article.type || article.article?.type,
-    score: article.score || article.article?.score,
-    createdAt: article.createdAt || article.article?.createdAt,
-    sourceId: article.sourceId || article.article?.sourceId,
-    iconUrl: article.iconUrl
-      ? `${BACKEND_URL}/${article.iconUrl}`
-      : article.article?.iconUrl
-      ? `${BACKEND_URL}/${article.article.iconUrl}`
-      : "",
+  // 🔹 User topics query
+  const {
+    data: userTopics = [],
+    refetch: refetchUserTopics,
+  } = useQuery({
+    queryKey: ["userTopics"],
+    queryFn: fetchUserTopics,
+    enabled: hasToken(), // faqat token bo‘lsa ishlaydi
   });
 
+  // 🔹 Cards formatting
   const cards = articles
     .flatMap(
       (article) =>
@@ -108,39 +137,6 @@ const Home: React.FC = () => {
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     )
     .slice(0, 10);
-
-  const fetchUserTopics = async () => {
-    try {
-      if (!hasToken()) {
-        console.log("Token yo‘q – foydalanuvchi login qilmagan");
-        return;
-      }
-
-      const { data } = await customAxios.get("/user/topics");
-
-      const tags: Tag[] = Array.isArray(data)
-        ? data.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            articles: item.articles
-              ? item.articles.map((a: any) => formatArticle(a))
-              : [],
-          }))
-        : [];
-
-      setUserTopics(tags);
-    } catch (err: any) {
-      if (err.response?.status === 401) {
-        console.log("Unauthorized – foydalanuvchi login qilmagan yoki token eskirgan");
-        return;
-      }
-      console.error("Error fetching user topics:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserTopics();
-  }, []);
 
   return (
     <div className={cls.wrapper}>
@@ -250,7 +246,7 @@ const Home: React.FC = () => {
                         >
                           {tag.articles && tag.articles?.length > 0 ? (
                             tag.articles
-                              .slice(0, 12) // Max 12 cards
+                              .slice(0, 12)
                               .map((article, idx) => (
                                 <Card
                                   key={article.id || idx}
@@ -270,7 +266,7 @@ const Home: React.FC = () => {
                   <CategoryModal
                     isOpen={isOpen}
                     onClose={() => setIsOpen(false)}
-                    onSave={() => fetchUserTopics()}
+                    onSave={() => refetchUserTopics()}
                   />
                 </div>
               </div>
