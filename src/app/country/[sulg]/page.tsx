@@ -5,9 +5,8 @@ import { useParams, useSearchParams } from "next/navigation";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "./Country.module.css";
-import CategoryPage from "@/components/category/CategoryPage";
 
-const BACKEND_URL = "http://localhost:4000";
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
 const Country = () => {
   const { sulg } = useParams();
@@ -35,7 +34,7 @@ const Country = () => {
         const formatted = data?.data
           ? data.data
               .map((item: any) => formatArticle(item.article || item))
-              .filter((item: any) => item.imageUrl) 
+              .filter((item: any) => item.imageUrl)
           : [];
 
         setArticles(formatted.reverse());
@@ -50,7 +49,6 @@ const Country = () => {
   }, [sulg, lang]);
 
   return (
-
     <div className={cls["container"]}>
       {loading ? (
         <p>Loading...</p>
@@ -63,9 +61,9 @@ const Country = () => {
             .map((_, groupIdx) => (
               <Card
                 key={groupIdx}
-                cardMain={articles[groupIdx * 3]} 
+                cardMain={articles[groupIdx * 3]}
                 smallCardOA
-                cards={articles.slice(groupIdx * 3, groupIdx * 3 + 3)} 
+                cards={articles.slice(groupIdx * 3, groupIdx * 3 + 3)}
               />
             ))}
         </div>

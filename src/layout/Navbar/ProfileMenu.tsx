@@ -75,7 +75,7 @@ const ProfileMenu: React.FC = () => {
       </div>
 
       {openProfile && (
-        <div className={cls["profile-popup"] } >
+        <div className={cls["profile-popup"]}>
           <span
             className={cls["close-btn"]}
             onClick={() => setOpenProfile(false)}
@@ -125,14 +125,19 @@ const ProfileMenu: React.FC = () => {
     </div>
   ) : (
     <>
-       <Link href="http://localhost:4000/api/users/google" className={`${cls["login"]} ${cls.hideOnMobile}`}>
-      Sign in
-    </Link>
+      <Link
+        href="http://localhost:4000/api/users/google"
+        className={`${cls["login"]} ${cls.hideOnMobile}`}
+      >
+        Sign in
+      </Link>
 
-    
-    <Link href="http://localhost:4000/api/users/google" className={`${cls["login-mobile"]} ${cls.hideMobile}`}>
-      <FiUser />
-    </Link>
+      <Link
+        href="http://localhost:4000/api/users/google"
+        className={`${cls["login-mobile"]} ${cls.hideMobile}`}
+      >
+        <FiUser />
+      </Link>
     </>
   );
 };

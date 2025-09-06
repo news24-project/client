@@ -2,25 +2,25 @@ import { customAxios } from "./customAxios";
 
 export interface IArticle {
   id: string;
-  name:string;
-  createdAt: string;
+  name: string;
+  createdAt?: string;
   articleTags: IArticleChild[];
 }
 
 export interface IArticleChild {
-    id: string;
-    title: string;
-    url: string;
-    summary: string | null;
-    content: string | null;
-    imageUrl?: string | null;
-    author: string | null;
-    publishedAt: string;
-    type: string;
-    score: number;
-    createdAt: string;
-    sourceId: string;
-    iconUrl: string | null;
+  id: string;
+  title: string;
+  url: string;
+  summary: string | null;
+  content: string | null;
+  imageUrl?: string | null;
+  author: string | null;
+  publishedAt: string;
+  type: string;
+  score: number;
+  createdAt: string;
+  sourceId: string;
+  iconUrl: string | null;
 }
 
 export async function findAllArticles(): Promise<IArticle[]> {
