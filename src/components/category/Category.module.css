@@ -11,3 +11,9 @@
   border-radius: 16px;
   width: 100%;
 }
+@media (max-width: 768px) {
+  .article-container {
+    background-color: transparent;
+    padding: 0;
+  }
+}

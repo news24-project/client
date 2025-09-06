@@ -6,6 +6,7 @@ import { customAxios } from "@/api/customAxios";
 import CategoryHeader from "@/components/CategoryHeader";
 import Card from "@/components/card/Card";
 import cls from "./Category.module.css";
+import LoadingCard from "@/components/LoadingCard";
 
 interface Tag {
   id: string;
@@ -17,25 +18,30 @@ interface CategoryPageProps {
   image?: string;
 }
 
-const categoryData: { [key: string]: { icon: string; color: string } } = {
-  technology: { icon: "/images/technology.webp", color: "#039be5" },
-  sports: { icon: "/images/sports.webp", color: "#ef6c00" },
-  science: { icon: "/images/science.webp", color: "#e91e63" },
-  entertainment: { icon: "/images/entertainment.webp", color: "#6A1B9A" },
-  health: { icon: "/images/health.webp", color: "#5677fc" },
-  business: { icon: "/images/business.webp", color: "#259b24" },
-  world: { icon: "/images/world1.webp", color: "#689f38" },
-};
-
 const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTagId, setSelectedTagId] = useState<string>("latest");
   const [tagArticles, setTagArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true); // loading state
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
+
+
+  const categoryData: { [key: string]: { icon: string; color: string } } = {
+    technology: { icon: "/images/technology.webp", color: "#039be5" },
+    sports: { icon: "/images/sports.webp", color: "#ef6c00" },
+    science: { icon: "/images/science.webp", color: "#e91e63" },
+    entertainment: { icon: "/images/entertainment.webp", color: "#6A1B9A" },
+    health: { icon: "/images/health.webp", color: "#5677fc" },
+    business: { icon: "/images/business.webp", color: "#259b24" },
+    world: { icon: "/images/world1.webp", color: "#689f38" },
+  };
+
+
   const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+
   const key = title.toLowerCase();
   const categoryInfo = categoryData[key] || categoryData["world"];
 
@@ -54,20 +60,24 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
     if (!id) return;
     const fetchTags = async () => {
       try {
+        setLoading(true); // loading boshlanadi
         const { data } = await customAxios.get(`/categories/${id}`);
         setTags(data.data || []);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false); // loading tugaydi
       }
     };
     fetchTags();
   }, [id]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || tags.length === 0) return;
 
     const fetchArticles = async () => {
       try {
+        setLoading(true); // loading boshlanadi
         if (selectedTagId === "latest") {
           const articlesArrays = await Promise.all(
             tags.map((tag) =>
@@ -102,6 +112,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
         }
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false); // loading tugaydi
       }
     };
 
@@ -130,18 +142,24 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
         }}
       />
 
-      <div className={cls["article-container"]}>
-        {tagArticles
-          .filter((_, idx) => idx % 3 === 0)
-          .map((_, groupIdx) => (
-            <Card
-              key={groupIdx}
-              cardMain={tagArticles[groupIdx * 3]}
-              smallCardOA
-              cards={tagArticles.slice(groupIdx * 3, groupIdx * 3 + 3)}
-            />
-          ))}
-      </div>
+      {loading ? (
+        <LoadingCard count={3} /> // loading paytida skeleton
+      ) : tagArticles.length === 0 ? (
+        <p>No articles found</p>
+      ) : (
+        <div className={cls["article-container"]}>
+          {tagArticles
+            .filter((_, idx) => idx % 3 === 0)
+            .map((_, groupIdx) => (
+              <Card
+                key={groupIdx}
+                cardMain={tagArticles[groupIdx * 3]}
+                smallCardOA
+                cards={tagArticles.slice(groupIdx * 3, groupIdx * 3 + 3)}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

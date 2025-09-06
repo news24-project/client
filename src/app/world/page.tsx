@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "../country/[sulg]/Country.module.css";
-import CategoryHeader from "@/components/CategoryHeader";
 import CategoryPage from "@/components/category/CategoryPage";
+import LoadingCard from "@/components/LoadingCard"; 
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
@@ -60,11 +60,7 @@ const World = () => {
   return (
     <div className={cls["container"]}>
       <CategoryPage title="World" />
-      {loading ? (
-        <p>Loading...</p>
-      ) : articles.length === 0 ? (
-        <p>No articles found</p>
-      ) : (
+     
         <div className={cls["article-container"]}>
           {articles
             .filter((_, idx) => idx % 3 === 0)
@@ -73,11 +69,11 @@ const World = () => {
                 key={groupIdx}
                 cardMain={articles[groupIdx * 3]}
                 smallCardOA
-                cards={articles.slice(groupIdx * 3, groupIdx * 3 + 3)} // 3 ta guruhlab
+                cards={articles.slice(groupIdx * 3, groupIdx * 3 + 3)} 
               />
             ))}
         </div>
-      )}
+    
     </div>
   );
 };

@@ -3,7 +3,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgb(52, 49, 49);
+  background: #2a2b2e;
   box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-evenly;
@@ -38,4 +38,8 @@
 
 .iconWrapper:hover {
   background: #488bff;
+}
+
+.wrapper {
+  padding-bottom: 80px; 
 }

@@ -87,7 +87,7 @@ const SearchBar: React.FC = () => {
             <label>
               {t.date}
               <CustomSelect
-                style={{ backgroundColor: "#4b4c4d", width: "200px" }}
+                style={{  width: "200px" }}
                 value={selectedDate}
                 onChange={setSelectedDate}
                 options={t.dateOptions}
