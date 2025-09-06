@@ -8,16 +8,12 @@ export interface IArticle {
 }
 
 export interface IArticleChild {
-  id: string;
-  articleId: string;
-  tagId: string;
-  article: {
     id: string;
     title: string;
     url: string;
     summary: string | null;
     content: string | null;
-    imageUrl: string | null;
+    imageUrl?: string | null;
     author: string | null;
     publishedAt: string;
     type: string;
@@ -25,7 +21,6 @@ export interface IArticleChild {
     createdAt: string;
     sourceId: string;
     iconUrl: string | null;
-  };
 }
 
 export async function findAllArticles(): Promise<IArticle[]> {

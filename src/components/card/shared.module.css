@@ -23,3 +23,53 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+.toFullCoverageDivSmall {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background-color: rgb(51, 53, 54);
+}
+
+.toFullCoverageDivSmall:hover a {
+  text-decoration: underline;
+}
+.toFullCoverageDivSmall img {
+  width: 21px;
+  height: 21px;
+}
+
+.toFullCoverageDivSmall a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgb(189, 193, 198);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 1280px) {
+  .toFullCoverageDiv {
+    width: 100%;
+    right: 0%;
+    background: none;
+    border: 1px solid rgb(51, 53, 54);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0px;
+    border-radius: 24px;
+    bottom: 5px;
+  }
+  .toFullCoverageDivSmall {
+    right: 45px;
+    bottom: 1px;
+  }
+  .toFullCoverageDivSmall img {
+    width: 19px;
+    height: 19px;
+  }
+}

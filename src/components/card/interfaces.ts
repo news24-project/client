@@ -1,7 +1,7 @@
 import { IArticleChild } from "@/api";
 
 export interface ICard {
-  cardMain: IArticleChild["article"];
-  cards?: IArticleChild["article"][];
+  cardMain: IArticleChild;
+  cards?: IArticleChild[];
   smallCardOA?: boolean;
 }
