@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cls from "./CategoryHeader.module.css";
 import { BsShare } from "react-icons/bs";
 import { IoIosStarOutline } from "react-icons/io";
 import { IoStar } from "react-icons/io5";
+import {
+  useFollowMutation,
+  useGetAllFollows,
+  useUnFollowMutation,
+} from "@/hooks/useFollow";
 
 type Props = {
   title: string;
@@ -12,6 +17,7 @@ type Props = {
   categories?: string[];
   activeIndex?: number;
   onTagClick?: (index: number) => void;
+  id: string;
   backgroundColor?: string;
 };
 
@@ -21,6 +27,7 @@ const CategoryHeader = ({
   categories = [],
   activeIndex = 0,
   onTagClick,
+  id,
   backgroundColor,
 }: Props) => {
   const fullCategories =
@@ -30,10 +37,36 @@ const CategoryHeader = ({
       ? ["Latest", ...categories]
       : [];
 
+  const { data } = useGetAllFollows();
   const [isFollowing, setIsFollowing] = useState(false);
 
+  useEffect(() => {
+    const alreadyFollowing = data?.data?.some(
+      (item: any) => item.categoryId === id
+    );
+    setIsFollowing(alreadyFollowing ?? false);
+  }, [data, id]);
+
+  const followUser = useFollowMutation();
+  const unfollow = useUnFollowMutation();
+
   const handleFollow = () => {
-    setIsFollowing(!isFollowing);
+    if (isFollowing) {
+      unfollow.mutate(id, {
+        onSuccess() {
+          setIsFollowing(false);
+        },
+      });
+    } else {
+      followUser.mutate(
+        { categoryId: id },
+        {
+          onSuccess() {
+            setIsFollowing(true);
+          },
+        }
+      );
+    }
   };
 
   return (

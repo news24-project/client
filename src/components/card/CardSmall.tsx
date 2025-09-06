@@ -9,22 +9,19 @@ import { formatDate } from "@/utils/dataText";
 const CardSmall = ({
   cardMain,
   smallCardOA,
+  isSmallImg
 }: {
   cardMain: IArticleChild;
   smallCardOA?: boolean;
+  isSmallImg?: boolean
 }) => {
-  const {
-    imageUrl = "",
-    iconUrl = "",
-    title = "",
-    publishedAt,
-    author,
-    url,
-  } = cardMain || {};
+  const { imageUrl, iconUrl, title, publishedAt, author, url } =
+    cardMain;
   const articleId = cardMain.id;
+console.log(isSmallImg);
 
   return (
-    <div className={cn(css.cardSmall)}>
+    <div className={cn(css.cardSmall, {[css.cardSmallActive]: isSmallImg})}>
       <div
         className={cn(css.cardSmallLeftDiv, {
           [css.cardSmallLeftDivActive]: !smallCardOA,
@@ -36,7 +33,7 @@ const CardSmall = ({
               {iconUrl ? <img alt={title} src={iconUrl} /> : null}
               <span>{author}</span>
             </div>
-            <h2>{title}</h2>
+            <h2 className={cn({[css.titleActive]: isSmallImg})}>{title}</h2>
             <CardMenu
               url={url}
               title={title}
@@ -55,7 +52,7 @@ const CardSmall = ({
           [css.cardSmallRightDivActive]: !smallCardOA,
         })}
       >
-        {imageUrl ? <img alt={title} src={imageUrl} /> : null}
+        {imageUrl ? <img alt={title} src={imageUrl} className={cn({[css.imgActive]: isSmallImg})}/> : null}
       </div>
 
       <div className={cn(css.smallWrapper)}>

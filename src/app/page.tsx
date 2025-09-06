@@ -234,21 +234,21 @@ interface IArticleChild {
 const BACKEND_URL = "http://localhost:4000";
 
 // Dynamic grid class function
-const getDynamicGridClass = (cardCount:number) => {
-  if (cardCount === 0) return '';
-  if (cardCount === 1) return cls['grid-1'];
-  if (cardCount === 2) return cls['grid-2'];
-  if (cardCount === 3) return cls['grid-3'];
-  if (cardCount === 4) return cls['grid-4'];
-  if (cardCount === 5) return cls['grid-5'];
-  if (cardCount === 6) return cls['grid-6'];
-  if (cardCount === 7) return cls['grid-7'];
-  if (cardCount === 8) return cls['grid-8'];
-  if (cardCount === 9) return cls['grid-9'];
-  if (cardCount === 10) return cls['grid-10'];
-  if (cardCount === 11) return cls['grid-11'];
-  if (cardCount === 12) return cls['grid-12'];
-  return cls['grid-default'];
+const getDynamicGridClass = (cardCount: number) => {
+  if (cardCount === 0) return "";
+  if (cardCount === 1) return cls["grid-1"];
+  if (cardCount === 2) return cls["grid-2"];
+  if (cardCount === 3) return cls["grid-3"];
+  if (cardCount === 4) return cls["grid-4"];
+  if (cardCount === 5) return cls["grid-5"];
+  if (cardCount === 6) return cls["grid-6"];
+  if (cardCount === 7) return cls["grid-7"];
+  if (cardCount === 8) return cls["grid-8"];
+  if (cardCount === 9) return cls["grid-9"];
+  if (cardCount === 10) return cls["grid-10"];
+  if (cardCount === 11) return cls["grid-11"];
+  if (cardCount === 12) return cls["grid-12"];
+  return cls["grid-default"];
 };
 
 const Home: React.FC = () => {
@@ -288,8 +288,11 @@ const Home: React.FC = () => {
   const cards = articles
     .flatMap(
       (article) =>
-        article.articleTags?.map((tag) => (tag ? formatArticle(tag) : null)) ||
-        []
+        article.articleTags?.map((tag) => {
+          const formatted = formatArticle(tag);
+
+          return formatted.imageUrl ? formatted : null;
+        }) || []
     )
     .filter(Boolean);
 
@@ -384,6 +387,7 @@ const Home: React.FC = () => {
                         key={article.id || idx}
                         cardMain={article}
                         smallCardOA
+                        isSmallImgCard
                       />
                     ))}
                   </div>
@@ -418,8 +422,12 @@ const Home: React.FC = () => {
                       <h2 className={cls.topicTitle}>
                         {tag.name} <IoIosArrowForward />
                       </h2>
-                      {/* Dynamic grid layout for topic articles */}
-                      <div className={`${cls.topicCardsGrid} ${getDynamicGridClass(tag.articles?.length || 0)}`}>
+
+                      <div
+                        className={`${cls.topicCardsGrid} ${getDynamicGridClass(
+                          tag.articles?.length || 0
+                        )}`}
+                      >
                         {tag.articles && tag.articles?.length > 0 ? (
                           tag.articles
                             .slice(0, 12) // Max 12 cards
@@ -428,6 +436,7 @@ const Home: React.FC = () => {
                                 key={article.id || idx}
                                 cardMain={article}
                                 smallCardOA
+                                isSmallImgCard
                               />
                             ))
                         ) : (
@@ -450,13 +459,18 @@ const Home: React.FC = () => {
               <div className={cls["for-in"]}>
                 Notable stories and conversation starters
               </div>
-              {/* Dynamic grid layout for beyond content */}
-              <div className={`${cls.beyondContent} ${getDynamicGridClass(latestTen.slice(4, 8).length)}`}>
+
+              <div
+                className={`${cls.beyondContent} ${getDynamicGridClass(
+                  latestTen.slice(4, 8).length
+                )}`}
+              >
                 {latestTen.slice(4, 8).map((article, idx) => (
                   <Card
                     key={article.id || idx}
                     cardMain={article}
                     smallCardOA
+                    isSmallImgCard
                   />
                 ))}
               </div>

@@ -4,12 +4,11 @@ import { ICard } from "./interfaces";
 import CardBig from "./CardBig";
 import CardSmall from "./CardSmall";
 
-const Card = ({ cardMain, cards, smallCardOA}: ICard) => {
-  console.log(cardMain, cards, "sad")
+const Card = ({ cardMain, cards, smallCardOA, isSmallImgCard }: ICard & { isSmallImgCard?: boolean }) => {
   if (cards?.length) {
     return <CardBig cardMain={cardMain} cards={cards} />;
   }
-  return <CardSmall cardMain={cardMain} smallCardOA={smallCardOA} />;
-};
 
+  return <CardSmall cardMain={cardMain} smallCardOA={smallCardOA} isSmallImg={isSmallImgCard} />;
+};
 export default Card;
