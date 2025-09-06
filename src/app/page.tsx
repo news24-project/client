@@ -13,6 +13,7 @@ import CategoryModal from "@/components/CategoryModal/CategoryModal";
 import { customAxios } from "@/api/customAxios";
 import { days, months } from "@/utils/dates";
 import { useQuery } from "@tanstack/react-query";
+import { cookies } from "next/headers";
 
 const briefing = {
   "en-US": "Your briefing",
@@ -33,8 +34,8 @@ interface Tag {
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
-// 🔹 Cookie ichida token bor-yo‘qligini tekshirish
 const hasToken = () => {
+  if (typeof document === "undefined") return false;
   return document.cookie
     .split("; ")
     .some((row) => row.startsWith("accessToken="));
@@ -111,10 +112,7 @@ const Home: React.FC = () => {
   const { data: articles = [] } = useFindAllArticles();
 
   // 🔹 User topics query
-  const {
-    data: userTopics = [],
-    refetch: refetchUserTopics,
-  } = useQuery({
+  const { data: userTopics = [], refetch: refetchUserTopics } = useQuery({
     queryKey: ["userTopics"],
     queryFn: fetchUserTopics,
     enabled: hasToken(), // faqat token bo‘lsa ishlaydi
@@ -240,9 +238,9 @@ const Home: React.FC = () => {
                         </h2>
 
                         <div
-                          className={`${cls.topicCardsGrid} ${getDynamicGridClass(
-                            tag.articles?.length || 0
-                          )}`}
+                          className={`${
+                            cls.topicCardsGrid
+                          } ${getDynamicGridClass(tag.articles?.length || 0)}`}
                         >
                           {tag.articles && tag.articles?.length > 0 ? (
                             tag.articles
