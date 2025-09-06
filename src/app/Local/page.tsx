@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import type React from "react";
@@ -7,14 +5,17 @@ import { useEffect, useState } from "react";
 import { FiSliders, FiInfo } from "react-icons/fi";
 import styles from "./Local.module.css";
 import Link from "next/link";
-import Card from "@/components/card/Card";
-import { customAxios } from "@/api/customAxios";
 import NewsItem from "@/components/LocalNews";
+import { customAxios } from "@/api/customAxios";
 
 const BACKEND_URL = "http://localhost:4000";
 
 const LocalNews: React.FC = () => {
-  const news = [
+  const [news, setNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Test uchun default news
+  const fallbackNews = [
     {
       id: 1,
       source: "Euronews.com",
@@ -54,9 +55,23 @@ const LocalNews: React.FC = () => {
       title: "Tashkent's role in Central Asia's geopolitics",
       time: "10 Jul",
       image: "https://picsum.photos/200/300",
-
     },
-  ]
+  ];
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const res = await customAxios.get(`${BACKEND_URL}/news`);
+        setNews(res.data); 
+      } catch (error) {
+        console.error("News fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -67,16 +82,18 @@ const LocalNews: React.FC = () => {
           <div className={styles.leftControls}>
             <button className={styles.locationButton}>Tashkent</button>
             <Link href="/manage">
-              <button
-                className={styles.filterButton}
-
-              >
+              <button className={styles.filterButton}>
                 <FiSliders size={18} />
               </button>
             </Link>
           </div>
           <div className={styles.locationInfo}>
-            <a className={styles.infoLink} href="https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en-GB&authuser=0" target="_blank" rel="noopener noreferrer">
+            <a
+              className={styles.infoLink}
+              href="https://support.google.com/googlenews/answer/9256668?ref_topic=9006244&hl=en-GB&authuser=0"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FiInfo size={18} />
               <span>Why these locations?</span>
             </a>
@@ -85,15 +102,14 @@ const LocalNews: React.FC = () => {
       </div>
 
       <div className={styles.newsList}>
-        {news.map((item) => (
-
-          <NewsItem  key={item.id} {...item} />
-        ))}
+        {(loading ? fallbackNews : news.length ? news : fallbackNews).map(
+          (item) => (
+            <NewsItem key={item.id} {...item} />
+          )
+        )}
       </div>
     </div>
   );
 };
 
-
-
-export default LocalNews
+export default LocalNews;
