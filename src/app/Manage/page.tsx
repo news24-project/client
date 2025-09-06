@@ -1,127 +1,47 @@
 "use client";
 
 import type React from "react";
-
 import {
   ArrowLeft,
   Info,
   Search,
-  MapPin,
   Star,
   X,
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Manage.module.css";
 import Link from "next/link";
 import { IoIosStarOutline } from "react-icons/io";
-const cities = [
-  {
-    name: "Dresden",
-    country: "Germany",
-    flag: "🇩🇪",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Dublin",
-    country: "Ireland",
-    flag: "🇮🇪",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Düsseldorf",
-    country: "Germany",
-    flag: "🇩🇪",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Dortmund",
-    country: "Germany",
-    flag: "🇩🇪",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Dover",
-    country: "Dover",
-    flag: "🇬🇧",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Dieppe",
-    country: "France",
-    flag: "🇫🇷",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Doncaster",
-    country: "Doncaster",
-    flag: "🇬🇧",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Durham",
-    country: "Durham",
-    flag: "🇬🇧",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Dundee",
-    country: "Dundee",
-    flag: "🇬🇧",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Dijon",
-    country: "France",
-    flag: "🇫🇷",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Dallas",
-    country: "United States",
-    flag: "🇺🇸",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Denver",
-    country: "United States",
-    flag: "🇺🇸",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Detroit",
-    country: "United States",
-    flag: "🇺🇸",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Doha",
-    country: "Qatar",
-    flag: "🇶🇦",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Damascus",
-    country: "Syria",
-    flag: "🇸🇾",
-    image: "https://picsum.photos/200/300",
-  },
-  {
-    name: "Tashkent",
-    country: "Uzbekistan",
-    flag: "🇺🇿",
-    image: "/images/Tashkent.jpg",
-  },
-];
+import { customAxios } from "@/api/customAxios";
+
+type City = {
+  name: string;
+  country: string;
+  flag: string;
+  image: string;
+};
 
 export default function ManageLocalNews() {
   const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [selectedCities, setSelectedCities] = useState<
-    Array<{ name: string; country: string; flag: string; image: string }>
-  >([]);
+  const [selectedCities, setSelectedCities] = useState<City[]>([]);
   const [openMenuCity, setOpenMenuCity] = useState<string | null>(null);
+  const [cities, setCities] = useState<City[]>([]);
+
+  // backenddan cities olish
+  useEffect(() => {
+    async function fetchCities() {
+      try {
+        const res = await customAxios.get("/cities"); // 🔹 backend route shu bo‘lsa
+        setCities(res.data);
+      } catch (err) {
+        console.error("Error fetching cities:", err);
+      }
+    }
+    fetchCities();
+  }, []);
 
   const filteredCities = cities.filter((city) =>
     city.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -175,6 +95,7 @@ export default function ManageLocalNews() {
 
   return (
     <div className={styles.container}>
+      {/* HEADER */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <Link href="/local">
@@ -195,7 +116,9 @@ export default function ManageLocalNews() {
         </a>
       </div>
 
+      {/* CONTENT */}
       <div className={styles.content}>
+        {/* SEARCH */}
         <div className={styles.searchContainer}>
           <Search className={styles.searchIcon} />
           <input
@@ -211,6 +134,7 @@ export default function ManageLocalNews() {
           )}
         </div>
 
+        {/* SEARCH RESULTS */}
         {searchQuery && (
           <div className={styles.searchResults}>
             {filteredCities.map((city) => (
@@ -248,11 +172,11 @@ export default function ManageLocalNews() {
           </div>
         )}
 
+        {/* DEFAULT VIEW */}
         {!searchQuery && (
           <>
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>Your local news</h2>
-
               {selectedCities.length > 0 ? (
                 <div className={styles.selectedCitiesContainer}>
                   {selectedCities.map((city) => (
@@ -261,10 +185,7 @@ export default function ManageLocalNews() {
                         <div className={styles.suggestionLeft}>
                           <div className={styles.locationImage}>
                             <img
-                              src={
-                                cities.find((c) => c.name === "Tashkent")
-                                  ?.image || "/images/Tashkent.jpg"
-                              }
+                              src={city.image}
                               alt={city.name}
                               className={styles.image}
                             />
@@ -317,7 +238,6 @@ export default function ManageLocalNews() {
                         </div>
                       </div>
                     </div>
-
                     <p className={styles.newsCardText}>
                       See local news that you care about by adding locations
                     </p>
@@ -326,9 +246,9 @@ export default function ManageLocalNews() {
               )}
             </div>
 
+            {/* Suggested */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>Suggested for you</h2>
-
               {!favorites.includes("Tashkent") && (
                 <div className={styles.suggestionCard}>
                   <div className={styles.suggestionContent}>
@@ -342,7 +262,6 @@ export default function ManageLocalNews() {
                       </div>
                       <span className={styles.locationName}>Tashkent</span>
                     </div>
-
                     <button
                       onClick={(e) => toggleFavorite(e, "Tashkent")}
                       className={styles.starButton}

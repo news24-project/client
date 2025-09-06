@@ -4,54 +4,52 @@ import type React from "react";
 import { FiSliders, FiInfo } from "react-icons/fi";
 import styles from "./Local.module.css";
 import Link from "next/link";
-import NewsItem from "@/components/LocalNews";
+import { customAxios } from "@/api/customAxios";
+import Card from "@/components/card/Card";
+import cls from "../country/[sulg]/Country.module.css";
+import { useEffect, useState } from "react";
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
 const LocalNews: React.FC = () => {
-  const news = [
-    {
-      id: 1,
-      source: "Euronews.com",
-      sourceIcon: "https://www.euronews.com/favicon.ico",
-      title: "New Tashkent: Uzbekistan's Urban Transformation",
-      time: "20 hours ago",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 2,
-      source: "FIVB",
-      sourceIcon: "https://www.fivb.com/favicon.ico",
-      title:
-        "Spotlight turns to Tashkent as Boys' U19 World Championship begins Thursday",
-      time: "23 Jul",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 3,
-      source: "The Gymternet",
-      sourceIcon: "https://picsum.photos/200/300",
-      title: "2025 Tashkent Challenge Cup Results",
-      time: "22 Jun",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 4,
-      source: "UzDaily",
-      sourceIcon: "https://www.uzdaily.uz/favicon.ico",
-      title: "Tashkent to host international conference on digital economy",
-      time: "15 Jul",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 5,
-      source: "BBC News",
-      sourceIcon: "https://www.bbc.com/favicon.ico",
-      title: "Tashkent's role in Central Asia's geopolitics",
-      time: "10 Jul",
-      image: "https://picsum.photos/200/300",
-    },
-  ];
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const formatArticle = (article: any) => ({
+    ...article,
+    iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+  });
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const { data } = await customAxios.get(`/article-tags/uz`);
+        if (data?.data?.length) {
+          const formatted = data.data
+            .map((item: any) => formatArticle(item.article || item))
+            .filter((item: any) => item.imageUrl);
+
+          setArticles(
+            formatted.sort(
+              (a, b) =>
+                new Date(b.publishedAt).getTime() -
+                new Date(a.publishedAt).getTime()
+            )
+          );
+        } else {
+          setArticles([]);
+        }
+      } catch (error) {
+        console.error("Local news fetch error:", error);
+        setArticles([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -81,10 +79,14 @@ const LocalNews: React.FC = () => {
         </div>
       </div>
 
-      <div className={styles.newsList}>
-        {news.map((item) => (
-          <NewsItem key={item.id} {...item} />
-        ))}
+      <div className={cls["article-container"]}>
+        {loading ? (
+          <p>Loading...</p>
+        ) : articles.length === 0 ? (
+          <p>No local news found</p>
+        ) : (
+          articles.map((article, idx) => <Card key={idx} cardMain={article} />)
+        )}
       </div>
     </div>
   );

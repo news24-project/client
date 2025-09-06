@@ -88,6 +88,7 @@
 }
 
 .newsList {
+  
   display: flex;
   flex-direction: column;
   background-color: #131314;
@@ -96,6 +97,7 @@
 }
 
 .newsItem {
+
   background-color: transparent;
   border-radius: 0;
   padding: 1.5rem;
