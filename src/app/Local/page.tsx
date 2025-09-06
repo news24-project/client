@@ -6,7 +6,7 @@ import styles from "./Local.module.css";
 import Link from "next/link";
 import NewsItem from "@/components/LocalNews";
 
-const BACKEND_URL = "http://45.76.94.219:7777";
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
 const LocalNews: React.FC = () => {
   const news = [
