@@ -32,7 +32,7 @@ const LocalNews: React.FC = () => {
 
           setArticles(
             formatted.sort(
-              (a, b) =>
+              (a: any, b: any) =>
                 new Date(b.publishedAt).getTime() -
                 new Date(a.publishedAt).getTime()
             )
