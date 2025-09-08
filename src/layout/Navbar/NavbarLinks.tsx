@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import cls from "./Navbar.module.css";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CategoryType } from "@/types";
 import { customAxios } from "@/api/customAxios";
 import { useLanguage } from "@/app/LanguageProvider";
@@ -12,6 +12,7 @@ const NavbarLinks: React.FC = () => {
   const { selectedLang } = useLanguage();
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const pathname = usePathname();
+  const router = useRouter();
 
   const t =
     translations[selectedLang].navbarLinks || translations["en-US"].navbarLinks;
@@ -22,6 +23,13 @@ const NavbarLinks: React.FC = () => {
     { name: t.following, path: "/following" },
   ];
 
+  // Local bo‘lsa local-news ga yo‘naltirish
+  useEffect(() => {
+    if (pathname === "/local") {
+      router.replace("/local-news");
+    }
+  }, [pathname, router]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       setCategories([]);
@@ -31,6 +39,7 @@ const NavbarLinks: React.FC = () => {
         );
 
         const mapped = (data.categories || []).map((cat: any) => {
+          // id faqat mavjud bo‘lsa URL’ga qo‘shiladi
           const path = `/${cat.slug}${cat.id ? `?id=${cat.id}` : ""}`;
           return {
             name: cat.name,
