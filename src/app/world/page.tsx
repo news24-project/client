@@ -16,13 +16,21 @@ const formatArticle = (article: any) => ({
   iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
 });
 
+// Til / davlat nomlari uchun mapping
+const countryNames: Record<string, string> = {
+  uz: "Uzbekistan",
+  en: "World",
+  ru: "Russia",
+  fr: "France",
+  de: "Germany",
+};
+
 const countryCodes = ["en"];
 
 const World = () => {
   const searchParams = useSearchParams();
-  const lang = searchParams.get("lang");
+  const lang = searchParams.get("lang") || "en"; // default en
 
-  // 🔹 Maqolalarni olish query
   const {
     data: articles = [],
     isLoading,
@@ -48,12 +56,16 @@ const World = () => {
           new Date(a.publishedAt).getTime()
       );
     },
-    enabled: !!lang, // faqat lang mavjud bo‘lsa ishlaydi
+    enabled: !!lang, 
   });
+
+  
+  const categoryTitle = countryNames[lang] || lang.toUpperCase();
+  console.log(categoryTitle,)
 
   return (
     <div className={cls["container"]}>
-      <CategoryPage title="World" />
+      <CategoryPage title={categoryTitle} />
 
       {isLoading ? (
         <LoadingCard count={3} />

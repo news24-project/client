@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/api/customAxios";
 import CategoryHeader from "@/components/CategoryHeader";
@@ -43,36 +43,35 @@ const sortByDateDesc = (articles: any[]) =>
   );
 
 const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
-  const [selectedTagId, setSelectedTagId] = useState<string>("latest");
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const router = useRouter();
+
+ 
+  const idFromUrl = searchParams.get("id") || "id-null";
+  const tagFromUrl = searchParams.get("tag") || "latest";
+
+  const [selectedTagId, setSelectedTagId] = useState<string>(tagFromUrl);
 
   const key = title.toLowerCase();
-  const categoryInfo = categoryData[key] || categoryData["world"];
+  const categoryInfo = categoryData[key];
+  const headerImage = image || categoryInfo?.icon || "";
+  const headerColor = image ? undefined : categoryInfo?.color;
 
-  // 🔹 Tagsni olish query
-  const {
-    data: tags = [],
-    isLoading: tagsLoading,
-    isError: tagsError,
-  } = useQuery<Tag[]>({
-    queryKey: ["tags", id],
+  const { data: tags = [], isLoading: tagsLoading } = useQuery<Tag[]>({
+    queryKey: ["tags", idFromUrl],
     queryFn: async () => {
-      const { data } = await customAxios.get(`/categories/${id}`);
+      const { data } = await customAxios.get(`/categories/${idFromUrl}`);
       return data.data || [];
     },
-    enabled: !!id,
+    enabled: !!idFromUrl,
   });
 
-  // 🔹 Maqolalarni olish query
-  const {
-    data: tagArticles = [],
-    isLoading: articlesLoading,
-    isError: articlesError,
-  } = useQuery<any[]>({
-    queryKey: ["articles", selectedTagId, id],
+  const { data: tagArticles = [], isLoading: articlesLoading } = useQuery<
+    any[]
+  >({
+    queryKey: ["articles", selectedTagId, idFromUrl],
     queryFn: async () => {
-      if (!id || tags.length === 0) return [];
+      if (tags.length === 0) return [];
 
       if (selectedTagId === "latest") {
         const articlesArrays = await Promise.all(
@@ -89,7 +88,6 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
               .catch(() => [])
           )
         );
-
         return sortByDateDesc(articlesArrays.flat());
       } else {
         const { data } = await customAxios.get(
@@ -104,18 +102,26 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
           : [];
       }
     },
-    enabled: !!id && tags.length > 0,
+    enabled: tags.length > 0,
   });
 
   const loading = tagsLoading || articlesLoading;
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("id", idFromUrl);
+    if (selectedTagId === "latest") url.searchParams.delete("tag");
+    else url.searchParams.set("tag", selectedTagId);
+    router.replace(url.toString());
+  }, [selectedTagId, idFromUrl, router]);
+
   return (
     <div className={cls.container}>
       <CategoryHeader
-        id={id as string}
+        id={idFromUrl}
         title={title}
-        image={categoryInfo.icon}
-        backgroundColor={categoryInfo.color}
+        image={headerImage}
+        backgroundColor={headerColor}
         categories={tags.length > 0 ? tags.map((tag) => tag.name) : undefined}
         activeIndex={
           tags.length > 0
@@ -133,9 +139,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
 
       {loading ? (
         <LoadingCard count={3} />
-      ) : tagArticles.length === 0 ? (
-        <p>No articles found</p>
-      ) : (
+      ) : tagArticles.length === 0 ? null : (
         <div className={cls["article-container"]}>
           {tagArticles
             .filter((_, idx) => idx % 3 === 0)

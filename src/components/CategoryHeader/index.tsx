@@ -81,6 +81,7 @@ const CategoryHeader = ({
               <img src={image} alt="category icon" className={cls.icon} />
             )}
           </div>
+
           <h1>{title}</h1>
         </div>
         <div className={cls.followShare}>
