@@ -13,7 +13,6 @@ import CategoryModal from "@/components/CategoryModal/CategoryModal";
 import { customAxios } from "@/api/customAxios";
 import { days, months } from "@/utils/dates";
 import { useQuery } from "@tanstack/react-query";
-import { cookies } from "next/headers";
 
 const briefing = {
   "en-US": "Your briefing",
@@ -41,7 +40,6 @@ const hasToken = () => {
     .some((row) => row.startsWith("accessToken="));
 };
 
-// 🔹 Dynamic grid class
 const getDynamicGridClass = (cardCount: number) => {
   if (cardCount === 0) return "";
   if (cardCount === 1) return cls["grid-1"];

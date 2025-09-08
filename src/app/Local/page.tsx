@@ -1,19 +1,27 @@
 "use client";
 
-import type React from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { FiSliders, FiInfo } from "react-icons/fi";
 import styles from "./Local.module.css";
 import Link from "next/link";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "../country/[sulg]/Country.module.css";
-import { useEffect, useState } from "react";
+import LoadingCard from "@/components/LoadingCard";
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
 const LocalNews: React.FC = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+
+  const idFromUrl = searchParams.get("id") || "id-null";
+
   const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   const formatArticle = (article: any) => ({
     ...article,
@@ -23,8 +31,10 @@ const LocalNews: React.FC = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        setLoading(true);
-        const { data } = await customAxios.get(`/article-tags/uz`);
+        setIsLoading(true);
+        setIsError(false);
+
+        const { data } = await customAxios.get(`/article-tags/${idFromUrl}`);
         if (data?.data?.length) {
           const formatted = data.data
             .map((item: any) => formatArticle(item.article || item))
@@ -42,14 +52,22 @@ const LocalNews: React.FC = () => {
         }
       } catch (error) {
         console.error("Local news fetch error:", error);
+        setIsError(true);
         setArticles([]);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchArticles();
-  }, []);
+  }, [idFromUrl]);
+
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("id", idFromUrl);
+    router.replace(url.toString());
+  }, [idFromUrl, router]);
 
   return (
     <div className={styles.container}>
@@ -79,15 +97,21 @@ const LocalNews: React.FC = () => {
         </div>
       </div>
 
-      <div className={cls["article-container"]}>
-        {loading ? (
-          <p>Loading...</p>
-        ) : articles.length === 0 ? (
-          <p>No local news found</p>
-        ) : (
-          articles.map((article, idx) => <Card key={idx} cardMain={article} />)
-        )}
-      </div>
+      {isLoading ? (
+        <LoadingCard count={3} />
+      ) : (
+        <div className={cls["article-container"]}>
+          {isError ? (
+            <p>Error loading articles</p>
+          ) : articles.length === 0 ? (
+            <p>No local news found</p>
+          ) : (
+            articles.map((article, idx) => (
+              <Card key={idx} cardMain={article} smallCardOA />
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };
