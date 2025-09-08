@@ -85,7 +85,7 @@ const LocalNews: React.FC = () => {
         ) : articles.length === 0 ? (
           <p>No local news found</p>
         ) : (
-          articles.map((article, idx) => <Card key={idx} cardMain={article} />)
+          articles.map((article, idx) => <Card key={idx} cardMain={article} smallCardOA />)
         )}
       </div>
     </div>

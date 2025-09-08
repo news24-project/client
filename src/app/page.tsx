@@ -13,7 +13,7 @@ import CategoryModal from "@/components/CategoryModal/CategoryModal";
 import { customAxios } from "@/api/customAxios";
 import { days, months } from "@/utils/dates";
 import { useQuery } from "@tanstack/react-query";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 
 const briefing = {
   "en-US": "Your briefing",
