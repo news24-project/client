@@ -16,8 +16,8 @@ const LocalNews: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-
-  const idFromUrl = searchParams.get("id") || "id-null";
+  // URLdan tilni olish, default uz
+  const langFromUrl = searchParams.get("lang") || "uz";
 
   const [articles, setArticles] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,13 +28,14 @@ const LocalNews: React.FC = () => {
     iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
   });
 
+  // Ma'lumotlarni backenddan olish
   useEffect(() => {
     const fetchArticles = async () => {
       try {
         setIsLoading(true);
         setIsError(false);
 
-        const { data } = await customAxios.get(`/article-tags/${idFromUrl}`);
+        const { data } = await customAxios.get(`/article-tags/${langFromUrl}`);
         if (data?.data?.length) {
           const formatted = data.data
             .map((item: any) => formatArticle(item.article || item))
@@ -60,14 +61,14 @@ const LocalNews: React.FC = () => {
     };
 
     fetchArticles();
-  }, [idFromUrl]);
+  }, [langFromUrl]);
 
-
+  // URL parametrini refreshda saqlash
   useEffect(() => {
     const url = new URL(window.location.href);
-    url.searchParams.set("id", idFromUrl);
+    url.searchParams.set("lang", langFromUrl);
     router.replace(url.toString());
-  }, [idFromUrl, router]);
+  }, [langFromUrl, router]);
 
   return (
     <div className={styles.container}>
