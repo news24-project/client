@@ -30,14 +30,16 @@ const NavbarLinks: React.FC = () => {
           `/categories?lang=${selectedLang}`
         );
 
-        const mapped = (data.categories || []).map((cat: any) => ({
-          name: cat.name,
-          path: `/${cat.slug}?id=${cat.id}`,
-        }));
+        const mapped = (data.categories || []).map((cat: any) => {
+          const path = `/${cat.slug}${cat.id ? `?id=${cat.id}` : ""}`;
+          return {
+            name: cat.name,
+            path,
+          };
+        });
 
         const dynamicCats: CategoryType[] = [...mapped];
 
-       
         if (data?.country) {
           const countryPath = `/country/${data.country.slug}?lang=${selectedLang}`;
           dynamicCats.unshift({
@@ -73,7 +75,6 @@ const NavbarLinks: React.FC = () => {
             {cat.name}
           </Link>
 
-         
           {index === staticCategories.length - 1 && (
             <span className={cls["hide-mobile"]}>|</span>
           )}

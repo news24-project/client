@@ -42,14 +42,20 @@ const sortByDateDesc = (articles: any[]) =>
       new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
+const LOCAL_ID_KEY = "lastCategoryId";
+
 const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
- 
-  const idFromUrl = searchParams.get("id") || "id-null";
-  const tagFromUrl = searchParams.get("tag") || "latest";
+  // URLdan id olish yoki localStorage => null bo'lsa "id-null"
+  let idFromUrl = searchParams.get("id");
+  if (!idFromUrl) {
+    const storedId = localStorage.getItem(LOCAL_ID_KEY);
+    idFromUrl = storedId || "id-null";
+  }
 
+  const tagFromUrl = searchParams.get("tag") || "latest";
   const [selectedTagId, setSelectedTagId] = useState<string>(tagFromUrl);
 
   const key = title.toLowerCase();
@@ -57,21 +63,24 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
   const headerImage = image || categoryInfo?.icon || "";
   const headerColor = image ? undefined : categoryInfo?.color;
 
+  // Tags query
   const { data: tags = [], isLoading: tagsLoading } = useQuery<Tag[]>({
     queryKey: ["tags", idFromUrl],
     queryFn: async () => {
+      if (!idFromUrl) return [];
       const { data } = await customAxios.get(`/categories/${idFromUrl}`);
       return data.data || [];
     },
     enabled: !!idFromUrl,
   });
 
+  // Articles query
   const { data: tagArticles = [], isLoading: articlesLoading } = useQuery<
     any[]
   >({
     queryKey: ["articles", selectedTagId, idFromUrl],
     queryFn: async () => {
-      if (tags.length === 0) return [];
+      if (!idFromUrl || tags.length === 0) return [];
 
       if (selectedTagId === "latest") {
         const articlesArrays = await Promise.all(
@@ -102,12 +111,19 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
           : [];
       }
     },
-    enabled: tags.length > 0,
+    enabled: !!idFromUrl && tags.length > 0,
   });
 
   const loading = tagsLoading || articlesLoading;
 
+  // URL va localStorage ga yozish
   useEffect(() => {
+    if (!idFromUrl) return;
+
+    // id-null bo'lsa localStorage ga ham id-null saqlaymiz
+    localStorage.setItem(LOCAL_ID_KEY, idFromUrl);
+
+    // URL yangilash
     const url = new URL(window.location.href);
     url.searchParams.set("id", idFromUrl);
     if (selectedTagId === "latest") url.searchParams.delete("tag");
