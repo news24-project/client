@@ -34,7 +34,7 @@ interface IArticleChild {
   article: IArticle;
 }
 
-const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+const BACKEND_URL = "http://localhost:4000";
 
 const Home: React.FC = () => {
   const { selectedLang } = useLanguage();

@@ -8,7 +8,7 @@ import cls from "../country/[sulg]/Country.module.css";
 import CategoryHeader from "@/components/CategoryHeader";
 import CategoryPage from "@/components/category/CategoryPage";
 
-const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+const BACKEND_URL = "http://localhost:4000";
 
 const World = () => {
   const searchParams = useSearchParams();

@@ -35,7 +35,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
-  const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+  const BACKEND_URL = "http://localhost:4000";
   const key = title.toLowerCase();
   const categoryInfo = categoryData[key] || categoryData["world"];
 

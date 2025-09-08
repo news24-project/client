@@ -6,7 +6,7 @@ import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "./Country.module.css";
 
-const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+const BACKEND_URL = "http://localhost:4000";
 
 const Country = () => {
   const { sulg } = useParams();
