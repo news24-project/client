@@ -17,6 +17,7 @@ interface Tag {
 interface CategoryPageProps {
   title: string;
   image?: string;
+  isCountry?: boolean;
 }
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
@@ -33,7 +34,7 @@ const categoryData: { [key: string]: { icon: string; color: string } } = {
 
 const formatArticle = (article: any) => ({
   ...article,
-  iconUrl: article.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+  iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
 });
 
 const sortByDateDesc = (articles: any[]) =>
@@ -42,20 +43,17 @@ const sortByDateDesc = (articles: any[]) =>
       new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-const LOCAL_ID_KEY = "lastCategoryId";
-
-const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
+const CategoryPage: React.FC<CategoryPageProps> = ({
+  title,
+  image,
+  isCountry,
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // URLdan id olish yoki localStorage => null bo'lsa "id-null"
-  let idFromUrl = searchParams.get("id");
-  if (!idFromUrl) {
-    const storedId = localStorage.getItem(LOCAL_ID_KEY);
-    idFromUrl = storedId || "id-null";
-  }
-
+  const idFromUrl = searchParams.get("id") || "id-null";
   const tagFromUrl = searchParams.get("tag") || "latest";
+
   const [selectedTagId, setSelectedTagId] = useState<string>(tagFromUrl);
 
   const key = title.toLowerCase();
@@ -63,7 +61,6 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
   const headerImage = image || categoryInfo?.icon || "";
   const headerColor = image ? undefined : categoryInfo?.color;
 
-  // Tags query
   const { data: tags = [], isLoading: tagsLoading } = useQuery<Tag[]>({
     queryKey: ["tags", idFromUrl],
     queryFn: async () => {
@@ -74,7 +71,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
     enabled: !!idFromUrl,
   });
 
-  // Articles query
+  // 🔹 Articles query
   const { data: tagArticles = [], isLoading: articlesLoading } = useQuery<
     any[]
   >({
@@ -116,19 +113,17 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
 
   const loading = tagsLoading || articlesLoading;
 
-  // URL va localStorage ga yozish
   useEffect(() => {
     if (!idFromUrl) return;
 
-    // id-null bo'lsa localStorage ga ham id-null saqlaymiz
-    localStorage.setItem(LOCAL_ID_KEY, idFromUrl);
-
-    // URL yangilash
     const url = new URL(window.location.href);
     url.searchParams.set("id", idFromUrl);
     if (selectedTagId === "latest") url.searchParams.delete("tag");
     else url.searchParams.set("tag", selectedTagId);
-    router.replace(url.toString());
+
+    router.replace(
+      `${window.location.pathname}?${url.searchParams.toString()}`
+    );
   }, [selectedTagId, idFromUrl, router]);
 
   return (
@@ -151,6 +146,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
           if (index === 0) setSelectedTagId("latest");
           else setSelectedTagId(tags[index - 1]?.id);
         }}
+        isCountry={isCountry}
       />
 
       {loading ? (

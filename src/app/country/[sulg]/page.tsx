@@ -8,6 +8,7 @@ import Card from "@/components/card/Card";
 import cls from "./Country.module.css";
 import CategoryPage from "@/components/category/CategoryPage";
 import LoadingCard from "@/components/LoadingCard";
+import NotFound from "@/app/not-found/page";
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
@@ -19,14 +20,25 @@ const formatArticle = (article: any) => ({
 const countryNames: Record<string, string> = {
   uz: "Uzbekistan",
   ru: "Russia",
-  en: "U.S",
+  us: "U.S",
+  tr: "Turkey",
+  kz: "Kazakhstan",
+  kg: "Kyrgyzstan",
+  in: "India",
+  zh: "China",
 };
 
 const countryImages: Record<string, string> = {
   uz: "/images/uz.webp",
   ru: "/images/ru.jpeg",
   us: "/images/us.jpeg",
+  tr: "/images/tr.jpeg",
+  kz: "/images/kz.jpeg",
+  kg: "/images/kg.jpg",
+  in: "/images/in.jpeg",
+  zh: "/images/xt.jpeg",
 };
+
 
 const Country = () => {
   const { sulg } = useParams();
@@ -40,8 +52,6 @@ const Country = () => {
   } = useQuery({
     queryKey: ["countryArticles", sulg, lang],
     queryFn: async () => {
-      if (!sulg) return [];
-
       const { data } = await customAxios.get(`/article-tags/${sulg}`, {
         params: { lang },
       });
@@ -55,20 +65,14 @@ const Country = () => {
     enabled: !!sulg,
   });
 
+  const categoryImage = sulg && countryImages[sulg as string];
   const categoryTitle =
     sulg && (countryNames[sulg as string] || (sulg as string).toUpperCase());
-
-  const categoryImage =
-    sulg && countryImages[sulg as string]
-      ? countryImages[sulg as string]
-      : undefined;
-
-  console.log("sulg:", sulg, "categoryImage:", categoryImage);
 
   return (
     <div className={cls["container"]}>
       {categoryTitle && (
-        <CategoryPage title={categoryTitle} image={categoryImage} />
+        <CategoryPage title={categoryTitle} image={categoryImage} isCountry />
       )}
 
       {isLoading ? (
@@ -76,12 +80,12 @@ const Country = () => {
       ) : isError ? (
         <p>Error loading articles</p>
       ) : articles.length === 0 ? (
-        <p>No articles found for {sulg}</p>
+        <NotFound />
       ) : (
         <div className={cls["article-container"]}>
           {articles
-            .filter((_, idx) => idx % 3 === 0)
-            .map((_, groupIdx) => (
+            .filter((_: any, idx: number) => idx % 3 === 0)
+            .map((_: any, groupIdx: number) => (
               <Card
                 key={groupIdx}
                 cardMain={articles[groupIdx * 3]}

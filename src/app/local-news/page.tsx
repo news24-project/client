@@ -16,7 +16,6 @@ const LocalNews: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // URLdan tilni olish, default uz
   const langFromUrl = searchParams.get("lang") || "uz";
 
   const [articles, setArticles] = useState<any[]>([]);
@@ -28,7 +27,6 @@ const LocalNews: React.FC = () => {
     iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
   });
 
-  // Ma'lumotlarni backenddan olish
   useEffect(() => {
     const fetchArticles = async () => {
       try {
@@ -63,7 +61,6 @@ const LocalNews: React.FC = () => {
     fetchArticles();
   }, [langFromUrl]);
 
-  // URL parametrini refreshda saqlash
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("lang", langFromUrl);
@@ -78,10 +75,8 @@ const LocalNews: React.FC = () => {
         <div className={styles.controls}>
           <div className={styles.leftControls}>
             <button className={styles.locationButton}>Tashkent</button>
-            <Link href="/manage">
-              <button className={styles.filterButton}>
-                <FiSliders size={18} />
-              </button>
+            <Link href="/manage" className={styles.filterButton}>
+              <FiSliders size={18} />
             </Link>
           </div>
           <div className={styles.locationInfo}>

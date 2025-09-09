@@ -17,7 +17,8 @@ type Props = {
   categories?: string[];
   activeIndex?: number;
   onTagClick?: (index: number) => void;
-  id: string;
+  id?: string; // 🔹 endi optional
+  isCountry?: boolean;
   backgroundColor?: string;
 };
 
@@ -28,10 +29,13 @@ const CategoryHeader = ({
   activeIndex = 0,
   onTagClick,
   id,
+  isCountry,
   backgroundColor,
 }: Props) => {
+  // 🔹 Kategoriya bo‘lsa: "Latest" + boshqa taglar chiqadi
+  // 🔹 Country bo‘lsa yoki World bo‘lsa: faqat bo‘sh chiqadi
   const fullCategories =
-    title.toLowerCase() === "world"
+    title.toLowerCase() === "world" || isCountry
       ? []
       : categories && categories.length > 0
       ? ["Latest", ...categories]
@@ -41,6 +45,7 @@ const CategoryHeader = ({
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
+    if (!id) return; // id bo‘lmasa tekshirishning hojati yo‘q
     const alreadyFollowing = data?.data?.some(
       (item: any) => item.categoryId === id
     );
@@ -51,6 +56,7 @@ const CategoryHeader = ({
   const unfollow = useUnFollowMutation();
 
   const handleFollow = () => {
+    if (!id) return; // id bo‘lmasa follow ishlamaydi
     if (isFollowing) {
       unfollow.mutate(id, {
         onSuccess() {
@@ -84,18 +90,22 @@ const CategoryHeader = ({
 
           <h1>{title}</h1>
         </div>
+
         <div className={cls.followShare}>
-          <button
-            onClick={handleFollow}
-            className={`${cls.follow} ${isFollowing ? cls.following : ""}`}
-          >
-            {isFollowing ? (
-              <IoStar className={cls["follow-icon"]} />
-            ) : (
-              <IoIosStarOutline className={cls["follow-icon"]} />
-            )}
-            <span>{isFollowing ? "Following" : "Follow"}</span>
-          </button>
+       
+          {id && (
+            <button
+              onClick={handleFollow}
+              className={`${cls.follow} ${isFollowing ? cls.following : ""}`}
+            >
+              {isFollowing ? (
+                <IoStar className={cls["follow-icon"]} />
+              ) : (
+                <IoIosStarOutline className={cls["follow-icon"]} />
+              )}
+              <span>{isFollowing ? "Following" : "Follow"}</span>
+            </button>
+          )}
 
           <button className={cls.share}>
             <BsShare />
@@ -103,17 +113,20 @@ const CategoryHeader = ({
         </div>
       </div>
 
-      <div className={cls.buttons}>
-        {fullCategories.map((cat, idx) => (
-          <button
-            key={`${cat}-${idx}`}
-            className={`${cls.button} ${activeIndex === idx ? cls.active : ""}`}
-            onClick={() => onTagClick?.(idx)}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+
+      {fullCategories.length > 0 && (
+        <div className={cls.buttons}>
+          {fullCategories.map((cat, idx) => (
+            <button
+              key={`${cat}-${idx}`}
+              className={`${cls.button} ${activeIndex === idx ? cls.active : ""}`}
+              onClick={() => onTagClick?.(idx)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

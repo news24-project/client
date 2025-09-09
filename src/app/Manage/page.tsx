@@ -118,7 +118,7 @@ export default function ManageLocalNews() {
 
       {/* CONTENT */}
       <div className={styles.content}>
-        {/* SEARCH */}
+      
         <div className={styles.searchContainer}>
           <Search className={styles.searchIcon} />
           <input
