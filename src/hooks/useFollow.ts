@@ -3,6 +3,7 @@ import {
   follow,
   followBody,
   getAllFollows,
+  getAllInformation,
   getFollowedCategories,
 } from "@/api/follow";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -30,5 +31,12 @@ export function useFollowMutation() {
 export function useUnFollowMutation() {
   return useMutation({
     mutationFn: (id: string) => deleteFollow(id),
+  });
+}
+
+export function useGetAllArticles(id: string) {
+  return useQuery({
+    queryKey: ["get all info"],
+    queryFn: () => getAllInformation(id),
   });
 }

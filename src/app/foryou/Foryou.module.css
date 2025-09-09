@@ -1,0 +1,7 @@
+.container {
+  margin-inline: auto;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+}

@@ -54,3 +54,12 @@ export async function deleteFollow(id: string) {
     throw error;
   }
 }
+
+export async function getAllInformation(id: string) {
+  try {
+    const res = await customAxios.get(`/follows/all/cmf52yob2039fw0twg6cjobbt`);
+    return res.data;
+  } catch (error) {
+    console.log("all information error!", error);
+  }
+}
