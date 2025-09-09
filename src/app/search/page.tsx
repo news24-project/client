@@ -4,7 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
+
 import cls from "./Search.module.css";
+import NotFound from "../not-found/page";
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
@@ -50,7 +52,7 @@ export default function SearchPage() {
       {loading ? (
         <p>Loading...</p>
       ) : articles.length === 0 ? (
-        <p>No results found</p>
+        <NotFound />  
       ) : (
         <div className={cls["article-container"]}>
           {articles.map((article, idx) => (
