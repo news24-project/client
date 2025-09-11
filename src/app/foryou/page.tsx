@@ -1,43 +1,55 @@
 "use client";
 
-import CategoryHeader from "@/components/CategoryHeader";
-
-interface News {
-  source: string;
-  sourceIcon: string;
-  title: string;
-  time: string;
-  image: string;
-}
-
-// import React, { useEffect, useState } from "react";
+import Card from "@/components/card/Card";
+import { useGetAllArticles } from "@/hooks/useFollow";
+import style from "./Foryou.module.css";
+import LoadingCard from "@/components/LoadingCard";
 
 const ForYou = () => {
-  // const [news, setNews] = useState<News[]>([]);
+  const { data = [], isLoading } = useGetAllArticles();
+  const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
-  // useEffect(() => {
-  //   customAxios.get("/art")
-
-  // }, []);
+  const formatArticle = (article: any) => ({
+    ...article,
+    iconUrl: article?.source?.iconUrl
+      ? `${BACKEND_URL}/${article.source.iconUrl}`
+      : "",
+    sourceName: article?.source?.name || "",
+    language: article?.source?.language || "",
+  });
 
   return (
     <div className="container">
-      <div>
-        <CategoryHeader
-          id="tech"
-          title="Technology"
-          categories={[
-            "Latest",
-            "Mobile",
-            "Gadgets",
-            "Internet",
-            "Virtual reality",
-            "Artificial intelligence",
-            "Computing",
-          ]}
-        />
+      <div className={style.container}>
+        <h1 className={style.title}>For You</h1>
+
+        {isLoading ? (
+          <LoadingCard count={3} />
+        ) : (
+          <>
+            <div className={style["article-container"]}>
+              {data
+                .filter(
+                  (e: any) => e.imageUrl && e.source.language === "english"
+                )
+                .map((e: any, groupIdx: number) => {
+                  const formatted = formatArticle(e);
+
+                  return (
+                    <Card
+                      key={groupIdx}
+                      cardMain={formatted}
+                      smallCardOA
+                      cards={data
+                        .slice(groupIdx * 3, groupIdx * 3 + 3)
+                        .map(formatArticle)}
+                    />
+                  );
+                })}
+            </div>
+          </>
+        )}
       </div>
-      <div></div>
     </div>
   );
 };

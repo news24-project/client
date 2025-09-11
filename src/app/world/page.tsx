@@ -7,7 +7,7 @@ import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "../country/[sulg]/Country.module.css";
 import CategoryPage from "@/components/category/CategoryPage";
-import LoadingCard from "@/components/LoadingCard"; 
+import LoadingCard from "@/components/LoadingCard";
 
 const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
 
@@ -52,16 +52,14 @@ const World = () => {
 
       return allArticles.sort(
         (a, b) =>
-          new Date(b.publishedAt).getTime() -
-          new Date(a.publishedAt).getTime()
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       );
     },
-    enabled: !!lang, 
+    enabled: !!lang,
   });
 
-  
   const categoryTitle = countryNames[lang] || lang.toUpperCase();
-  console.log(categoryTitle,)
+  console.log(categoryTitle);
 
   return (
     <div className={cls["container"]}>
