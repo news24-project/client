@@ -31,20 +31,27 @@ const STORAGE_KEY = "selectedLang";
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [selectedLang, setSelectedLangState] = useState<Language>("en-US");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const savedLang = localStorage.getItem(STORAGE_KEY) as Language | null;
     if (savedLang) {
       setSelectedLangState(savedLang);
     }
+    setLoading(false);
   }, []);
 
   const setSelectedLang = (lang: Language) => {
     setSelectedLangState(lang);
     localStorage.setItem(STORAGE_KEY, lang);
 
+ 
     window.location.href = `/?lang=${lang}`;
   };
+
+  if (loading) {
+    return null; 
+  }
 
   return (
     <LanguageContext.Provider value={{ selectedLang, setSelectedLang }}>

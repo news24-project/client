@@ -22,6 +22,9 @@ export default function FollowingPage() {
     setLocals(locals.filter((local) => local.id !== id));
     setMenuOpen(null);
   };
+  const uniqueTopics = data?.data
+    ? Array.from(new Map(data.data.map((t: any) => [t.id, t])).values())
+    : [];
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -77,7 +80,7 @@ export default function FollowingPage() {
                 </div>
               ) : (
                 <div className={styles.topicBox}>
-                  {data?.data?.map((topic: any) => (
+                  {uniqueTopics.map((topic: any) => (
                     <div key={topic.id} className={styles.topicCard}>
                       <div className={styles.icon}>
                         {topic.name === "technology"

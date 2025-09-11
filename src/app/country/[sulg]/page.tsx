@@ -1,57 +1,80 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/api/customAxios";
 import Card from "@/components/card/Card";
 import cls from "./Country.module.css";
+import CategoryPage from "@/components/category/CategoryPage";
+import LoadingCard from "@/components/LoadingCard";
 
-const BACKEND_URL = "http://localhost:4000";
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+
+const formatArticle = (article: any) => ({
+  ...article,
+  iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+});
+
+const countryNames: Record<string, string> = {
+  uz: "Uzbekistan",
+  ru: "Russia",
+  en: "U.S",
+};
+
+const countryImages: Record<string, string> = {
+  uz: "/images/uz.webp",
+  ru: "/images/ru.jpeg",
+  us: "/images/us.jpeg",
+};
 
 const Country = () => {
   const { sulg } = useParams();
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
 
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: articles = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["countryArticles", sulg, lang],
+    queryFn: async () => {
+      if (!sulg) return [];
 
-  const formatArticle = (article: any) => ({
-    ...article,
-    iconUrl: article?.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+      const { data } = await customAxios.get(`/article-tags/${sulg}`, {
+        params: { lang },
+      });
+
+      const formatted = data?.data
+        ? data.data.map((item: any) => formatArticle(item.article || item))
+        : [];
+
+      return [...formatted].reverse();
+    },
+    enabled: !!sulg,
   });
 
-  useEffect(() => {
-    if (!sulg) return;
+  const categoryTitle =
+    sulg && (countryNames[sulg as string] || (sulg as string).toUpperCase());
 
-    const fetchArticles = async () => {
-      try {
-        setLoading(true);
-        const { data } = await customAxios.get(`/article-tags/${sulg}`, {
-          params: { lang },
-        });
+  const categoryImage =
+    sulg && countryImages[sulg as string]
+      ? countryImages[sulg as string]
+      : undefined;
 
-        const formatted = data?.data
-          ? data.data
-              .map((item: any) => formatArticle(item.article || item))
-              .filter((item: any) => item.imageUrl)
-          : [];
-
-        setArticles(formatted.reverse());
-      } catch (err) {
-        console.error("Error fetching country articles:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
-  }, [sulg, lang]);
+  console.log("sulg:", sulg, "categoryImage:", categoryImage);
 
   return (
     <div className={cls["container"]}>
-      {loading ? (
-        <p>Loading...</p>
+      {categoryTitle && (
+        <CategoryPage title={categoryTitle} image={categoryImage} />
+      )}
+
+      {isLoading ? (
+        <LoadingCard count={3} />
+      ) : isError ? (
+        <p>Error loading articles</p>
       ) : articles.length === 0 ? (
         <p>No articles found for {sulg}</p>
       ) : (

@@ -34,9 +34,9 @@ export function useUnFollowMutation() {
   });
 }
 
-export function useGetAllArticles(id: string) {
+export function useGetAllArticles() {
   return useQuery({
     queryKey: ["get all info"],
-    queryFn: () => getAllInformation(id),
+    queryFn: () => getAllInformation(),
   });
 }

@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/api/customAxios";
 import CategoryHeader from "@/components/CategoryHeader";
 import Card from "@/components/card/Card";
 import cls from "./Category.module.css";
+import LoadingCard from "@/components/LoadingCard";
 
 interface Tag {
   id: string;
@@ -17,6 +19,8 @@ interface CategoryPageProps {
   image?: string;
 }
 
+const BACKEND_URL = "https://news24.muhammad-yusuf.uz";
+
 const categoryData: { [key: string]: { icon: string; color: string } } = {
   technology: { icon: "/images/technology.webp", color: "#039be5" },
   sports: { icon: "/images/sports.webp", color: "#ef6c00" },
@@ -27,94 +31,113 @@ const categoryData: { [key: string]: { icon: string; color: string } } = {
   world: { icon: "/images/world1.webp", color: "#689f38" },
 };
 
+const formatArticle = (article: any) => ({
+  ...article,
+  iconUrl: article.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+});
+
+const sortByDateDesc = (articles: any[]) =>
+  articles.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+
+const LOCAL_ID_KEY = "lastCategoryId";
+
 const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [selectedTagId, setSelectedTagId] = useState<string>("latest");
-  const [tagArticles, setTagArticles] = useState<any[]>([]);
-
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const router = useRouter();
 
-  const BACKEND_URL = "http://localhost:4000";
+  // URLdan id olish yoki localStorage => null bo'lsa "id-null"
+  let idFromUrl = searchParams.get("id");
+  if (!idFromUrl) {
+    const storedId = localStorage.getItem(LOCAL_ID_KEY);
+    idFromUrl = storedId || "id-null";
+  }
+
+  const tagFromUrl = searchParams.get("tag") || "latest";
+  const [selectedTagId, setSelectedTagId] = useState<string>(tagFromUrl);
+
   const key = title.toLowerCase();
-  const categoryInfo = categoryData[key] || categoryData["world"];
+  const categoryInfo = categoryData[key];
+  const headerImage = image || categoryInfo?.icon || "";
+  const headerColor = image ? undefined : categoryInfo?.color;
 
-  const formatArticle = (article: any) => ({
-    ...article,
-    iconUrl: article.iconUrl ? `${BACKEND_URL}/${article.iconUrl}` : "",
+  // Tags query
+  const { data: tags = [], isLoading: tagsLoading } = useQuery<Tag[]>({
+    queryKey: ["tags", idFromUrl],
+    queryFn: async () => {
+      if (!idFromUrl) return [];
+      const { data } = await customAxios.get(`/categories/${idFromUrl}`);
+      return data.data || [];
+    },
+    enabled: !!idFromUrl,
   });
 
-  const sortByDateDesc = (articles: any[]) =>
-    articles.sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    );
+  // Articles query
+  const { data: tagArticles = [], isLoading: articlesLoading } = useQuery<
+    any[]
+  >({
+    queryKey: ["articles", selectedTagId, idFromUrl],
+    queryFn: async () => {
+      if (!idFromUrl || tags.length === 0) return [];
 
-  useEffect(() => {
-    if (!id) return;
-    const fetchTags = async () => {
-      try {
-        const { data } = await customAxios.get(`/categories/${id}`);
-        setTags(data.data || []);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchTags();
-  }, [id]);
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchArticles = async () => {
-      try {
-        if (selectedTagId === "latest") {
-          const articlesArrays = await Promise.all(
-            tags.map((tag) =>
-              customAxios
-                .get(`/article-tags/tag/${tag.id}`)
-                .then((res) =>
-                  res.data.articleTags
-                    ? res.data.articleTags
-                        .map((item: any) => formatArticle(item.article))
-                        .filter((article: any) => article.imageUrl)
-                    : []
-                )
-                .catch(() => [])
+      if (selectedTagId === "latest") {
+        const articlesArrays = await Promise.all(
+          tags.map((tag) =>
+            customAxios
+              .get(`/article-tags/tag/${tag.id}`)
+              .then((res) =>
+                res.data.articleTags
+                  ? res.data.articleTags
+                      .map((item: any) => formatArticle(item.article))
+                      .filter((article: any) => article.imageUrl)
+                  : []
+              )
+              .catch(() => [])
+          )
+        );
+        return sortByDateDesc(articlesArrays.flat());
+      } else {
+        const { data } = await customAxios.get(
+          `/article-tags/tag/${selectedTagId}`
+        );
+        return data.articleTags
+          ? sortByDateDesc(
+              data.articleTags
+                .map((item: any) => formatArticle(item.article))
+                .filter((article: any) => article.imageUrl)
             )
-          );
-
-          const allArticles = sortByDateDesc(articlesArrays.flat());
-          setTagArticles(allArticles);
-        } else {
-          const { data } = await customAxios.get(
-            `/article-tags/tag/${selectedTagId}`
-          );
-          setTagArticles(
-            data.articleTags
-              ? sortByDateDesc(
-                  data.articleTags
-                    .map((item: any) => formatArticle(item.article))
-                    .filter((article: any) => article.imageUrl)
-                )
-              : []
-          );
-        }
-      } catch (err) {
-        console.error(err);
+          : [];
       }
-    };
+    },
+    enabled: !!idFromUrl && tags.length > 0,
+  });
 
-    fetchArticles();
-  }, [selectedTagId, tags, id]);
+  const loading = tagsLoading || articlesLoading;
+
+  // URL va localStorage ga yozish
+  useEffect(() => {
+    if (!idFromUrl) return;
+
+    // id-null bo'lsa localStorage ga ham id-null saqlaymiz
+    localStorage.setItem(LOCAL_ID_KEY, idFromUrl);
+
+    // URL yangilash
+    const url = new URL(window.location.href);
+    url.searchParams.set("id", idFromUrl);
+    if (selectedTagId === "latest") url.searchParams.delete("tag");
+    else url.searchParams.set("tag", selectedTagId);
+    router.replace(url.toString());
+  }, [selectedTagId, idFromUrl, router]);
 
   return (
     <div className={cls.container}>
       <CategoryHeader
-        id={id as string}
+        id={idFromUrl}
         title={title}
-        image={categoryInfo.icon}
-        backgroundColor={categoryInfo.color}
+        image={headerImage}
+        backgroundColor={headerColor}
         categories={tags.length > 0 ? tags.map((tag) => tag.name) : undefined}
         activeIndex={
           tags.length > 0
@@ -130,18 +153,22 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ title, image }) => {
         }}
       />
 
-      <div className={cls["article-container"]}>
-        {tagArticles
-          .filter((_, idx) => idx % 3 === 0)
-          .map((_, groupIdx) => (
-            <Card
-              key={groupIdx}
-              cardMain={tagArticles[groupIdx * 3]}
-              smallCardOA
-              cards={tagArticles.slice(groupIdx * 3, groupIdx * 3 + 3)}
-            />
-          ))}
-      </div>
+      {loading ? (
+        <LoadingCard count={3} />
+      ) : tagArticles.length === 0 ? null : (
+        <div className={cls["article-container"]}>
+          {tagArticles
+            .filter((_, idx) => idx % 3 === 0)
+            .map((_, groupIdx) => (
+              <Card
+                key={groupIdx}
+                cardMain={tagArticles[groupIdx * 3]}
+                smallCardOA
+                cards={tagArticles.slice(groupIdx * 3, groupIdx * 3 + 3)}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };
